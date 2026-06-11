@@ -104,6 +104,8 @@ It is intentionally independent from any single policy and is referenced by mult
 
 ## Important Design Notes
 
+The [Zero Trust Conditional Access assessment](ZERO-TRUST-ASSESSMENT.md) records current coverage, identified gaps, design risks, and recommended implementation priorities. The assessment is dated because Microsoft capabilities and recommendations change over time.
+
 ### Emergency access
 
 Maintain at least two cloud-only emergency-access accounts. Monitor their use and exclude them carefully from policies that could cause tenant-wide lockout. Exclusion-group membership must be tightly controlled and reviewed.
@@ -136,6 +138,7 @@ Conditional-Access-Baseline/
 |-- Groups/                # Exclusion security-group JSON files
 |-- NamedLocations/        # Named-location JSON files
 |-- MigrationTable.json    # Group and service-principal dependency metadata
+|-- ZERO-TRUST-ASSESSMENT.md # Coverage and gap assessment
 +-- README.md
 ~~~
 
