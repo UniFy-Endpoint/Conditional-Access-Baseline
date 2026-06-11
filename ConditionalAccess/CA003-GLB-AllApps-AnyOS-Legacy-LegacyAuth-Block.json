@@ -11,7 +11,7 @@
   "modifiedDateTime@odata.type": "#DateTimeOffset",
   "modifiedDateTime": "2025-12-11T19:36:04.4576083Z",
   "state@odata.type": "#microsoft.graph.conditionalAccessPolicyState",
-  "state": "enabled",
+  "state": "disabled",
   "deletedDateTime": null,
   "partialEnablementStrategy": null,
   "sessionControls": null,
@@ -59,6 +59,7 @@
       "includeGroups": [],
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
+        "9f027ad8-042b-4c85-9727-9008f6851597",
         "a90133c8-9a64-47b4-bd50-3bc45556a0bf"
       ],
       "includeRoles@odata.type": "#Collection(String)",

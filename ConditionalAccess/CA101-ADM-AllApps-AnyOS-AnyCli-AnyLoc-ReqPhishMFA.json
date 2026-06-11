@@ -5,13 +5,13 @@
   "@odata.editLink": "identity/conditionalAccess/policies('3e7161c6-61f6-48e4-a12c-0b1a80285bcd')",
   "id": "3e7161c6-61f6-48e4-a12c-0b1a80285bcd",
   "templateId": null,
-  "displayName": "CA101-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPhishMFA",
+  "displayName": "CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2025-11-27T17:04:55.3656817Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
   "modifiedDateTime": "2026-04-27T09:32:49.2192207Z",
   "state@odata.type": "#microsoft.graph.conditionalAccessPolicyState",
-  "state": "enabled",
+  "state": "disabled",
   "deletedDateTime": null,
   "partialEnablementStrategy": null,
   "conditions": {
@@ -37,9 +37,7 @@
         "All"
       ],
       "excludeApplications@odata.type": "#Collection(String)",
-      "excludeApplications": [
-        "14d82eec-204b-4c2f-b7e8-296a70dab67e"
-      ],
+      "excludeApplications": [],
       "includeUserActions@odata.type": "#Collection(String)",
       "includeUserActions": [],
       "includeAuthenticationContextClassReferences@odata.type": "#Collection(String)",
@@ -56,6 +54,7 @@
       "includeGroups": [],
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
+        "9f027ad8-042b-4c85-9727-9008f6851597",
         "7b32cf4c-58c1-4fe8-9547-983e4d57a098"
       ],
       "includeRoles@odata.type": "#Collection(String)",
@@ -104,17 +103,6 @@
       ],
       "includeGuestsOrExternalUsers": null,
       "excludeGuestsOrExternalUsers": null
-    },
-    "locations": {
-      "@odata.type": "#microsoft.graph.conditionalAccessLocations",
-      "includeLocations@odata.type": "#Collection(String)",
-      "includeLocations": [
-        "All"
-      ],
-      "excludeLocations@odata.type": "#Collection(String)",
-      "excludeLocations": [
-        "10725f98-e039-43b4-9084-ae8e9450d3fe"
-      ]
     }
   },
   "grantControls": {

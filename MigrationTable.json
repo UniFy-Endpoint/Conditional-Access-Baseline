@@ -27,7 +27,7 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA005-GLB-DeviceReg-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL",
+      "DisplayName": "CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL",
       "Id": "e0a3310d-fd7b-42ec-9a6e-6fc064f02358",
       "Type": "Group"
     },
@@ -42,7 +42,7 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA101-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPhishMFA-EXCL",
+      "DisplayName": "CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL",
       "Id": "7b32cf4c-58c1-4fe8-9547-983e4d57a098",
       "Type": "Group"
     },
@@ -249,14 +249,6 @@
       "Id": null,
       "AppId": "0af06dc6-e4b5-4f28-818e-e78e62d137a5",
       "PolicyReferenceId": "0af06dc6-e4b5-4f28-818e-e78e62d137a5",
-      "ReferenceKind": "AppId",
-      "Type": "ServicePrincipal"
-    },
-    {
-      "DisplayName": "Microsoft Graph Command Line Tools",
-      "Id": null,
-      "AppId": "14d82eec-204b-4c2f-b7e8-296a70dab67e",
-      "PolicyReferenceId": "14d82eec-204b-4c2f-b7e8-296a70dab67e",
       "ReferenceKind": "AppId",
       "Type": "ServicePrincipal"
     },

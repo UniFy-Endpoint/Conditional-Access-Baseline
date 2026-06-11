@@ -5,13 +5,13 @@
   "@odata.editLink": "identity/conditionalAccess/policies('cca1efbd-cddb-4c3c-b393-7b1b9ff13787')",
   "id": "cca1efbd-cddb-4c3c-b393-7b1b9ff13787",
   "templateId": null,
-  "displayName": "CA005-GLB-DeviceReg-AnyOS-AnyCli-UntrustLoc-ReqMFA",
+  "displayName": "CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2025-11-27T17:04:42.7521464Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
   "modifiedDateTime": "2026-02-25T18:20:41.381486Z",
   "state@odata.type": "#microsoft.graph.conditionalAccessPolicyState",
-  "state": "enabled",
+  "state": "disabled",
   "deletedDateTime": null,
   "partialEnablementStrategy": null,
   "sessionControls": null,
@@ -68,17 +68,6 @@
       ],
       "includeGuestsOrExternalUsers": null,
       "excludeGuestsOrExternalUsers": null
-    },
-    "locations": {
-      "@odata.type": "#microsoft.graph.conditionalAccessLocations",
-      "includeLocations@odata.type": "#Collection(String)",
-      "includeLocations": [
-        "All"
-      ],
-      "excludeLocations@odata.type": "#Collection(String)",
-      "excludeLocations": [
-        "10725f98-e039-43b4-9084-ae8e9450d3fe"
-      ]
     }
   },
   "grantControls": {

@@ -11,7 +11,7 @@
   "modifiedDateTime@odata.type": "#DateTimeOffset",
   "modifiedDateTime": "2026-05-20T08:37:07.5697311Z",
   "state@odata.type": "#microsoft.graph.conditionalAccessPolicyState",
-  "state": "enabled",
+  "state": "disabled",
   "deletedDateTime": null,
   "grantControls": null,
   "partialEnablementStrategy": null,

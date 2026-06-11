@@ -6,15 +6,17 @@ Assessment date: June 11, 2026
 
 This baseline provides strong coverage of Microsoft's common Conditional Access controls for workforce users, administrators, guests, managed devices, unmanaged-device access, identity risk, session enforcement, legacy authentication, and authentication flows.
 
-The baseline is substantial, but it is not yet a complete Microsoft Zero Trust Conditional Access implementation. The highest-priority findings are:
+The baseline is substantial, but it is not a complete Microsoft Zero Trust Conditional Access implementation because several controls require tenant-specific identities, applications, networks, licensing, and governance decisions.
 
-1. Phishing-resistant MFA for administrators is limited to untrusted locations instead of applying to all locations.
-2. MFA for device registration or join is limited to untrusted locations instead of applying to the user action at all locations.
-3. Conditional Access for workload identities is not represented.
-4. Two applicable policies do not exclude the shared emergency-access group.
-5. The source JSON records policies as enabled even though the restore script safely creates them as disabled.
+The following repository-level findings were remediated on June 11, 2026:
 
-The first four findings should be addressed before describing the repository as a complete Conditional Access baseline. Workload-identity policies require tenant-specific service-principal and network information, so they should be implemented as documented extensions or generated templates rather than universal static policies.
+- CA101 now requires phishing-resistant MFA for administrators at all locations.
+- CA005 now requires MFA for device registration or join at all locations.
+- CA003 and CA101 now exclude the shared emergency-access group.
+- All source policy JSON files are stored as disabled.
+- Automated validation now checks policy state, emergency exclusions, filenames, group references, migration metadata, required CA005 and CA101 controls, JSON syntax, and PowerShell syntax.
+
+Conditional Access for workload identities remains the highest-priority uncovered area. Workload-identity policies require tenant-specific service-principal and network information, so they should be implemented as documented extensions or generated templates rather than universal static policies.
 
 ## Assessment Scope
 
@@ -51,42 +53,40 @@ This is a design assessment. It does not validate tenant licensing, authenticati
 | Sign-in and user risk | Covered; Entra ID P2 required | CA501 and CA502 |
 | Insider-risk signal | Covered; integration required | CA503 |
 
-## Priority Findings
+## Remediation Status
 
 ### 1. Require phishing-resistant MFA for administrators at all locations
 
-**Priority:** High
+**Status:** Resolved on June 11, 2026
 
-CA101 requires phishing-resistant MFA only outside approved locations. CA100 applies MFA at all locations, but ordinary MFA does not provide the same phishing resistance.
+CA101 requires phishing-resistant MFA at all locations. CA100 continues to provide a broader MFA baseline, while CA101 enforces the stronger authentication requirement for targeted administrator roles.
 
 Microsoft recommends phishing-resistant MFA for privileged administrator roles across all resources and does not make the recommendation dependent on network location.
 
-**Recommendation**
+**Implementation notes**
 
-- Change CA101 from `UntrustLoc` to `AnyLoc`.
-- Target all resources.
-- Keep only the administrator roles required by the organization, including at least Microsoft's recommended high-impact roles.
-- Exclude the emergency-access group.
+- CA101 is named `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA`.
+- It targets all resources and has no location condition.
+- It excludes the shared emergency-access group and its dedicated exclusion group.
 - Validate administrator registration for passkeys, Windows Hello for Business, or certificate-based authentication before enforcement.
 - Deploy in report-only mode before enabling.
 
 ### 2. Require MFA for device registration or join at all locations
 
-**Priority:** High
+**Status:** Resolved on June 11, 2026
 
-CA005 protects the `Register or join devices` user action only outside approved locations. Device registration establishes a persistent device identity and should not rely on location as the deciding factor.
+CA005 protects the `Register or join devices` user action at all locations. Device registration establishes a persistent device identity and does not rely on location as the deciding factor.
 
-**Recommendation**
+**Implementation notes**
 
-- Change CA005 from `UntrustLoc` to `AnyLoc`.
-- Use the built-in Multifactor authentication strength when external authentication-method compatibility permits it.
-- Exclude emergency-access accounts.
+- CA005 is named `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA`.
+- It has no location condition and excludes emergency-access accounts.
 - Set the tenant device setting `Require Multifactor Authentication to register or join devices with Microsoft Entra` to `No` when this user-action policy is used. Microsoft documents that the tenant-wide setting otherwise prevents correct Conditional Access enforcement.
 - Test with a controlled pilot assignment and explicit device registration scenarios. Microsoft report-only evaluation does not support policies in the User Actions scope.
 
 ### 3. Add Conditional Access for workload identities
 
-**Priority:** High for tenants with application service principals
+**Status:** Open; high priority for tenants with application service principals
 
 The current policies target users and guests. User-scoped Conditional Access policies do not protect service-principal token requests.
 
@@ -108,35 +108,33 @@ These policies are not suitable as universal static JSON because service-princip
 
 ### 4. Correct emergency-access exclusions
 
-**Priority:** High
+**Status:** Resolved on June 11, 2026
 
-The shared emergency-access group is excluded from 31 of 39 policies. Six guest-only policies do not need the exclusion because emergency accounts should not be guests. The following two applicable policies do need correction:
+The shared emergency-access group is excluded from every applicable non-guest policy. Guest-only policies do not require the exclusion because emergency accounts should not be guests.
 
-- CA003-GLB-AllApps-AnyOS-Legacy-LegacyAuth-Block
-- CA101-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPhishMFA
+CA003 and CA101 now include `CA000-GLB-BGA-EmergencyAccess-EXCL`. Automated validation detects future omissions.
 
-Microsoft recommends excluding emergency-access accounts from Conditional Access policies that block or restrict sign-in. The accounts should instead use independent phishing-resistant credentials, be monitored, and be tested regularly.
+Microsoft recommends excluding emergency-access accounts from Conditional Access policies that block or restrict sign-in. The accounts should use independent phishing-resistant credentials, be monitored, and be tested regularly.
 
-**Recommendation**
+**Operational requirements**
 
-- Add `CA000-GLB-BGA-EmergencyAccess-EXCL` to CA003 and CA101.
 - Maintain at least two cloud-only emergency-access accounts.
 - Use passkeys or certificate-based authentication that does not depend on the normal administrator authentication path.
 - Alert on every sign-in and regularly validate account access.
 
 ### 5. Make source policy state safer
 
-**Priority:** Medium
+**Status:** Resolved on June 11, 2026
 
-Every policy JSON currently records `"state": "enabled"`. The restore script correctly overrides this and creates policies in the disabled state, but the source files can still be misunderstood or reused outside the restore workflow.
+Every policy JSON records `"state": "disabled"`. The restore script independently overrides policy state and creates policies as disabled.
 
 Microsoft recommends evaluating new Conditional Access policies before enforcement, normally with report-only mode. User Actions policies are an exception because report-only evaluation does not support that scope.
 
-**Recommendation**
+**Implementation notes**
 
-- Change the stored policy state to `disabled`, or document the source files explicitly as exported reference state.
 - Keep the restore script's forced-disabled behavior.
-- Add automated validation that rejects a restore path capable of directly creating enabled policies.
+- `Test-Baseline.ps1` rejects source policies that aren't disabled.
+- GitHub Actions runs baseline validation for pushes to `main` and pull requests.
 
 ## Tenant-Specific Extensions
 
@@ -182,13 +180,11 @@ Authentication strengths, Identity Protection, Defender for Cloud Apps, Insider 
 
 ## Recommended Implementation Order
 
-1. Add the emergency-access exclusion to CA003 and CA101.
-2. Expand CA101 to phishing-resistant MFA for administrators at all locations.
-3. Expand CA005 device registration or join protection to all locations and verify the tenant device setting.
-4. Change stored policy state to report-only or explicitly mark it as export-only state.
-5. Inventory workload identities and build tenant-specific location and risk policies.
-6. Evaluate authentication context, cross-tenant trust, compliant-network signals, and Terms of Use based on business requirements.
-7. Validate changes with report-only mode where supported, sign-in logs, the What If tool, pilot assignments, emergency-access testing, and rollback procedures. Use controlled functional tests for User Actions policies.
+1. Verify administrator readiness for phishing-resistant MFA before enabling CA101.
+2. Verify the tenant device setting and controlled test scenarios before enabling CA005.
+3. Inventory workload identities and build tenant-specific location and risk policies.
+4. Evaluate authentication context, cross-tenant trust, compliant-network signals, and Terms of Use based on business requirements.
+5. Validate changes with report-only mode where supported, sign-in logs, the What If tool, pilot assignments, emergency-access testing, and rollback procedures. Use controlled functional tests for User Actions policies.
 
 ## Microsoft Documentation
 

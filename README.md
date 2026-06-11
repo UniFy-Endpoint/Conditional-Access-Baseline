@@ -66,10 +66,10 @@ It is intentionally independent from any single policy and is referenced by mult
 | CA002 | GLB | <code>CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block</code> | Prevent access from device platforms that are not explicitly supported by the organization. | Blocks platforms other than Android, iOS, Windows, macOS, and Linux. | Entra ID P1 | <code>CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block-EXCL</code> |
 | CA003 | GLB | <code>CA003-GLB-AllApps-AnyOS-Legacy-LegacyAuth-Block</code> | Remove legacy authentication protocols that cannot satisfy modern access controls. | Blocks Exchange ActiveSync and other legacy client authentication. | Entra ID P1 | <code>CA003-GLB-AllApps-AnyOS-Legacy-LegacyAuth-Block-EXCL</code> |
 | CA004 | GLB | <code>CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block</code> | Reduce phishing and token-transfer risk from high-risk authentication flows. | Blocks device code flow and authentication transfer. | Entra ID P1; authentication-flow support | <code>CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL</code> |
-| CA005 | GLB | <code>CA005-GLB-DeviceReg-AnyOS-AnyCli-UntrustLoc-ReqMFA</code> | Protect Microsoft Entra device registration and join operations outside approved locations. | Requires MFA for register or join device actions from untrusted locations. | Entra ID P1; MFA registration; named locations | <code>CA005-GLB-DeviceReg-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL</code> |
+| CA005 | GLB | <code>CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA</code> | Protect Microsoft Entra device registration and join operations at every location. | Requires MFA for the register or join devices user action. | Entra ID P1; MFA registration; tenant device setting coordination | <code>CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL</code> |
 | CA006 | GLB | <code>CA006-GLB-RegSecInfo-AnyOS-AnyCli-UntrustLoc-ReqMFA</code> | Protect security-information registration from unauthorized changes outside approved locations. | Requires MFA when registering security information from untrusted locations. | Entra ID P1; combined registration; named locations | <code>CA006-GLB-RegSecInfo-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL</code> |
 | CA100 | ADM | <code>CA100-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA</code> | Apply baseline multifactor protection to privileged administrator roles. | Requires MFA for targeted administrator roles across all applications. | Entra ID P1; MFA methods | <code>CA100-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL</code> |
-| CA101 | ADM | <code>CA101-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPhishMFA</code> | Use phishing-resistant authentication for administrators outside approved locations. | Requires the phishing-resistant MFA authentication strength. | Entra ID P1; phishing-resistant methods; named locations | <code>CA101-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPhishMFA-EXCL</code> |
+| CA101 | ADM | <code>CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA</code> | Require phishing-resistant authentication for administrators at every location. | Requires the phishing-resistant MFA authentication strength for all targeted resources. | Entra ID P1; phishing-resistant methods | <code>CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL</code> |
 | CA102 | ADM | <code>CA102-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPwdlessMFA</code> | Strengthen administrator access to management portals outside approved locations. | Requires the Passwordless MFA authentication strength for admin portals and Azure management. | Entra ID P1; passwordless methods; named locations | <code>CA102-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPwdlessMFA-EXCL</code> |
 | CA103 | ADM | <code>CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq</code> | Limit the lifetime of privileged sign-in sessions. | Requires administrators to reauthenticate every 8 hours. | Entra ID P1 | <code>CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-EXCL</code> |
 | CA104 | ADM | <code>CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-PersistSession</code> | Prevent privileged browser sessions from persisting after the browser closes. | Sets persistent browser session mode to never persistent. | Entra ID P1 | <code>CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-PersistSession-EXCL</code> |
@@ -112,7 +112,9 @@ Maintain at least two cloud-only emergency-access accounts. Monitor their use an
 
 ### Policy deployment
 
-The restore script creates policies in the **Off** state. Review each policy with Conditional Access report-only mode, sign-in logs, the What If tool, pilot groups, and documented rollback procedures before enabling it.
+All source policy JSON files are stored in the **Off** state, and the restore script also forces policies to **Off** before creation. Review each policy with Conditional Access report-only mode where supported, sign-in logs, the What If tool, pilot groups, and documented rollback procedures before enabling it. Policies scoped to User Actions, including CA005, require controlled functional testing because report-only evaluation does not support that scope.
+
+For CA005, set the tenant device setting **Require Multifactor Authentication to register or join devices with Microsoft Entra** to **No** so Conditional Access controls the MFA requirement.
 
 ### App protection policy
 
@@ -139,6 +141,7 @@ Conditional-Access-Baseline/
 |-- NamedLocations/        # Named-location JSON files
 |-- MigrationTable.json    # Group and service-principal dependency metadata
 |-- ZERO-TRUST-ASSESSMENT.md # Coverage and gap assessment
+|-- Test-Baseline.ps1      # Local and CI baseline validation
 +-- README.md
 ~~~
 
@@ -177,15 +180,19 @@ C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
 
 ## Validation Checklist
 
+- Run `./Test-Baseline.ps1` locally; GitHub Actions also runs it for pushes and pull requests.
 - All JSON files parse successfully.
 - Policy filenames match their internal displayName.
 - Group filenames match their internal displayName.
+- Every source policy is disabled.
+- Every non-guest policy excludes the shared emergency-access group.
 - Policy and group IDs remain unchanged.
 - Every referenced group ID exists in the baseline.
 - Migration-table group names match the group files.
 - Service-principal dependencies are represented in MigrationTable.json.
 - All policy request payloads pass local schema validation.
 - P2 policies are reported as license-required when the tenant lacks Entra ID P2.
+- CA005 and CA101 remain scoped to all locations.
 
 ## Microsoft Documentation
 
