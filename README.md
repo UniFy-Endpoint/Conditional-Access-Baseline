@@ -29,7 +29,7 @@ A structured Microsoft Entra Conditional Access Baseline derived from Microsoft 
 - [Repository Layout](#repository-layout)
 - [Restore Workflow](#restore-workflow)
 - [Microsoft Documentation](#microsoft-documentation)
-- [Disclaimer](#disclaimer)
+
 
 ---
 
@@ -261,8 +261,3 @@ C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
 - [Network conditions in Conditional Access](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-assignment-network)
 - [Conditional Access report-only mode](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-report-only)
 
----
-
-## Disclaimer
-
-Test this baseline in a non-production tenant before deploying to any production environment. Conditional Access block policies can cause tenant lockout or application outages when assignments, exclusions, licensing, authentication methods, or dependencies are misconfigured. The repository owner is responsible for validating applicability and impact in each target tenant.
