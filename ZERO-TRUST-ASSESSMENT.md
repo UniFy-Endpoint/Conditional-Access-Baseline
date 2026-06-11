@@ -86,9 +86,11 @@ CA005 protects the `Register or join devices` user action at all locations. Devi
 
 ### 3. Add Conditional Access for workload identities
 
-**Status:** Open; high priority for tenants with application service principals
+**Status:** Not included in this baseline; tenant administrator action required
 
-The current policies target users and guests. User-scoped Conditional Access policies do not protect service-principal token requests.
+Conditional Access policies for workload identities are intentionally not included in the baseline policy JSON files. The current policies target users and guests, and user-scoped Conditional Access policies do not protect service-principal token requests.
+
+A Conditional Access Administrator must configure workload-identity policies directly in each tenant based on the tenant's service principals, approved public IP ranges, service-principal risk tolerance, licensing, and operational dependencies.
 
 Microsoft supports workload-identity policies that block selected service principals:
 
@@ -96,15 +98,28 @@ Microsoft supports workload-identity policies that block selected service princi
 - When Microsoft Entra detects service-principal risk.
 - In scenarios integrated with authentication context.
 
-**Recommendation**
+**Tenant configuration**
 
 - Inventory service principals, credentials, owners, permissions, sign-in locations, and business criticality.
 - Prefer managed identities where supported.
-- Add a location-based block policy for selected single-tenant service principals with predictable network origins.
-- Add a service-principal risk block policy where licensing and Identity Protection support it.
-- Start in report-only mode and review service-principal sign-in logs.
+- Sign in to the Microsoft Entra admin center as at least a Conditional Access Administrator.
+- Go to **Entra ID > Conditional Access > Policies > New policy**.
+- Under **Users or workload identities**, select **Workload identities** and directly select the required service principals.
+- Under **Target resources**, include **All resources**.
+- For a location-based policy, include **Any location**, exclude only named locations containing approved public IP ranges, and select **Block access**.
+- For a risk-based policy, configure **Service principal risk**, select the risk levels that should trigger the policy, and select **Block access**.
+- Start in report-only mode and review **Entra ID > Monitoring & health > Sign-in logs > Service principal sign-ins** before enforcement.
 
-These policies are not suitable as universal static JSON because service-principal object IDs and approved network locations are tenant-specific. Microsoft Entra Workload ID Premium licensing is required to create or modify them, and managed identities are not covered by these policies.
+**Limitations and prerequisites**
+
+- These policies aren't suitable as universal static JSON because service-principal object IDs and approved network locations are tenant-specific.
+- Microsoft Entra Workload ID Premium licensing is required to create or modify them.
+- Policies apply to selected single-tenant service principals owned by the organization.
+- Managed identities, Microsoft applications, third-party SaaS applications, and multitenant applications aren't covered.
+- Service principals must be assigned directly. Assignment through a group containing service principals isn't enforced.
+- Use the service principal Object ID from **Enterprise applications**, not the application-registration object ID.
+- Block access is the available grant control because workload identities can't perform MFA.
+- Prefer managed identities or workload identity federation where supported to reduce stored credentials.
 
 ### 4. Correct emergency-access exclusions
 
@@ -191,6 +206,8 @@ Authentication strengths, Identity Protection, Defender for Cloud Apps, Insider 
 - [Require phishing-resistant MFA for administrators](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-admin-phish-resistant-mfa)
 - [Require MFA for device registration](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-all-users-device-registration)
 - [Conditional Access for workload identities](https://learn.microsoft.com/en-us/entra/identity/conditional-access/workload-identity)
+- [Workload identities overview](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-overview)
+- [Network conditions in Conditional Access](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-assignment-network)
 - [Manage emergency-access accounts](https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/security-emergency-access)
 - [Conditional Access report-only mode](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-report-only)
 - [Authentication strengths](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-authentication-strengths)
