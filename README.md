@@ -132,19 +132,6 @@ For CA005, set the tenant device setting **Require Multifactor Authentication to
 
 Workload-identity policies protect service-principal token requests rather than interactive user sign-ins. Microsoft supports blocking selected service principals based on network location or service-principal risk.
 
-To configure a location-based policy:
-
-1. Sign in to the Microsoft Entra admin center as at least a **Conditional Access Administrator**.
-2. Go to **Entra ID > Conditional Access > Policies > New policy**.
-3. Under **Users or workload identities**, select **Workload identities**.
-4. Under **Include**, select the required service principals directly.
-5. Under **Target resources**, include **All resources**.
-6. Under **Conditions > Locations**, include **Any location** and exclude only the named locations containing approved public IP ranges.
-7. Under **Grant**, select **Block access**.
-8. Start in **Report-only** mode, create the policy, and review service-principal sign-in logs before enforcement.
-
-For a risk-based policy, use the same workload-identity and resource assignments, configure **Conditions > Service principal risk**, select the risk levels that should trigger the policy, and use **Block access**. Review results under **Entra ID > Monitoring & health > Sign-in logs > Service principal sign-ins**.
-
 Important limitations:
 
 - Microsoft Entra Workload ID Premium licenses are required to create or modify these policies.
