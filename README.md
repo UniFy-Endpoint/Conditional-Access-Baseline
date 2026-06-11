@@ -12,7 +12,7 @@ This repository contains a structured Microsoft Entra Conditional Access baselin
 
 ---
 
-> **Important:** This is a reference baseline, not a universal production configuration. Review tenant licensing, authentication methods, device management, application dependencies, emergency-access accounts, exclusions, and user impact before enabling any policy.
+> **Important:** This is a reference baseline, not a universal one-size-fits-all checklist configuration. Review tenant licensing, authentication methods, device management, application dependencies, emergency-access accounts, exclusions, and user impact before enabling any policy. Assess each recommendation against your organization's operational requirements, risk tolerance, and deployment model before making changes. Always test with a pilot group before broad rollout.
 
 ## Zero Trust Approach
 
@@ -220,7 +220,6 @@ C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
 
 ## Validation Checklist
 
-- Run `./Test-Baseline.ps1` locally; GitHub Actions also runs it for pushes and pull requests.
 - All JSON files parse successfully.
 - Policy filenames match their internal displayName.
 - Group filenames match their internal displayName.
