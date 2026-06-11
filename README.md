@@ -160,9 +160,6 @@ For CA005: set the tenant device setting **Require Multifactor Authentication to
 
 Workload-identity policies protect service-principal token requests rather than interactive user sign-ins. Microsoft supports blocking selected service principals based on network location or service-principal risk.
 
-<<<<<<< Updated upstream
-Important limitations:
-=======
 **Key limitations:**
 
 | Limitation | Detail |
@@ -178,28 +175,11 @@ Important limitations:
 ### App Protection Policy
 
 CA211, CA212, and CA213 use the Graph `compliantApplication` grant control, which maps to **Require app protection policy**. Do not configure the retired **Require approved client app** (`approvedApplication`) control. Deploy and validate supported Intune App Protection Policies and applications before enabling these policies.
->>>>>>> Stashed changes
 
 CA002 treats Android, iOS, Windows, macOS, and Linux as the organization's supported platforms.
 
 ### Licensing and Dependencies
 
-<<<<<<< Updated upstream
-- CA211, CA212, and CA213 use the Graph `compliantApplication` grant control, which represents **Require app protection policy**. Do not configure the retired **Require approved client app** (`approvedApplication`) control. Deploy and validate supported Intune App Protection Policies and applications before enabling these policies.
-
-- CA002 treats Android, iOS, Windows, macOS, and Linux as supported platforms.
-
-### Licensing and dependencies
-
-- Microsoft Entra ID P1 is the baseline requirement for Conditional Access.
-- CA501-CA503 require Microsoft Entra ID P2 and Identity Protection capabilities.
-- Device-compliance policies require Microsoft Intune compliance configuration.
-- App-protection controls require supported applications and deployed Intune App Protection Policies.
-- CA211 also requires Microsoft Defender for Cloud Apps session control integration.
-- CA503 requires the appropriate Microsoft Purview insider-risk integration.
-- Token protection and application-enforced restrictions support only specific platforms, clients, and resources.
-- Tenant-specific Conditional Access policies for service principals require Microsoft Entra Workload ID Premium.
-=======
 | Dependency | Applies To |
 | :--- | :--- |
 | Microsoft Entra ID P1 | All policies — baseline requirement for Conditional Access |
@@ -212,7 +192,6 @@ CA002 treats Android, iOS, Windows, macOS, and Linux as the organization's suppo
 | Microsoft Entra Workload ID Premium | Tenant-specific service-principal policies |
 
 ---
->>>>>>> Stashed changes
 
 ## Repository Layout
 
@@ -267,20 +246,6 @@ C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
 
 ## Validation Checklist
 
-<<<<<<< Updated upstream
-- All JSON files parse successfully.
-- Policy filenames match their internal displayName.
-- Group filenames match their internal displayName.
-- Every source policy is disabled.
-- Every non-guest policy excludes the shared emergency-access group.
-- Policy and group IDs remain unchanged.
-- Every referenced group ID exists in the baseline.
-- Migration-table group names match the group files.
-- Service-principal dependencies are represented in MigrationTable.json.
-- All policy request payloads pass local schema validation.
-- P2 policies are reported as license-required when the tenant lacks Entra ID P2.
-- CA005 and CA101 remain scoped to all locations.
-=======
 - [ ] All JSON files parse successfully
 - [ ] Policy filenames match their internal `displayName`
 - [ ] Group filenames match their internal `displayName`
@@ -295,7 +260,6 @@ C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
 - [ ] CA005 and CA101 remain scoped to all locations
 
 ---
->>>>>>> Stashed changes
 
 ## Microsoft Documentation
 
