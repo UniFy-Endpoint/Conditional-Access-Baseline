@@ -1,7 +1,5 @@
 # Microsoft Entra Conditional Access — Zero Trust Baseline
 
-[![Release](https://img.shields.io/github/v/release/UniFy-Endpoint/Conditional-Access-Baseline?label=Release&color=0078d4)](https://github.com/UniFy-Endpoint/Conditional-Access-Baseline/releases/latest)
-[![License](https://img.shields.io/github/license/UniFy-Endpoint/Conditional-Access-Baseline?label=License&color=0078d4)](LICENSE)
 
 A structured Microsoft Entra Conditional Access Baseline derived from Microsoft Zero Trust and Conditional Access guidance. Includes **39 policies**, **39 exclusion security groups**, **Named Location**, a migration dependency table, and a PowerShell Backup & Restore utility.
 
