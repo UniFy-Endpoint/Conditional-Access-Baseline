@@ -2,6 +2,16 @@
 
 This repository contains a structured Microsoft Entra Conditional Access baseline derived from Microsoft Zero Trust and Conditional Access guidance. It includes 39 Conditional Access policies, 39 security groups, one named location, a migration table, and a PowerShell backup/restore utility.
 
+---
+
+| | |
+|---|---|
+| **Author** | Yoennis Olmo, Sr. Modern Work Consultant |
+| **Microsoft Zero Trust Assessment Reference** | [Microsoft Zero Trust Assessment](https://learn.microsoft.com/en-us/security/zero-trust/assessment/overview) (updated April 2026) |
+| **Last Updated** | June 2026 |
+
+---
+
 > **Important:** This is a reference baseline, not a universal production configuration. Review tenant licensing, authentication methods, device management, application dependencies, emergency-access accounts, exclusions, and user impact before enabling any policy.
 
 ## Zero Trust Approach
