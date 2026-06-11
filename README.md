@@ -24,7 +24,6 @@ A structured Microsoft Entra Conditional Access Baseline derived from Microsoft 
 - [Important Design Notes](#important-design-notes)
 - [Repository Layout](#repository-layout)
 - [Restore Workflow](#restore-workflow)
-- [Validation Checklist](#validation-checklist)
 - [Microsoft Documentation](#microsoft-documentation)
 - [Disclaimer](#disclaimer)
 
@@ -235,23 +234,6 @@ Location-dependent policies use this named location to distinguish trusted from 
 ~~~text
 C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
 ~~~
-
----
-
-## Validation Checklist
-
-- [ ] All JSON files parse successfully
-- [ ] Policy filenames match their internal `displayName`
-- [ ] Group filenames match their internal `displayName`
-- [ ] Every source policy is in the **disabled** state
-- [ ] Every non-guest policy excludes the shared emergency-access group
-- [ ] Policy and group IDs remain unchanged
-- [ ] Every referenced group ID exists in the baseline
-- [ ] Migration-table group names match the group files
-- [ ] Service-principal dependencies are represented in `MigrationTable.json`
-- [ ] All policy request payloads pass local schema validation
-- [ ] P2 policies are reported as license-required when the tenant lacks Entra ID P2
-- [ ] CA005 and CA101 remain scoped to all locations
 
 ---
 
