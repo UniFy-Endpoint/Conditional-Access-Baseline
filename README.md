@@ -239,25 +239,23 @@ C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
 
 ## Microsoft Documentation
 
-| Topic | Link |
-| :--- | :--- |
-| Conditional Access overview | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview) |
-| Plan a Conditional Access deployment | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/plan-conditional-access) |
-| Conditional Access policy templates | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-policy-common) |
-| Zero Trust identity and device access policies | [learn.microsoft.com](https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-identity-device-access-policies-overview) |
-| Build Conditional Access policies | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-policies) |
-| Authentication strengths | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-authentication-strengths) |
-| Require device compliance | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-all-users-device-compliance) |
-| Require app protection policy | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-all-users-approved-app-or-app-protection) |
-| Conditional Access session controls | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-session) |
-| Continuous Access Evaluation | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-continuous-access-evaluation) |
-| Token protection | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-token-protection) |
-| Identity Protection risk policies | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/id-protection/howto-identity-protection-configure-risk-policies) |
-| Authentication flows | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-authentication-flows) |
-| Conditional Access for workload identities | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/workload-identity) |
-| Workload identities overview | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-overview) |
-| Network conditions in Conditional Access | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-assignment-network) |
-| Conditional Access report-only mode | [learn.microsoft.com](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-report-only) |
+- [Conditional Access overview](https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview)
+- [Plan a Conditional Access deployment](https://learn.microsoft.com/en-us/entra/identity/conditional-access/plan-conditional-access)
+- [Conditional Access policy templates](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-policy-common)
+- [Zero Trust identity and device access policies](https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-identity-device-access-policies-overview)
+- [Build Conditional Access policies](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-policies)
+- [Authentication strengths](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-authentication-strengths)
+- [Require device compliance](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-all-users-device-compliance)
+- [Require app protection policy](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-all-users-approved-app-or-app-protection)
+- [Conditional Access session controls](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-session)
+- [Continuous Access Evaluation](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-continuous-access-evaluation)
+- [Token protection](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-token-protection)
+- [Identity Protection risk policies](https://learn.microsoft.com/en-us/entra/id-protection/howto-identity-protection-configure-risk-policies)
+- [Authentication flows](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-authentication-flows)
+- [Conditional Access for workload identities](https://learn.microsoft.com/en-us/entra/identity/conditional-access/workload-identity)
+- [Workload identities overview](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-overview)
+- [Network conditions in Conditional Access](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-assignment-network)
+- [Conditional Access report-only mode](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-report-only)
 
 ---
 
