@@ -25,7 +25,7 @@ A structured Microsoft Entra Conditional Access Baseline derived from Microsoft 
 - [Policy Catalog](#policy-catalog)
 - [Important Design Notes](#important-design-notes)
 - [Repository Layout](#repository-layout)
-- [Restore Workflow](#restore-workflow)
+- [Backup and Restore](#backup-and-restore)
 - [Microsoft Documentation](#microsoft-documentation)
 
 
@@ -202,7 +202,20 @@ Conditional-Access-Baseline/
 
 ---
 
-## Restore Workflow
+## Backup and Restore
+
+The included `Invoke-ConditionalAccessBaseline.ps1` PowerShell script handles both directions. Use it to export a snapshot of your tenant's Conditional Access configuration before making changes and to restore the baseline into any target tenant.
+
+### Backup Workflow
+
+1. Open **PowerShell 7**.
+2. Run `Invoke-ConditionalAccessBaseline.ps1`.
+3. Connect to Microsoft Graph and consent to the requested delegated permissions.
+4. Select **Backup Conditional Access Policies**.
+5. Choose an output folder to store the exported JSON files.
+6. Review the exported files to confirm all policies, groups, and named locations were captured.
+
+### Restore Workflow
 
 1. Open **PowerShell 7**.
 2. Run `Invoke-ConditionalAccessBaseline.ps1`.
