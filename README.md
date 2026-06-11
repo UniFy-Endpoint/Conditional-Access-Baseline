@@ -157,9 +157,9 @@ Important limitations:
 
 ### App protection policy
 
-CA211, CA212, and CA213 use the Graph `compliantApplication` grant control, which represents **Require app protection policy**. Do not configure the retired **Require approved client app** (`approvedApplication`) control. Deploy and validate supported Intune App Protection Policies and applications before enabling these policies.
+- CA211, CA212, and CA213 use the Graph `compliantApplication` grant control, which represents **Require app protection policy**. Do not configure the retired **Require approved client app** (`approvedApplication`) control. Deploy and validate supported Intune App Protection Policies and applications before enabling these policies.
 
-CA002 treats Android, iOS, Windows, macOS, and Linux as supported platforms. Linux is excluded from CA002's unsupported-platform block so CA210 can enforce Linux device compliance without a policy overlap.
+- CA002 treats Android, iOS, Windows, macOS, and Linux as supported platforms.
 
 ### Licensing and dependencies
 
