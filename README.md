@@ -1,6 +1,6 @@
 # Microsoft Entra Conditional Access — Zero Trust Baseline
 
-A structured Microsoft Entra Conditional Access baseline derived from Microsoft Zero Trust and Conditional Access guidance. Includes **39 policies**, **39 exclusion security groups**, **one named location**, a migration dependency table, and a PowerShell restore utility.
+A structured Microsoft Entra Conditional Access Baseline derived from Microsoft Zero Trust and Conditional Access guidance. Includes **39 policies**, **39 exclusion security groups**, **Named Location**, a migration dependency table, and a PowerShell Backup &Restore utility.
 
 ---
 
@@ -223,7 +223,6 @@ Conditional-Access-Baseline/
 ├── NamedLocations/           # Named-location JSON files
 ├── MigrationTable.json       # Group and service-principal dependency metadata
 ├── ZERO-TRUST-ASSESSMENT.md  # Coverage and gap assessment
-├── Test-Baseline.ps1         # Local and CI baseline validation
 └── README.md
 ~~~
 
