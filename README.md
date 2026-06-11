@@ -116,6 +116,35 @@ All source policy JSON files are stored in the **Off** state, and the restore sc
 
 For CA005, set the tenant device setting **Require Multifactor Authentication to register or join devices with Microsoft Entra** to **No** so Conditional Access controls the MFA requirement.
 
+### Workload identities
+
+> **Not included in this baseline:** Conditional Access policies for workload identities are tenant-specific and are not included in the policy JSON files. A Conditional Access Administrator can configure them directly in each tenant based on the tenant's service principals, approved network locations, risk tolerance, licensing, and operational dependencies. See [Conditional Access for workload identities](https://learn.microsoft.com/en-us/entra/identity/conditional-access/workload-identity) and [What are workload identities?](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-overview).
+
+Workload-identity policies protect service-principal token requests rather than interactive user sign-ins. Microsoft supports blocking selected service principals based on network location or service-principal risk.
+
+To configure a location-based policy:
+
+1. Sign in to the Microsoft Entra admin center as at least a **Conditional Access Administrator**.
+2. Go to **Entra ID > Conditional Access > Policies > New policy**.
+3. Under **Users or workload identities**, select **Workload identities**.
+4. Under **Include**, select the required service principals directly.
+5. Under **Target resources**, include **All resources**.
+6. Under **Conditions > Locations**, include **Any location** and exclude only the named locations containing approved public IP ranges.
+7. Under **Grant**, select **Block access**.
+8. Start in **Report-only** mode, create the policy, and review service-principal sign-in logs before enforcement.
+
+For a risk-based policy, use the same workload-identity and resource assignments, configure **Conditions > Service principal risk**, select the risk levels that should trigger the policy, and use **Block access**. Review results under **Entra ID > Monitoring & health > Sign-in logs > Service principal sign-ins**.
+
+Important limitations:
+
+- Microsoft Entra Workload ID Premium licenses are required to create or modify these policies.
+- Policies apply to selected single-tenant service principals owned by the organization.
+- Managed identities, Microsoft applications, third-party SaaS applications, and multitenant applications are not covered.
+- Assign service principals directly to the policy. Assignment through a group containing service principals is not enforced.
+- Use the service principal **Object ID** from **Enterprise applications**, not the application-registration object ID.
+- **Block access** is the available grant control because workload identities cannot perform MFA.
+- Prefer managed identities or workload identity federation where supported to reduce stored credentials.
+
 ### App protection policy
 
 CA211, CA212, and CA213 use the Graph `compliantApplication` grant control, which represents **Require app protection policy**. Do not configure the retired **Require approved client app** (`approvedApplication`) control. Deploy and validate supported Intune App Protection Policies and applications before enabling these policies.
@@ -131,6 +160,7 @@ CA002 treats Android, iOS, Windows, macOS, and Linux as supported platforms. Lin
 - CA211 also requires Microsoft Defender for Cloud Apps session control integration.
 - CA503 requires the appropriate Microsoft Purview insider-risk integration.
 - Token protection and application-enforced restrictions support only specific platforms, clients, and resources.
+- Tenant-specific Conditional Access policies for service principals require Microsoft Entra Workload ID Premium.
 
 ## Repository Layout
 
@@ -209,6 +239,10 @@ C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
 - [Token protection](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-token-protection)
 - [Identity Protection risk policies](https://learn.microsoft.com/en-us/entra/id-protection/howto-identity-protection-configure-risk-policies)
 - [Authentication flows](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-authentication-flows)
+- [Conditional Access for workload identities](https://learn.microsoft.com/en-us/entra/identity/conditional-access/workload-identity)
+- [Workload identities overview](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-overview)
+- [Network conditions in Conditional Access](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-assignment-network)
+- [Conditional Access report-only mode](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-report-only)
 
 ## Disclaimer
 
