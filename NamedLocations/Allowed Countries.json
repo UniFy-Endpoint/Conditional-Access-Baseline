@@ -1,0 +1,25 @@
+{
+  "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/namedLocations/$entity",
+  "@odata.type": "#microsoft.graph.countryNamedLocation",
+  "@odata.id": "identity/conditionalAccess/namedLocations('10725f98-e039-43b4-9084-ae8e9450d3fe')",
+  "@odata.editLink": "identity/conditionalAccess/namedLocations('10725f98-e039-43b4-9084-ae8e9450d3fe')/microsoft.graph.countryNamedLocation",
+  "id": "10725f98-e039-43b4-9084-ae8e9450d3fe",
+  "displayName": "Allowed Countries",
+  "modifiedDateTime@odata.type": "#DateTimeOffset",
+  "modifiedDateTime": "2025-11-27T13:50:04.0523115Z",
+  "createdDateTime@odata.type": "#DateTimeOffset",
+  "createdDateTime": "2025-11-27T13:50:04.0523115Z",
+  "deletedDateTime": null,
+  "countriesAndRegions@odata.type": "#Collection(String)",
+  "countriesAndRegions": [
+    "BE",
+    "NL"
+  ],
+  "includeUnknownCountriesAndRegions": false,
+  "countryLookupMethod@odata.type": "#microsoft.graph.countryLookupMethodType",
+  "countryLookupMethod": "clientIpAddress",
+  "#microsoft.graph.restore": {
+    "title": "microsoft.graph.restore",
+    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/namedLocations('10725f98-e039-43b4-9084-ae8e9450d3fe')/microsoft.graph.namedLocation/microsoft.graph.restore"
+  }
+}
