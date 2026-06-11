@@ -172,12 +172,6 @@ Workload-identity policies protect service-principal token requests rather than 
 | Grant control | **Block access** is the only available grant control — workload identities cannot perform MFA |
 | Best practice | Prefer managed identities or workload identity federation where supported to reduce stored credentials |
 
-### App Protection Policy
-
-CA211, CA212, and CA213 use the Graph `compliantApplication` grant control, which maps to **Require app protection policy**. Do not configure the retired **Require approved client app** (`approvedApplication`) control. Deploy and validate supported Intune App Protection Policies and applications before enabling these policies.
-
-CA002 treats Android, iOS, Windows, macOS, and Linux as the organization's supported platforms.
-
 ### Licensing and Dependencies
 
 | Dependency | Applies To |
