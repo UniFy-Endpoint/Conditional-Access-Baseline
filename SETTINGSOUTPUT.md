@@ -67,7 +67,7 @@ Generated from the repository JSON inventory on **June 12, 2026**.
 
 ## Administrator Scope
 
-CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR policies except CA215, CA216, and CA219 contain that full exclusion set and also exclude `CA-ADM-UnsupportedRoleAccounts`. CA201, CA202, CA203, CA206, and CA211 retain two additional directory-synchronization service-role exceptions. CA215, CA216, and CA219 retain only synchronization exceptions because their controls are unique and must continue to protect administrators.
+CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR policies except CA215, CA216, and CA219 contain that full exclusion set and also exclude `CA-ADM-CustomRoleAccounts`. CA201, CA202, CA203, CA206, and CA211 retain two additional directory-synchronization service-role exceptions. CA215, CA216, and CA219 retain only synchronization exceptions because their controls are unique and must continue to protect administrators.
 
 ## Policy Details
 
@@ -247,7 +247,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | State | Disabled |
 | Audience | Administrators (34 roles) |
 | Include users | Any / none |
-| Include groups | CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Include groups | CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL (7b32cf4c-58c1-4fe8-9547-983e4d57a098) |
 | Include roles | 34 roles |
 | Exclude roles | 1 roles |
@@ -275,7 +275,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | State | Disabled |
 | Audience | Administrators (34 roles) |
 | Include users | Any / none |
-| Include groups | CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Include groups | CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL (9c00db91-443d-403d-aa57-a936717a05a8) |
 | Include roles | 34 roles |
 | Exclude roles | None |
@@ -303,7 +303,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | State | Disabled |
 | Audience | Administrators (34 roles) |
 | Include users | Any / none |
-| Include groups | CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Include groups | CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL (a570fe91-63a6-40f4-ae55-aecef9ffa324) |
 | Include roles | 34 roles |
 | Exclude roles | None |
@@ -331,7 +331,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | State | Disabled |
 | Audience | Administrators (34 roles) |
 | Include users | Any / none |
-| Include groups | CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Include groups | CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL (a247a2a0-0a3d-47cb-83c3-df185d806f8d) |
 | Include roles | 34 roles |
 | Exclude roles | 2 roles |
@@ -360,7 +360,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (3f9c97fb-8087-4992-b912-bfc471201a59), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (3f9c97fb-8087-4992-b912-bfc471201a59), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -388,7 +388,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA-EXCL (1444d9a4-a764-4127-a1f9-716342cb904b), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA-EXCL (1444d9a4-a764-4127-a1f9-716342cb904b), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -416,7 +416,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL (5273dd03-b602-4a55-b42a-7d8819ea3a0c), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL (5273dd03-b602-4a55-b42a-7d8819ea3a0c), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -444,7 +444,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL (8d1356e9-235c-4fb3-85ff-b6f6fd33639f), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL (8d1356e9-235c-4fb3-85ff-b6f6fd33639f), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -472,7 +472,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL (18fa41d2-7057-43bc-a7dc-b319f0ae6606), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL (18fa41d2-7057-43bc-a7dc-b319f0ae6606), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -500,7 +500,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant-EXCL (c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant-EXCL (c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -528,7 +528,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant-EXCL (c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant-EXCL (c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -556,7 +556,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL (dd68178f-b5b1-45c3-be04-304ad8b5c91a), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL (dd68178f-b5b1-45c3-be04-304ad8b5c91a), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -584,7 +584,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL (1bed65eb-3c26-449e-bb1d-eb61e193de9e), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL (1bed65eb-3c26-449e-bb1d-eb61e193de9e), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -612,7 +612,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL (24ce71a0-a35c-4d76-b473-98deae1de32b), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL (24ce71a0-a35c-4d76-b473-98deae1de32b), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -640,7 +640,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL (236772fa-5f88-4345-8de1-e6b2b6cc0c8b), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL (236772fa-5f88-4345-8de1-e6b2b6cc0c8b), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -668,7 +668,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect-EXCL (f69eda77-f120-4ffb-beba-fce593e90119), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect-EXCL (f69eda77-f120-4ffb-beba-fce593e90119), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -696,7 +696,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect-EXCL (b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect-EXCL (b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -724,7 +724,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL (6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL (6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -808,7 +808,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block-EXCL (e2b1a316-387a-46d0-b918-d7b5ca56e2dc), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block-EXCL (e2b1a316-387a-46d0-b918-d7b5ca56e2dc), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -836,7 +836,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block-EXCL (d95b7bb3-0e51-4d1a-8371-8f9f118b2d83), CA-ADM-UnsupportedRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block-EXCL (d95b7bb3-0e51-4d1a-8371-8f9f118b2d83), CA-ADM-CustomRoleAccounts (e8050e22-eb33-4557-8c41-1b543156fc80) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -891,7 +891,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | State | Disabled |
 | Audience | Targeted group |
 | Include users | Any / none |
-| Include groups | CA-Interactive-ServiceAccounts (%ServiceAccountsGroupId%) |
+| Include groups | CA-SVC-Interactive-ServiceAccounts (%ServiceAccountsGroupId%) |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (%CA301ExclGroupId%) |
 | Include roles | None |
 | Exclude roles | None |
@@ -919,7 +919,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | State | Disabled |
 | Audience | Targeted group |
 | Include users | Any / none |
-| Include groups | CA-Interactive-ServiceAccounts (%ServiceAccountsGroupId%) |
+| Include groups | CA-SVC-Interactive-ServiceAccounts (%ServiceAccountsGroupId%) |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA302-SVC-Interactive-AllApps-AnyOS-AnyCli-UntrustedLocation-Block-EXCL (%CA302ExclGroupId%) |
 | Include roles | None |
 | Exclude roles | None |
@@ -947,7 +947,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | State | Disabled |
 | Audience | Targeted group |
 | Include users | Any / none |
-| Include groups | CA-Interactive-ServiceAccounts (%ServiceAccountsGroupId%) |
+| Include groups | CA-SVC-Interactive-ServiceAccounts (%ServiceAccountsGroupId%) |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA303-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL (%CA303ExclGroupId%) |
 | Include roles | None |
 | Exclude roles | None |

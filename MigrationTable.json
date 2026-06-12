@@ -2,12 +2,12 @@
   "SchemaVersion": 2,
   "Objects": [
     {
-      "DisplayName": "CA-ADM-UnsupportedRoleAccounts",
+      "DisplayName": "CA-ADM-CustomRoleAccounts",
       "Id": "e8050e22-eb33-4557-8c41-1b543156fc80",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA-Interactive-ServiceAccounts",
+      "DisplayName": "CA-SVC-Interactive-ServiceAccounts",
       "Id": "%ServiceAccountsGroupId%",
       "Type": "Group"
     },

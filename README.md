@@ -70,7 +70,7 @@ Policy numbers are allocated by family:
 ## Inventory
 
 - Policies: **50** (GLB 6, ADM 4, USR 19, SVC 3, WLI 2, GST 6, IDP 5, AGT 5)
-- Groups: **46** (43 dedicated policy EXCL groups, shared CA000 emergency access, CA-Interactive-ServiceAccounts, and CA-ADM-UnsupportedRoleAccounts)
+- Groups: **46** (43 dedicated policy EXCL groups, shared CA000 emergency access, CA-SVC-Interactive-ServiceAccounts, and CA-ADM-CustomRoleAccounts)
 - Policy states in source: **50 disabled**
 - Named locations: **3**
 - Administrator standard: **34 built-in roles**
@@ -144,8 +144,8 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 
 ## Design Notes
 
-- ADM policies (CA101–CA104) target 34 built-in privileged roles. Accounts with custom roles or administrative-unit-scoped assignments that cannot be targeted directly go in `CA-ADM-UnsupportedRoleAccounts`; ADM policies include this group and equivalent USR policies exclude it.
-- `CA-Interactive-ServiceAccounts` contains interactive service-account user objects targeted by SVC policies. Workload identities and service principals are governed separately by WLI policies.
+- ADM policies (CA101–CA104) target 34 built-in privileged roles. Accounts with custom roles or administrative-unit-scoped assignments that cannot be targeted directly go in `CA-ADM-CustomRoleAccounts`; ADM policies include this group and equivalent USR policies exclude it.
+- `CA-SVC-Interactive-ServiceAccounts` contains interactive service-account user objects targeted by SVC policies. Workload identities and service principals are governed separately by WLI policies.
 - A block grant control always wins. Where multiple policies apply, all grant and session controls must be satisfied — a weaker overlapping policy is not a fallback.
 - CA219 and CA601–CA605 should be enabled in report-only mode until preview and licensing dependencies are validated in the tenant.
 
@@ -160,7 +160,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 - Configure SharePoint/OneDrive limited access and Exchange application-enforced restrictions before CA214 or CA405.
 - Validate Defender for Cloud Apps session controls before CA211.
 - Validate CAE authentication IP and resource-seen IP before strict location enforcement.
-- Populate `CA-Interactive-ServiceAccounts` only with user objects that can complete MFA. Prefer managed identities or workload identity federation for automation.
+- Populate `CA-SVC-Interactive-ServiceAccounts` only with user objects that can complete MFA. Prefer managed identities or workload identity federation for automation.
 - Microsoft Entra Workload ID Premium is required for CA701 and CA702.
 - Create the `AgentIdentity` custom security attribute set and `AgentApprovalStatus` attribute before evaluating CA602.
 - Reconcile Security Defaults, legacy per-user MFA, cross-tenant trust, and Microsoft-managed Conditional Access policies before enforcement.
