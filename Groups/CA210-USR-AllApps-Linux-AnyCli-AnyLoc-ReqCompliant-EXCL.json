@@ -1,4 +1,4 @@
-{
+﻿{
   "id": "24ce71a0-a35c-4d76-b473-98deae1de32b",
   "deletedDateTime": null,
   "classification": null,
@@ -14,7 +14,7 @@
   "isManagementRestricted": null,
   "mail": null,
   "mailEnabled": false,
-  "mailNickname": "ca210-usr-excl",
+  "mailNickname": "CA210-usr-excl",
   "membershipRule": null,
   "membershipRuleProcessingState": null,
   "onPremisesDomainName": null,

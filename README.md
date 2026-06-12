@@ -1,13 +1,13 @@
-# Microsoft Entra Conditional Access — Zero Trust Baseline
+﻿# Microsoft Entra Conditional Access Baseline
 
+A structured Microsoft Entra Conditional Access baseline derived from Microsoft Zero Trust and Conditional Access guidance, containing **50 policies**, **46 security groups**, **3 named locations**, a migration dependency table, and PowerShell backup/restore tooling.
 
-A structured Microsoft Entra Conditional Access Baseline derived from Microsoft Zero Trust and Conditional Access guidance. Includes **39 policies**, **39 exclusion security groups**, **Named Location**, a migration dependency table, and a PowerShell Backup & Restore utility.
+The restore workflow creates policies disabled, and preview policies remain report-only until tenant prerequisites and impact evidence are approved.
 
 ---
 
 | Field | Details |
 | :--- | :--- |
-| **Version** | [v1.0.0](https://github.com/UniFy-Endpoint/Conditional-Access-Baseline/releases/tag/v1.0.0) |
 | **Author** | Yoennis Olmo, Sr. Modern Work Consultant |
 | **Reference** | [Microsoft Zero Trust Assessment](https://learn.microsoft.com/en-us/security/zero-trust/assessment/overview) (updated April 2026) |
 | **Last Updated** | June 2026 |
@@ -21,254 +21,185 @@ A structured Microsoft Entra Conditional Access Baseline derived from Microsoft 
 ## Table of Contents
 
 - [Zero Trust Approach](#zero-trust-approach)
-- [Naming Convention](#naming-convention)
+- [Inventory](#inventory)
+- [Naming](#naming)
 - [Policy Catalog](#policy-catalog)
-- [Important Design Notes](#important-design-notes)
+- [Design Notes](#design-notes)
+- [Tenant Prerequisites](#tenant-prerequisites)
+- [Deployment Order](#deployment-order)
 - [Repository Layout](#repository-layout)
-- [Backup and Restore](#backup-and-restore)
-- [Microsoft Documentation](#microsoft-documentation)
-
+- [Microsoft Guidance](#microsoft-guidance)
 
 ---
 
 ## Zero Trust Approach
 
-Microsoft defines Conditional Access as its Zero Trust policy engine. This baseline aligns with the Zero Trust principles of explicitly verifying access, enforcing least privilege, assuming breach, protecting privileged roles, requiring strong authentication, validating device health, limiting unmanaged-device access, and responding to identity risk signals.
+Microsoft defines Conditional Access as its Zero Trust policy engine. This baseline aligns with Zero Trust principles: explicitly verify access, enforce least privilege, assume breach, protect privileged roles, require strong authentication, validate device health, limit unmanaged-device access, and respond to identity risk signals.
 
-Policies are organized into five active families:
+Policies are organized into eight audience families:
 
 | Code | Family | Scope |
 | :---: | :--- | :--- |
-| GLB | Global | Foundational controls applied to all users |
+| GLB | Global | Foundational controls applied to all identities |
 | ADM | Administrators | Privileged directory roles |
-| USR | Users | Standard users — managed and unmanaged device scenarios |
+| USR | Users | Standard workforce — managed and unmanaged device scenarios |
+| SVC | Service Accounts | Interactive service-account user objects |
+| WLI | Workload Identities | Service principals and managed identities |
 | GST | Guests | Guest and external identities |
-| IDP | Identity Protection | Risk-driven policies requiring Entra ID P2 |
+| IDP | Identity Protection | Risk-driven policies requiring Microsoft Entra ID P2 |
+| AGT | Agents | AI agent and autonomous workload identities |
 
-Policy numbers are allocated by scope and licensing tier:
+Policy numbers are allocated by family:
 
-| Range | Purpose |
+| Range | Family |
 | :--- | :--- |
-| CA000 | Shared emergency-access exclusion group — referenced across multiple policies |
-| CA001 – CA099 | Global baseline policies |
-| CA100 – CA199 | Administrator policies |
-| CA200 – CA299 | Standard user policies |
-| CA300 – CA399 | Reserved for future advanced protection policies |
-| CA400 – CA499 | Guest and external identity policies |
-| CA500 – CA599 | Policies requiring Microsoft Entra ID P2 |
+| CA000 | Shared emergency-access exclusion group — referenced across all policies |
+| CA001 – CA099 | GLB — Global baseline policies |
+| CA100 – CA199 | ADM — Administrator policies |
+| CA200 – CA299 | USR — Standard user policies |
+| CA300 – CA399 | SVC — Interactive service-account policies |
+| CA400 – CA499 | GST — Guest and external identity policies |
+| CA500 – CA599 | IDP — Identity Protection policies (requires Entra ID P2) |
+| CA600 – CA699 | AGT — Agent and autonomous workload policies |
+| CA700 – CA799 | WLI — Workload identity policies (requires Workload ID Premium) |
 
 ---
 
-## Naming Convention
+---
 
-~~~text
-CA###-[Scope]-[Apps]-[Platform]-[Client]-[Location/Scenario]-[Control]
-~~~
+## Inventory
 
-This is a semantic pattern rather than a fixed segment count. `Scope` identifies the target user type. Control tokens use compact PascalCase to keep names concise and readable.
+- Policies: **50** (GLB 6, ADM 4, USR 19, SVC 3, WLI 2, GST 6, IDP 5, AGT 5)
+- Groups: **46** (43 dedicated policy EXCL groups, shared CA000 emergency access, CA-Interactive-ServiceAccounts, and CA-ADM-UnsupportedRoleAccounts)
+- Policy states in source: **50 disabled**
+- Named locations: **3**
+- Administrator standard: **34 built-in roles**
 
-| Token | Meaning |
-| :--- | :--- |
-| `AllApps` `O365` `M365` `AdminCenters` `EXO-SPO` | Application scope |
-| `AnyOS` `Win` `macOS` `iOS` `Android` `Linux` | Platform scope |
-| `AnyCli` `ModernCli` `Legacy` `Browser` `Desktop` `Mobile` | Client scope |
-| `AnyLoc` `UntrustLoc` `BYOD` | Location or access scenario |
-| `ReqMFA` `ReqPhishMFA` `ReqPwdlessMFA` | Authentication strength controls |
-| `ReqCompliant` `ReqCompliantOrHybrid` | Device compliance controls |
-| `Block` `SignInFreq` `PersistSession` `ContAccEval` | Block and session controls |
-| `ReqAppProtect` `AppCtrl` `AppRestrict` `ReqTokenProtect` | Application and token controls |
-| `EXCL` | Exclusion security group |
+---
 
-The shared emergency-access exclusion group is:
+## Naming
 
-~~~text
-CA000-GLB-BGA-EmergencyAccess-EXCL
-~~~
+`CA###-Audience-Resource-Platform-Client-Location-Control`
 
-This group is intentionally shared across multiple policies rather than scoped to a single one. CA215 references this shared group and has no dedicated exclusion group.
+Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. Workforce (`USR`) and guest (`GST`) policies are always separate. A dedicated exclusion group is named exactly `<policy-displayName>-EXCL`.
 
 ---
 
 ## Policy Catalog
 
-| ID | Family | Policy Name | Purpose | Enforcement | Requirements | Exclusion Group |
-| :--- | :---: | :--- | :--- | :--- | :--- | :--- |
-| CA001 | GLB | `CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block` | Prevent access from locations outside the approved named location. | Blocks matching sign-ins from untrusted locations. | Entra ID P1; named locations configured | `CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL` |
-| CA002 | GLB | `CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block` | Block access from device platforms that are not explicitly supported. | Blocks all platforms except Android, iOS, Windows, macOS, and Linux. | Entra ID P1 | `CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block-EXCL` |
-| CA003 | GLB | `CA003-GLB-AllApps-AnyOS-Legacy-LegacyAuth-Block` | Remove legacy authentication protocols that cannot satisfy modern access controls. | Blocks Exchange ActiveSync and other legacy client authentication. | Entra ID P1 | `CA003-GLB-AllApps-AnyOS-Legacy-LegacyAuth-Block-EXCL` |
-| CA004 | GLB | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Reduce phishing and token-transfer risk from high-risk authentication flows. | Blocks device code flow and authentication transfer. | Entra ID P1; authentication-flow support | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL` |
-| CA005 | GLB | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA` | Protect Microsoft Entra device registration and join operations at every location. | Requires MFA for the register or join devices user action. | Entra ID P1; MFA registration; tenant device setting coordination | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
-| CA006 | GLB | `CA006-GLB-RegSecInfo-AnyOS-AnyCli-UntrustLoc-ReqMFA` | Protect security-information registration from unauthorized changes outside approved locations. | Requires MFA when registering security information from untrusted locations. | Entra ID P1; combined registration; named locations | `CA006-GLB-RegSecInfo-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL` |
-| CA100 | ADM | `CA100-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Apply baseline multifactor protection to privileged administrator roles. | Requires MFA for targeted administrator roles across all applications. | Entra ID P1; MFA methods registered | `CA100-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
-| CA101 | ADM | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA` | Require phishing-resistant authentication for administrators at every location. | Requires the phishing-resistant MFA authentication strength for all targeted resources. | Entra ID P1; phishing-resistant methods registered | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL` |
-| CA102 | ADM | `CA102-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPwdlessMFA` | Strengthen administrator access to management portals outside approved locations. | Requires the Passwordless MFA authentication strength for admin portals and Azure management. | Entra ID P1; passwordless methods; named locations | `CA102-ADM-AllApps-AnyOS-AnyCli-UntrustLoc-ReqPwdlessMFA-EXCL` |
-| CA103 | ADM | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq` | Limit the lifetime of privileged sign-in sessions. | Requires administrators to reauthenticate every 8 hours. | Entra ID P1 | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-EXCL` |
-| CA104 | ADM | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-PersistSession` | Prevent privileged browser sessions from persisting after the browser closes. | Sets persistent browser session mode to never persistent. | Entra ID P1 | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-PersistSession-EXCL` |
-| CA105 | ADM | `CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval` | Apply strict location enforcement to supported administrator sessions. | Strictly enforces location policies with Continuous Access Evaluation. | Entra ID P1; CAE-capable resources and clients | `CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL` |
-| CA106 | ADM | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid` | Restrict privileged access to organization-managed devices only. | Requires a compliant device or a Microsoft Entra hybrid joined device. | Entra ID P1; Intune compliance or hybrid join | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL` |
-| CA200 | USR | `CA200-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Provide baseline multifactor protection for all workforce users. | Requires MFA for all targeted users and applications. | Entra ID P1; MFA methods registered | `CA200-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
-| CA201 | USR | `CA201-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA` | Strengthen workforce authentication outside approved locations. | Requires Passwordless MFA for browser, mobile, and desktop clients from untrusted locations. | Entra ID P1; passwordless methods; named locations | `CA201-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA-EXCL` |
-| CA202 | USR | `CA202-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Prevent standard users from accessing administrative management resources. | Blocks access to Microsoft admin portals and Azure management. | Entra ID P1 | `CA202-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL` |
-| CA203 | USR | `CA203-USR-AllApps-Win-macOS-AnyLoc-Browser-SignInFreq` | Limit browser session lifetime on Windows and macOS. | Requires browser reauthentication every 12 hours. | Entra ID P1 | `CA203-USR-AllApps-Win-macOS-AnyLoc-Browser-SignInFreq-EXCL` |
-| CA204 | USR | `CA204-USR-AllApps-Win-macOS-AnyLoc-Browser-PersistSession` | Prevent workforce browser sessions from persisting on Windows and macOS. | Sets persistent browser session mode to never persistent. | Entra ID P1 | `CA204-USR-AllApps-Win-macOS-AnyLoc-Browser-PersistSession-EXCL` |
-| CA205 | USR | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval` | Apply strict location enforcement to supported workforce sessions. | Strictly enforces location policies with Continuous Access Evaluation. | Entra ID P1; CAE-capable resources and clients | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL` |
-| CA206 | USR | `CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant` | Protect Microsoft 365 desktop access from unmanaged Windows devices. | Requires a compliant or Microsoft Entra hybrid joined Windows device. | Entra ID P1; Intune compliance or hybrid join | `CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant-EXCL` |
-| CA207 | USR | `CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant` | Protect Microsoft 365 desktop access from unmanaged macOS devices. | Requires the macOS device to be marked compliant. | Entra ID P1; Intune compliance | `CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant-EXCL` |
-| CA208 | USR | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant` | Restrict iOS access to organization-compliant devices. | Requires the iOS device to be marked compliant. | Entra ID P1; Intune compliance | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant-EXCL` |
-| CA209 | USR | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant` | Restrict Android access to organization-compliant devices. | Requires the Android device to be marked compliant. | Entra ID P1; Intune compliance | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant-EXCL` |
-| CA210 | USR | `CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Restrict Linux access to organization-compliant devices. | Requires the Linux device to be marked compliant. | Entra ID P1; supported Intune Linux compliance | `CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL` |
-| CA211 | USR | `CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Reduce data-loss risk from unmanaged Windows browser sessions accessing Microsoft 365. | Requires an app protection policy and uses Defender for Cloud Apps to block downloads. | Entra ID P1; Intune App Protection Policy; Defender for Cloud Apps | `CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL` |
-| CA212 | USR | `CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect` | Restrict Microsoft 365 mobile access on unmanaged Android devices to protected applications. | Requires an Intune app protection policy. | Entra ID P1; Intune App Protection Policy | `CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect-EXCL` |
-| CA213 | USR | `CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect` | Restrict Microsoft 365 mobile access on unmanaged iOS devices to protected applications. | Requires an Intune app protection policy. | Entra ID P1; Intune App Protection Policy | `CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect-EXCL` |
-| CA214 | USR | `CA214-USR-EXO-SPO-Win-Browser-BYOD-AppRestrict` | Provide limited Exchange Online and SharePoint Online browser access from unmanaged Windows devices. | Uses application-enforced restrictions to limit the browser experience. | Entra ID P1; Exchange Online and SharePoint configuration | `CA214-USR-EXO-SPO-Win-Browser-BYOD-AppRestrict-EXCL` |
-| CA215 | USR | `CA215-USR-O365-macOS-Browser-BYOD-AppRestrict` | Provide a restricted Microsoft 365 browser experience from unmanaged macOS devices. | Uses application-enforced restrictions; targets supported Exchange Online and SharePoint resources. | Entra ID P1; Exchange Online and SharePoint configuration | `CA000-GLB-BGA-EmergencyAccess-EXCL` *(shared)* |
-| CA216 | USR | `CA216-USR-M365-Win-macOS-Desktop-AnyLoc-ReqTokenProtect` | Reduce token replay risk for supported Microsoft 365 desktop sessions. | Requires device-bound sign-in session tokens for supported applications and platforms. | Feature-specific licensing; supported apps and devices | `CA216-USR-M365-Win-macOS-Desktop-AnyLoc-ReqTokenProtect-EXCL` |
-| CA400 | GST | `CA400-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Apply baseline multifactor protection to guest and external identities. | Requires MFA for all targeted guest and external users. | Entra ID P1; external identity MFA configuration | `CA400-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
-| CA401 | GST | `CA401-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block` | Limit guest access to the explicitly permitted application set. | Blocks browser, mobile, and desktop access to all applications except listed exclusions. | Entra ID P1; maintained application exclusions | `CA401-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block-EXCL` |
-| CA402 | GST | `CA402-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Prevent guests and external identities from reaching administrative resources. | Blocks access to Microsoft admin portals and Azure management. | Entra ID P1 | `CA402-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL` |
-| CA403 | GST | `CA403-GST-AllApps-AnyOS-AnyCli-AnyLoc-Browser-SignInFreq` | Limit the lifetime of guest and external-user sessions. | Requires guest users to reauthenticate every 4 hours. | Entra ID P1 | `CA403-GST-AllApps-AnyOS-AnyCli-AnyLoc-Browser-SignInFreq-EXCL` |
-| CA404 | GST | `CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-Browser-PersistSession` | Prevent guest browser sessions from persisting after the browser closes. | Sets persistent browser session mode to never persistent. | Entra ID P1 | `CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-Browser-PersistSession-EXCL` |
-| CA405 | GST | `CA405-GST-AllApps-AnyOS-ModernCli-AnyLoc-ContAccEval` | Apply strict location enforcement to supported guest sessions. | Configures strict CAE location enforcement; note that CAE support for guests is limited. | Entra ID P1; CAE limitations for guests | `CA405-GST-AllApps-AnyOS-ModernCli-AnyLoc-ContAccEval-EXCL` |
-| CA501 | IDP | `CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMedHigh-ReqPhishMFA` | Challenge medium- and high-risk sign-ins with strong phishing-resistant authentication. | Requires phishing-resistant MFA when sign-in risk is medium or high. | Entra ID P2; phishing-resistant methods registered | `CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMedHigh-ReqPhishMFA-EXCL` |
-| CA502 | IDP | `CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMedHigh-ReqRemediate` | Allow compromised users to securely remediate elevated user risk. | Requires risk remediation using the configured Passwordless MFA authentication strength. | Entra ID P2; Identity Protection; remediation prerequisites | `CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMedHigh-ReqRemediate-EXCL` |
-| CA503 | IDP | `CA503-IDP-O365-AnyOS-AnyCli-InsiderRiskElevated-Block` | Protect Microsoft 365 resources when insider-risk signals are elevated. | Blocks access when the insider-risk condition is elevated. | Entra ID P2; Microsoft Purview insider-risk integration | `CA503-IDP-O365-AnyOS-AnyCli-InsiderRiskElevated-Block-EXCL` |
+| ID | Family | Policy | State | Effective control | Dedicated EXCL |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| CA001 | GLB | `CA001-GLB-AllApps-AnyOS-AnyCli-UntrustedLocation-Block` | Disabled | block | `CA001-GLB-AllApps-AnyOS-AnyCli-UntrustedLocation-Block-EXCL` |
+| CA002 | GLB | `CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block` | Disabled | block | `CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block-EXCL` |
+| CA003 | GLB | `CA003-GLB-AllApps-AnyOS-Legacy-LegacyAuth-Block` | Disabled | block | `CA003-GLB-AllApps-AnyOS-Legacy-LegacyAuth-Block-EXCL` |
+| CA004 | GLB | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Disabled | block | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL` |
+| CA005 | GLB | `CA005-GLB-DeviceRegistration-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA005-GLB-DeviceRegistration-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
+| CA006 | GLB | `CA006-GLB-SecurityInfoReg-AnyOS-AnyCli-UntrustedLocation-ReqMFA` | Disabled | mfa | `CA006-GLB-SecurityInfoReg-AnyOS-AnyCli-UntrustedLocation-ReqMFA-EXCL` |
+| CA101 | ADM | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA` | Disabled | Authentication strength: Phishing-resistant MFA | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL` |
+| CA102 | ADM | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession` | Disabled | Sign-in frequency: 8 hours; Persistent browser: never | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL` |
+| CA103 | ADM | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
+| CA104 | ADM | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid` | Disabled | compliantDevice OR domainJoinedDevice | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL` |
+| CA201 | USR | `CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
+| CA202 | USR | `CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA` | Disabled | Authentication strength: Passwordless MFA | `CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA-EXCL` |
+| CA203 | USR | `CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Disabled | block | `CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL` |
+| CA204 | USR | `CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession` | Disabled | Sign-in frequency: 12 hours; Persistent browser: never | `CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL` |
+| CA205 | USR | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
+| CA206 | USR | `CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice OR domainJoinedDevice | `CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant-EXCL` |
+| CA207 | USR | `CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant-EXCL` |
+| CA208 | USR | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant` | Disabled | compliantDevice | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL` |
+| CA209 | USR | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant` | Disabled | compliantDevice | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL` |
+| CA210 | USR | `CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL` |
+| CA211 | USR | `CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL` |
+| CA212 | USR | `CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication | `CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect-EXCL` |
+| CA213 | USR | `CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication | `CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect-EXCL` |
+| CA214 | USR | `CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions` | Disabled | Application-enforced restrictions | `CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL` |
+| CA215 | USR | `CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect` | Disabled | Token protection | `CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect-EXCL` |
+| CA216 | USR | `CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime` | Disabled | mfa; Sign-in frequency: every time | `CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime-EXCL` |
+| CA217 | USR | `CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block` | Disabled | block | `CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block-EXCL` |
+| CA218 | USR | `CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block` | Disabled | block | `CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block-EXCL` |
+| CA219 | USR | `CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview` | Disabled | Token protection | `CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL` |
+| CA301 | SVC | `CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
+| CA302 | SVC | `CA302-SVC-Interactive-AllApps-AnyOS-AnyCli-UntrustedLocation-Block` | Disabled | block | `CA302-SVC-Interactive-AllApps-AnyOS-AnyCli-UntrustedLocation-Block-EXCL` |
+| CA303 | SVC | `CA303-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA303-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
+| CA401 | GST | `CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
+| CA402 | GST | `CA402-GST-ExceptAllowed-AnyOS-ModernClient-AnyLoc-Block` | Disabled | block | `CA402-GST-ExceptAllowed-AnyOS-ModernClient-AnyLoc-Block-EXCL` |
+| CA403 | GST | `CA403-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Disabled | block | `CA403-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL` |
+| CA404 | GST | `CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-Browser-SignInFreq-PersistSession` | Disabled | Sign-in frequency: 4 hours; Persistent browser: never | `CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-Browser-SignInFreq-PersistSession-EXCL` |
+| CA405 | GST | `CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnforcedRestrictions` | Disabled | Application-enforced restrictions | `CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL` |
+| CA406 | GST | `CA406-GST-AllApps-AnyOS-ModernClient-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA406-GST-AllApps-AnyOS-ModernClient-AnyLoc-ContinuousAccessEval-EXCL` |
+| CA501 | IDP | `CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishResistantMFA` | Disabled | Authentication strength: Phishing-resistant MFA; Sign-in frequency: every time | `CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishResistantMFA-EXCL` |
+| CA502 | IDP | `CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemediation` | Disabled | Authentication strength: Passwordless MFA; Sign-in frequency: every time | `CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemediation-EXCL` |
+| CA503 | IDP | `CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block` | Disabled | block | `CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block-EXCL` |
+| CA504 | IDP | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-Block` | Disabled | block | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-Block-EXCL` |
+| CA505 | IDP | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-Block` | Disabled | block | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-Block-EXCL` |
+| CA601 | AGT | `CA601-AGT-AllAgentId-AllApps-AnyOS-AnyCli-BlockHighRiskAgent` | Disabled | block | None |
+| CA602 | AGT | `CA602-AGT-UnapprovedAgentId-AllApps-AnyOS-AnyCli-Block` | Disabled | block | None |
+| CA603 | AGT | `CA603-AGT-AllAgentUsers-AllApps-AnyOS-AnyCli-ReqCompliantDevice` | Disabled | compliantDevice | None |
+| CA604 | AGT | `CA604-AGT-AllAgentUsers-AllApps-AnyOS-AnyCli-BlockRiskyAgents` | Disabled | block | None |
+| CA605 | AGT | `CA605-AGT-AllAgentUsers-AllAgentIdResources-AnyOS-AnyCli-BlockNonCompliantNetwork` | Disabled | block | None |
+| CA701 | WLI | `CA701-WLI-AllApps-AnyLoc-WorkloadRiskHigh-Block` | Disabled | block | None |
+| CA702 | WLI | `CA702-WLI-AllApps-AnyLoc-UntrustedNetwork-Block` | Disabled | block | None |
 
 ---
 
-## Important Design Notes
+## Design Notes
 
-The [Zero Trust Conditional Access Assessment](ZERO-TRUST-ASSESSMENT.md) records current coverage, identified gaps, design risks, and recommended implementation priorities. The assessment is dated because Microsoft capabilities and recommendations evolve over time.
+- ADM policies (CA101–CA104) target 34 built-in privileged roles. Accounts with custom roles or administrative-unit-scoped assignments that cannot be targeted directly go in `CA-ADM-UnsupportedRoleAccounts`; ADM policies include this group and equivalent USR policies exclude it.
+- `CA-Interactive-ServiceAccounts` contains interactive service-account user objects targeted by SVC policies. Workload identities and service principals are governed separately by WLI policies.
+- A block grant control always wins. Where multiple policies apply, all grant and session controls must be satisfied — a weaker overlapping policy is not a fallback.
+- CA219 and CA601–CA605 should be enabled in report-only mode until preview and licensing dependencies are validated in the tenant.
 
-### Emergency Access
+---
 
-Maintain at least two cloud-only emergency-access accounts. Monitor their use and exclude them carefully from policies that could cause tenant-wide lockout. Exclusion-group membership must be tightly controlled and reviewed on a recurring basis.
+## Tenant Prerequisites
 
-### Policy Deployment
+- Maintain at least two cloud-only emergency-access accounts and test them every 90 days.
+- Assign owners, justification, approval, expiration, access review, and monitoring to every EXCL group membership.
+- Configure and test phishing-resistant methods before piloting CA101.
+- Validate Intune compliance and App Protection policies before device and MAM enforcement.
+- Configure SharePoint/OneDrive limited access and Exchange application-enforced restrictions before CA214 or CA405.
+- Validate Defender for Cloud Apps session controls before CA211.
+- Validate CAE authentication IP and resource-seen IP before strict location enforcement.
+- Populate `CA-Interactive-ServiceAccounts` only with user objects that can complete MFA. Prefer managed identities or workload identity federation for automation.
+- Microsoft Entra Workload ID Premium is required for CA701 and CA702.
+- Create the `AgentIdentity` custom security attribute set and `AgentApprovalStatus` attribute before evaluating CA602.
+- Reconcile Security Defaults, legacy per-user MFA, cross-tenant trust, and Microsoft-managed Conditional Access policies before enforcement.
+- Enable FIDO2, Windows Hello for Business, and certificate-based authentication in the tenant Authentication Methods Policy before piloting CA101, CA501, or CA502; those policies will fail at runtime if the required methods are not enabled.
+- If regulatory requirements mandate geography-based access restrictions regardless of device compliance state (SOX, GDPR data-residency controls), review whether the CA001 device filter exclusion for compliant corporate devices is appropriate for your compliance posture.
 
-All source policy JSON files are stored in the **Off** state, and the restore script forces policies to **Off** before creation. Before enabling any policy:
+---
 
-- Validate with Conditional Access **report-only mode** where supported.
-- Review **sign-in logs** and use the **What If** tool.
-- Test with a **pilot group** and document rollback procedures.
+## Deployment Order
 
-> Policies scoped to **User Actions** (including CA005) require controlled functional testing because report-only evaluation does not support that scope.
-
-For CA005: set the tenant device setting **Require Multifactor Authentication to register or join devices with Microsoft Entra** to **No** so that Conditional Access fully controls the MFA requirement.
-
-### Workload Identities
-
-> **Not included in this baseline:** Conditional Access policies for workload identities are tenant-specific and are not included in the policy JSON files. A Conditional Access Administrator can configure them directly in each tenant based on the tenant's service principals, approved network locations, risk tolerance, licensing, and operational dependencies. See [Conditional Access for workload identities](https://learn.microsoft.com/en-us/entra/identity/conditional-access/workload-identity) and [What are workload identities?](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-overview).
-
-Workload-identity policies protect service-principal token requests rather than interactive user sign-ins. Microsoft supports blocking selected service principals based on network location or service-principal risk.
-
-**Key limitations:**
-
-| Limitation | Detail |
-| :--- | :--- |
-| Licensing | Microsoft Entra Workload ID Premium required to create or modify these policies |
-| Scope | Applies only to selected single-tenant service principals owned by the organization |
-| Exclusions | Managed identities, Microsoft apps, third-party SaaS apps, and multitenant apps are not covered |
-| Assignment | Service principals must be assigned directly — group-based assignment is not enforced |
-| Object ID | Use the service principal **Object ID** from **Enterprise applications**, not the app-registration ID |
-| Grant control | **Block access** is the only available grant control — workload identities cannot perform MFA |
-| Best practice | Prefer managed identities or workload identity federation where supported to reduce stored credentials |
-
-### Licensing and Dependencies
-
-| Dependency | Applies To |
-| :--- | :--- |
-| Microsoft Entra ID P1 | All policies — baseline requirement for Conditional Access |
-| Microsoft Entra ID P2 + Identity Protection | CA501, CA502, CA503 |
-| Microsoft Intune — device compliance | All device-compliance policies |
-| Microsoft Intune — App Protection Policies | CA211, CA212, CA213 |
-| Microsoft Defender for Cloud Apps — session control | CA211 |
-| Microsoft Purview — insider-risk integration | CA503 |
-| Token protection and app-enforced restrictions | Limited to specific platforms, clients, and resources |
-| Microsoft Entra Workload ID Premium | Tenant-specific service-principal policies |
+1. Audit Microsoft-managed Conditional Access policies in the tenant and decide whether to disable, retain, or supersede each one before restoring this baseline to avoid duplicate or conflicting controls.
+2. Restore policies disabled and reconcile migration dependencies.
+3. Pilot GLB and ADM controls, then broad workforce MFA.
+4. Pilot device compliance, MAM, browser restrictions, and session controls by platform.
+5. Enable guest controls only after cross-tenant MFA trust and external collaboration tests.
+6. Pilot SVC and WLI policies after identity inventory approval.
+7. Enable CA219 and CA601–CA605 in report-only mode until preview and licensing dependencies are validated.
+8. Review at least one normal business cycle of Conditional Access insights before enforcement.
 
 ---
 
 ## Repository Layout
 
-~~~text
-Conditional-Access-Baseline/
-├── ConditionalAccess/        # Conditional Access policy JSON files
-├── Groups/                   # Exclusion security-group JSON files
-├── NamedLocations/           # Named-location JSON files
-├── MigrationTable.json       # Group and service-principal dependency metadata
-├── ZERO-TRUST-ASSESSMENT.md  # Coverage and gap assessment
-└── README.md
-~~~
+- `ConditionalAccess/`: policy JSON files
+- `Groups/`: shared and dedicated group JSON files
+- `NamedLocations/`: named-location JSON files
+- `MigrationTable.json`: dependency identity mapping
+- `Invoke-ConditionalAccessBaseline.ps1`: backup and restore utility
+- `SETTINGSOUTPUT.md`: complete policy settings reference
 
 ---
 
-## Backup and Restore
+## Microsoft Guidance
 
-The included `Invoke-ConditionalAccessBaseline.ps1` PowerShell script handles both directions. Use it to export a snapshot of your tenant's Conditional Access configuration before making changes and to restore the baseline into any target tenant.
-
-### Backup Workflow
-
-1. Open **PowerShell 7**.
-2. Run `Invoke-ConditionalAccessBaseline.ps1`.
-3. Connect to Microsoft Graph and consent to the requested delegated permissions.
-4. Select **Backup Conditional Access Policies**.
-5. Choose an output folder to store the exported JSON files.
-6. Review the exported files to confirm all policies, groups, and named locations were captured.
-
-### Restore Workflow
-
-1. Open **PowerShell 7**.
-2. Run `Invoke-ConditionalAccessBaseline.ps1`.
-3. Connect to Microsoft Graph and consent to the requested delegated permissions.
-4. Select **Restore Conditional Access Policies**.
-5. Select the `Conditional-Access-Baseline` folder.
-6. Run **Preview** first and review all output carefully.
-7. Verify service-principal creation, groups, named locations, licensing warnings, and policy payloads.
-8. Apply the restore.
-9. Update the **Allowed Countries** named location for your organization's approved countries and regions.
-10. Review every restored policy in the Microsoft Entra admin center before enabling it.
-
-### Customizing the Allowed Countries Named Location
-
-The included `Allowed Countries.json` named location contains Belgium (`BE`) and the Netherlands (`NL`) as baseline examples. After importing the baseline, update this named location to match the countries and regions from which your organization permits access.
-
-Location-dependent policies use this named location to distinguish trusted from untrusted sign-ins. Do not enable those policies until the country list has been reviewed and customized for the target tenant. Keep `includeUnknownCountriesAndRegions` disabled unless your organization has explicitly assessed and accepted the additional risk.
-
-**Required Microsoft Graph delegated permissions:**
-
-| Permission | Purpose |
-| :--- | :--- |
-| `Policy.Read.All` | Read existing policies |
-| `Policy.ReadWrite.ConditionalAccess` | Create and update Conditional Access policies |
-| `Application.ReadWrite.All` | Manage service principal dependencies |
-| `Group.ReadWrite.All` | Create and update exclusion security groups |
-| `Directory.Read.All` | Read directory objects |
-
-**Troubleshooting log location:**
-
-~~~text
-C:\Windows\Temp\Invoke-ConditionalAccessBaseline.log
-~~~
-
----
-
-## Microsoft Documentation
-
-- [Conditional Access overview](https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview)
 - [Plan a Conditional Access deployment](https://learn.microsoft.com/en-us/entra/identity/conditional-access/plan-conditional-access)
-- [Conditional Access policy templates](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-policy-common)
-- [Zero Trust identity and device access policies](https://learn.microsoft.com/en-us/security/zero-trust/zero-trust-identity-device-access-policies-overview)
-- [Build Conditional Access policies](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-policies)
-- [Authentication strengths](https://learn.microsoft.com/en-us/entra/identity/authentication/concept-authentication-strengths)
-- [Require device compliance](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-all-users-device-compliance)
-- [Require app protection policy](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-all-users-approved-app-or-app-protection)
-- [Conditional Access session controls](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-session)
-- [Continuous Access Evaluation](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-continuous-access-evaluation)
+- [Require phishing-resistant MFA for administrators](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-admin-phish-resistant-mfa)
+- [Require MFA for all users](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-all-users-mfa-strength)
+- [Filter for devices](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-condition-filters-for-devices)
 - [Token protection](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-token-protection)
-- [Identity Protection risk policies](https://learn.microsoft.com/en-us/entra/id-protection/howto-identity-protection-configure-risk-policies)
-- [Authentication flows](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-authentication-flows)
 - [Conditional Access for workload identities](https://learn.microsoft.com/en-us/entra/identity/conditional-access/workload-identity)
-- [Workload identities overview](https://learn.microsoft.com/en-us/entra/workload-id/workload-identities-overview)
-- [Network conditions in Conditional Access](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-assignment-network)
-- [Conditional Access report-only mode](https://learn.microsoft.com/en-us/entra/identity/conditional-access/concept-conditional-access-report-only)
-
+- [Recommended policies for autonomous agents](https://learn.microsoft.com/en-us/entra/identity/conditional-access/policy-autonomous-agents)
+- [Manage emergency access accounts](https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/security-emergency-access)

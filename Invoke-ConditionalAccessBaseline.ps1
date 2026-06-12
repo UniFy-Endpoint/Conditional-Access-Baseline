@@ -616,10 +616,10 @@ function Get-CleanPolicyBody {
     $body = Remove-OdataAnnotations $body
 
     # Remove obsolete response fields that aren't accepted by the current
-    # conditionalAccessConditionSet create schema.
+    # conditionalAccessConditionSet create schema. The agents condition is
+    # retained because agent identity policies use the current beta schema.
     if ($body['conditions']) {
         $body['conditions'].Remove('times')
-        $body['conditions'].Remove('agents')
     }
 
     # Reduce authenticationStrength to a minimal typed reference (all other
@@ -704,6 +704,8 @@ function Repair-PolicyCollectionProperties {
         @('conditions', 'devices', 'excludeDevices'),
         @('conditions', 'clientApplications', 'includeServicePrincipals'),
         @('conditions', 'clientApplications', 'excludeServicePrincipals'),
+        @('conditions', 'clientApplications', 'includeAgentIdServicePrincipals'),
+        @('conditions', 'clientApplications', 'excludeAgentIdServicePrincipals'),
         @('grantControls', 'builtInControls'),
         @('grantControls', 'customAuthenticationFactors'),
         @('grantControls', 'termsOfUse')
@@ -1023,7 +1025,12 @@ function Invoke-BackupConditionalAccess {
             }
             $clientApps = $conditions['clientApplications']
             if ($clientApps) {
-                foreach ($appRef in @($clientApps['excludeServicePrincipals']) + @($clientApps['includeServicePrincipals'])) {
+                foreach ($appRef in @(
+                    $clientApps['excludeServicePrincipals']
+                    $clientApps['includeServicePrincipals']
+                    $clientApps['excludeAgentIdServicePrincipals']
+                    $clientApps['includeAgentIdServicePrincipals']
+                )) {
                     if ($appRef -and $appRef -match $uuidPattern) {
                         $null = $referencedAppIds.Add($appRef)
                     }
@@ -1454,6 +1461,8 @@ function Invoke-ApplyIdRemapping {
         if ($clientApps) {
             if ($clientApps['excludeServicePrincipals']) { $clientApps['excludeServicePrincipals'] = & $remapApplicationList $clientApps['excludeServicePrincipals'] }
             if ($clientApps['includeServicePrincipals']) { $clientApps['includeServicePrincipals'] = & $remapApplicationList $clientApps['includeServicePrincipals'] }
+            if ($clientApps['excludeAgentIdServicePrincipals']) { $clientApps['excludeAgentIdServicePrincipals'] = & $remapApplicationList $clientApps['excludeAgentIdServicePrincipals'] }
+            if ($clientApps['includeAgentIdServicePrincipals']) { $clientApps['includeAgentIdServicePrincipals'] = & $remapApplicationList $clientApps['includeAgentIdServicePrincipals'] }
         }
     }
 
@@ -1838,7 +1847,9 @@ function Get-PolicyDependencyIds {
     if ($clientApps) {
         $excServicePrincipals = if ($clientApps -is [PSCustomObject]) { $clientApps.excludeServicePrincipals } else { $clientApps['excludeServicePrincipals'] }
         $incServicePrincipals = if ($clientApps -is [PSCustomObject]) { $clientApps.includeServicePrincipals } else { $clientApps['includeServicePrincipals'] }
-        foreach ($appId in @($excServicePrincipals) + @($incServicePrincipals)) {
+        $excAgentPrincipals = if ($clientApps -is [PSCustomObject]) { $clientApps.excludeAgentIdServicePrincipals } else { $clientApps['excludeAgentIdServicePrincipals'] }
+        $incAgentPrincipals = if ($clientApps -is [PSCustomObject]) { $clientApps.includeAgentIdServicePrincipals } else { $clientApps['includeAgentIdServicePrincipals'] }
+        foreach ($appId in @($excServicePrincipals) + @($incServicePrincipals) + @($excAgentPrincipals) + @($incAgentPrincipals)) {
             if ($appId -and $appId -match $uuidPattern) { $null = $appIds.Add($appId) }
         }
     }

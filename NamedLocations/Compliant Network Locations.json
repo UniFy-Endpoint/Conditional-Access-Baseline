@@ -1,0 +1,20 @@
+{
+  "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/namedLocations/$entity",
+  "@odata.type": "#microsoft.graph.compliantNetworkNamedLocation",
+  "@odata.id": "identity/conditionalAccess/namedLocations('%CompliantNetworkLocationId%')",
+  "@odata.editLink": "identity/conditionalAccess/namedLocations('%CompliantNetworkLocationId%')/microsoft.graph.compliantNetworkNamedLocation",
+  "id": "%CompliantNetworkLocationId%",
+  "displayName": "All Compliant Network locations",
+  "modifiedDateTime@odata.type": "#DateTimeOffset",
+  "modifiedDateTime": "%CreatedDateTime%",
+  "createdDateTime@odata.type": "#DateTimeOffset",
+  "createdDateTime": "%CreatedDateTime%",
+  "deletedDateTime": null,
+  "compliantNetworkType@odata.type": "#microsoft.graph.compliantNetworkType",
+  "compliantNetworkType": "allTenantCompliantNetworks",
+  "isTrusted": true,
+  "#microsoft.graph.restore": {
+    "title": "microsoft.graph.restore",
+    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/namedLocations('%CompliantNetworkLocationId%')/microsoft.graph.namedLocation/microsoft.graph.restore"
+  }
+}
