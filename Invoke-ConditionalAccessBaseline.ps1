@@ -1298,9 +1298,14 @@ function Restore-NamedLocations {
 
         try {
             $body    = Get-CleanNamedLocationBody -LocationJson $locJson
+            # Send a serialized JSON string with an explicit content type so the @odata.type
+            # discriminator (countryNamedLocation vs ipNamedLocation) reaches Graph intact.
+            # Passing a hashtable body drops @odata.type and yields 'BadRequest: 1041'.
+            $bodyJson = $body | ConvertTo-Json -Depth 10
             $created = Invoke-MgGraphRequest -Method POST `
                            -Uri "https://graph.microsoft.com/beta/identity/conditionalAccess/namedLocations" `
-                           -Body $body -ErrorAction Stop
+                           -ContentType "application/json" `
+                           -Body $bodyJson -ErrorAction Stop
             $newId = if ($created -is [PSCustomObject]) { $created.id } else { $created['id'] }
             if ($oldId) { $idMap[$oldId] = $newId }
             Write-Log -Message "Created Named Location '$dispName'."
