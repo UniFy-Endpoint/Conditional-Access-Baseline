@@ -1798,6 +1798,12 @@ function Restore-SinglePolicy {
             return 'unsupported'
         }
 
+        if ($graphError -match '1149:.*workload identity premium') {
+            Write-Log -Level WARN -Message "Conditional Access policy '$displayName' was not created because the target tenant does not have the required Workload Identity Premium capability. Graph: $graphError"
+            Write-Host "  [SKIPPED — REQUIRES WORKLOAD IDENTITY PREMIUM]" -ForegroundColor Yellow
+            return 'unsupported'
+        }
+
         Write-LogError -ErrorRecord $policyErrorRecord -Context "Create Conditional Access policy '$displayName'"
         Write-Host "  [FAILED: $graphError]" -ForegroundColor Red
         return 'failed'
@@ -1876,6 +1882,10 @@ function Test-PolicyRequiresEntraP2 {
         }
         if (@($value | Where-Object { $_ }).Count -gt 0) { return $true }
     }
+
+    # agentIdRiskLevels is a string condition (e.g. "high", "medium,high") used by AGT risk policies
+    $agentRisk = if ($conditions -is [PSCustomObject]) { $conditions.agentIdRiskLevels } else { $conditions['agentIdRiskLevels'] }
+    if ($agentRisk -and $agentRisk -ne 'none') { return $true }
 
     return $false
 }
@@ -2149,7 +2159,7 @@ function Invoke-RestoreConditionalAccess {
                     Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
                     Write-Host "    Created      : $($stats['created'])  (all in DISABLED state)" -ForegroundColor Green
                     Write-Host "    Skipped      : $($stats['skipped'])  (already exist)" -ForegroundColor Yellow
-                    Write-Host "    License req. : $($stats['unsupported'])  (requires Entra ID P2)" -ForegroundColor $(if ($stats['unsupported'] -gt 0) { 'Yellow' } else { 'Green' })
+                    Write-Host "    License req. : $($stats['unsupported'])  (requires Entra ID P2 or Workload Identity Premium)" -ForegroundColor $(if ($stats['unsupported'] -gt 0) { 'Yellow' } else { 'Green' })
                     Write-Host "    Failed       : $($stats['failed'])" -ForegroundColor $(if ($stats['failed'] -gt 0) { 'Red' } else { 'Green' })
                     if ($stats['failed'] -gt 0 -and $script:LogEnabled) {
                         Write-Host "    Troubleshooting log: $script:LogPath" -ForegroundColor DarkGray
@@ -2278,7 +2288,7 @@ function Invoke-RestoreConditionalAccess {
                         }
                         'skipped' { Write-Host "  Policy already exists — no changes made." -ForegroundColor Yellow }
                         'unsupported' {
-                            Write-Host "  Policy skipped because Entra ID P2 is required." -ForegroundColor Yellow
+                            Write-Host "  Policy skipped because a premium license (Entra ID P2 or Workload Identity Premium) is required." -ForegroundColor Yellow
                         }
                         'failed'  {
                             Write-Host "  Restore failed. See error above." -ForegroundColor Red
