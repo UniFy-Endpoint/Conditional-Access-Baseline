@@ -166,6 +166,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 - Reconcile Security Defaults, legacy per-user MFA, cross-tenant trust, and Microsoft-managed Conditional Access policies before enforcement.
 - Enable FIDO2, Windows Hello for Business, and certificate-based authentication in the tenant Authentication Methods Policy before piloting CA101, CA501, or CA502; those policies will fail at runtime if the required methods are not enabled.
 - If regulatory requirements mandate geography-based access restrictions regardless of device compliance state (SOX, GDPR data-residency controls), review whether the CA001 device filter exclusion for compliant corporate devices is appropriate for your compliance posture.
+- The **Allowed Countries** named locations in this baseline are pre-configured for **Belgium (BE) and The Netherlands (NL)**. Update `NamedLocations/Allowed Countries.json` and `NamedLocations/Allowed Countries - Service Accounts.json` to match your organization's permitted countries before running the restore. These locations are referenced by CA001, CA006, CA202 (all users) and CA302, CA702 (service accounts and workload identities).
 
 ---
 
