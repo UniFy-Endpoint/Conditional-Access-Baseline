@@ -1298,22 +1298,25 @@ function Restore-NamedLocations {
 
         try {
             $body    = Get-CleanNamedLocationBody -LocationJson $locJson
-            # Send a serialized JSON string with an explicit content type so the @odata.type
-            # discriminator (countryNamedLocation vs ipNamedLocation) reaches Graph intact.
-            # Passing a hashtable body drops @odata.type and yields 'BadRequest: 1041'.
-            $bodyJson = $body | ConvertTo-Json -Depth 10
+            # Encode to UTF-8 bytes so the @odata.type discriminator is preserved exactly.
+            # Passing a string or hashtable body through Invoke-MgGraphRequest can cause the
+            # SDK to re-serialize and drop @odata.type, which Graph rejects with 1041.
+            $bodyJson  = $body | ConvertTo-Json -Depth 10 -Compress
+            $bodyBytes = [System.Text.Encoding]::UTF8.GetBytes($bodyJson)
+            Write-Log -Message "Creating Named Location '$dispName' — request body: $bodyJson"
             $created = Invoke-MgGraphRequest -Method POST `
                            -Uri "https://graph.microsoft.com/beta/identity/conditionalAccess/namedLocations" `
                            -ContentType "application/json" `
-                           -Body $bodyJson -ErrorAction Stop
+                           -Body $bodyBytes -ErrorAction Stop
             $newId = if ($created -is [PSCustomObject]) { $created.id } else { $created['id'] }
             if ($oldId) { $idMap[$oldId] = $newId }
-            Write-Log -Message "Created Named Location '$dispName'."
+            Write-Log -Message "Created Named Location '$dispName' — new ID: $newId"
             Write-Host "  [CREATED]" -ForegroundColor Green
         }
         catch {
             $graphError = Get-GraphErrorMessage -ErrorRecord $_
             Write-LogError -ErrorRecord $_ -Context "Create Named Location '$dispName'"
+            Write-Log -Level WARN -Message "Named Location '$dispName' — body sent: $bodyJson"
             Write-Host "  [FAILED: $graphError]" -ForegroundColor Red
         }
     }
