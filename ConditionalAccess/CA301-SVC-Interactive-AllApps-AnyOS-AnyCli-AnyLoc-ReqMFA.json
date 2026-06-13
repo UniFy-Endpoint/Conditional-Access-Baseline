@@ -1,9 +1,9 @@
 ﻿{
   "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies/$entity",
   "@odata.type": "#microsoft.graph.conditionalAccessPolicy",
-  "@odata.id": "identity/conditionalAccess/policies('%CA300PolicyId%')",
-  "@odata.editLink": "identity/conditionalAccess/policies('%CA300PolicyId%')",
-  "id": "%CA300PolicyId%",
+  "@odata.id": "identity/conditionalAccess/policies('%CA301PolicyId%')",
+  "@odata.editLink": "identity/conditionalAccess/policies('%CA301PolicyId%')",
+  "id": "%CA301PolicyId%",
   "templateId": null,
   "displayName": "CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA",
   "createdDateTime@odata.type": "#DateTimeOffset",
@@ -59,7 +59,7 @@
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
         "9f027ad8-042b-4c85-9727-9008f6851597",
-        "%CA300ExclGroupId%"
+        "%CA301ExclGroupId%"
       ],
       "includeRoles@odata.type": "#Collection(String)",
       "includeRoles": [],
@@ -80,13 +80,13 @@
     "customAuthenticationFactors": [],
     "termsOfUse@odata.type": "#Collection(String)",
     "termsOfUse": [],
-    "authenticationStrength@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies('%CA300PolicyId%')/grantControls/authenticationStrength/$entity",
-    "authenticationStrength@odata.associationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('%CA300PolicyId%')/grantControls/authenticationStrength/$ref",
-    "authenticationStrength@odata.navigationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('%CA300PolicyId%')/grantControls/authenticationStrength",
+    "authenticationStrength@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies('%CA301PolicyId%')/grantControls/authenticationStrength/$entity",
+    "authenticationStrength@odata.associationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('%CA301PolicyId%')/grantControls/authenticationStrength/$ref",
+    "authenticationStrength@odata.navigationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('%CA301PolicyId%')/grantControls/authenticationStrength",
     "authenticationStrength": null
   },
   "#microsoft.graph.restore": {
     "title": "microsoft.graph.restore",
-    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('%CA300PolicyId%')/microsoft.graph.restore"
+    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('%CA301PolicyId%')/microsoft.graph.restore"
   }
 }
