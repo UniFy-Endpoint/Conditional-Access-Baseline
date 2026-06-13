@@ -1810,7 +1810,9 @@ function Restore-SinglePolicy {
     }
 }
 
-# Extracts unique group, location, and application UUIDs from a policy.
+# Extracts unique group, location, and application IDs from a policy.
+# Group IDs include both real UUIDs and placeholder strings (e.g. %CA216ExclGroupId%)
+# so that placeholder-based groups in the Groups\ folder are created during restore.
 function Get-PolicyDependencyIds {
     param($PolicyJson)
 
@@ -1827,7 +1829,7 @@ function Get-PolicyDependencyIds {
         $excGroups = if ($users -is [PSCustomObject]) { $users.excludeGroups } else { $users['excludeGroups'] }
         $incGroups = if ($users -is [PSCustomObject]) { $users.includeGroups } else { $users['includeGroups'] }
         foreach ($gid in @($excGroups) + @($incGroups)) {
-            if ($gid -and $gid -match $uuidPattern) { $null = $groupIds.Add($gid) }
+            if ($gid) { $null = $groupIds.Add($gid) }
         }
     }
 
