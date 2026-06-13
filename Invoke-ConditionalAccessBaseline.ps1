@@ -1730,6 +1730,24 @@ function Restore-SinglePolicy {
         $body = Get-CleanPolicyBody -PolicyJson $PolicyJson
         $body = Invoke-ApplyIdRemapping -PolicyBody $body -GroupIdMap $GroupIdMap `
                     -LocationIdMap $LocationIdMap -ServicePrincipalIdMap $ServicePrincipalIdMap
+
+        # Detect unresolved named-location placeholders (e.g. %CompliantNetworkLocationId%
+        # requires Global Secure Access). Fail early with a clear message rather than
+        # letting Graph return a confusing 1040.
+        $locBlock = $body['conditions']
+        $locBlock = if ($locBlock) { $locBlock['locations'] } else { $null }
+        $unresolvedLoc = @(
+            @(if ($locBlock) { @($locBlock['includeLocations']) } else { @() }) +
+            @(if ($locBlock) { @($locBlock['excludeLocations']) } else { @() }) |
+            Where-Object { $_ -match '^%.+%$' }
+        ) | Select-Object -Unique
+        if ($unresolvedLoc.Count -gt 0) {
+            $missing = $unresolvedLoc -join ', '
+            Write-Log -Level WARN -Message "Conditional Access policy '$displayName' was not created because required named location(s) could not be resolved: $missing. Enable the corresponding tenant prerequisite (e.g., Global Secure Access) and re-run the restore."
+            Write-Host "  [SKIPPED — prerequisite named location not available: $missing]" -ForegroundColor Yellow
+            return 'unsupported'
+        }
+
         $body = Repair-PolicyCollectionProperties -PolicyBody $body
         $schemaCheck = Test-PolicyRequestSchema -PolicyBody $body
         if (-not $schemaCheck.IsValid) {
@@ -2180,7 +2198,7 @@ function Invoke-RestoreConditionalAccess {
                     Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
                     Write-Host "    Created      : $($stats['created'])  (all in DISABLED state)" -ForegroundColor Green
                     Write-Host "    Skipped      : $($stats['skipped'])  (already exist)" -ForegroundColor Yellow
-                    Write-Host "    License req. : $($stats['unsupported'])  (requires Entra ID P2 or Workload Identity Premium)" -ForegroundColor $(if ($stats['unsupported'] -gt 0) { 'Yellow' } else { 'Green' })
+                    Write-Host "    License req. : $($stats['unsupported'])  (requires Entra ID P2, Workload Identity Premium, or tenant prerequisite)" -ForegroundColor $(if ($stats['unsupported'] -gt 0) { 'Yellow' } else { 'Green' })
                     Write-Host "    Failed       : $($stats['failed'])" -ForegroundColor $(if ($stats['failed'] -gt 0) { 'Red' } else { 'Green' })
                     if ($stats['failed'] -gt 0 -and $script:LogEnabled) {
                         Write-Host "    Troubleshooting log: $script:LogPath" -ForegroundColor DarkGray
