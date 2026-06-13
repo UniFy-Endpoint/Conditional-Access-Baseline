@@ -104,7 +104,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA203 | USR | `CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Disabled | block | `CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL` |
 | CA204 | USR | `CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession` | Disabled | Sign-in frequency: 12 hours; Persistent browser: never | `CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL` |
 | CA205 | USR | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
-| CA206 | USR | `CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice OR domainJoinedDevice | `CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL` |
+| CA206 | USR | `CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice OR domainJoinedDevice | `CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant-EXCL` |
 | CA207 | USR | `CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL` |
 | CA208 | USR | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant` | Disabled | compliantDevice | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL` |
 | CA209 | USR | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant` | Disabled | compliantDevice | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL` |

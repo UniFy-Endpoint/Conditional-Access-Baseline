@@ -5,7 +5,7 @@
   "@odata.editLink": "identity/conditionalAccess/policies('697c223d-7239-4fd2-a05d-0391ee969792')",
   "id": "697c223d-7239-4fd2-a05d-0391ee969792",
   "templateId": null,
-  "displayName": "CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant",
+  "displayName": "CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2025-12-02T14:43:02.804309Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
@@ -34,7 +34,7 @@
       "@odata.type": "#microsoft.graph.conditionalAccessApplications",
       "includeApplications@odata.type": "#Collection(String)",
       "includeApplications": [
-        "Office365"
+        "All"
       ],
       "excludeApplications@odata.type": "#Collection(String)",
       "excludeApplications": [
