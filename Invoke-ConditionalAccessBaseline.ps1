@@ -1281,6 +1281,16 @@ function Restore-NamedLocations {
             continue
         }
 
+        # Compliant network named locations are provisioned by Global Secure Access and
+        # cannot be created via POST. When one is not already present in the tenant, surface
+        # the prerequisite clearly instead of letting Graph return a confusing creation error.
+        $odataType = if ($locJson -is [PSCustomObject]) { $locJson.'@odata.type' } else { $locJson['@odata.type'] }
+        if ($odataType -like '*compliantNetworkNamedLocation') {
+            Write-Log -Level WARN -Message "Named Location '$dispName' is a compliant network location and cannot be created directly; it is provisioned automatically when Global Secure Access / the compliant network check is enabled in the tenant."
+            Write-Host "  [SKIPPED — enable Global Secure Access to provision this location]" -ForegroundColor Yellow
+            continue
+        }
+
         if ($Preview) {
             Write-Host "  [WOULD CREATE]" -ForegroundColor Cyan
             continue
@@ -1837,8 +1847,11 @@ function Get-PolicyDependencyIds {
     if ($locs) {
         $excLocs = if ($locs -is [PSCustomObject]) { $locs.excludeLocations } else { $locs['excludeLocations'] }
         $incLocs = if ($locs -is [PSCustomObject]) { $locs.includeLocations } else { $locs['includeLocations'] }
+        # Location IDs include both real UUIDs and placeholder strings (e.g. %SvcCountryLocationId%)
+        # so that placeholder-based locations in the NamedLocations\ folder are created during restore.
+        # The reserved keywords All / AllTrusted are not real locations and must not be collected.
         foreach ($lid in @($excLocs) + @($incLocs)) {
-            if ($lid -and $lid -match $uuidPattern) { $null = $locationIds.Add($lid) }
+            if ($lid -and $lid -notin @('All', 'AllTrusted')) { $null = $locationIds.Add($lid) }
         }
     }
 
