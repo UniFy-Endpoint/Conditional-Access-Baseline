@@ -797,9 +797,11 @@ function Get-CleanNamedLocationBody {
     $odataType = if ($LocationJson -is [PSCustomObject]) { $LocationJson.'@odata.type' } else { $LocationJson['@odata.type'] }
     if ($odataType) { $body['@odata.type'] = $odataType }
 
-    # Copy only the known safe properties for each location type
+    # Copy only the properties accepted by Graph on POST.
+    # countryLookupMethod is not listed as settable on creation in the Graph API docs
+    # and causes a 1041 schema-mismatch error when included in the request body.
     $safeProps = @('displayName', 'countriesAndRegions', 'includeUnknownCountriesAndRegions',
-                   'countryLookupMethod', 'isTrusted', 'ipRanges')
+                   'isTrusted', 'ipRanges')
 
     foreach ($prop in $safeProps) {
         $val = if ($LocationJson -is [PSCustomObject]) { $LocationJson.$prop } else { $LocationJson[$prop] }
