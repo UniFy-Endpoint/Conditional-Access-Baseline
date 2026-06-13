@@ -38,8 +38,11 @@
       ],
       "excludeApplications@odata.type": "#Collection(String)",
       "excludeApplications": [
+        "a4f2693f-129c-4b96-982b-2c364b8314d7",
         "d4ebce55-015a-49b5-a083-c84d1797ae8c",
         "0000000a-0000-0000-c000-000000000000",
+        "270efc09-cd0d-444b-a71f-39af4910ec45",
+        "d32c68ad-72d2-4acb-a0c7-46bb2cf93873",
         "00000012-0000-0000-c000-000000000000"
       ],
       "includeUserActions@odata.type": "#Collection(String)",

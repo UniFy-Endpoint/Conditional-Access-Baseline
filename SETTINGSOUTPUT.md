@@ -533,7 +533,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
-| Exclude resources | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000) |
+| Exclude resources | Edge Sync (a4f2693f-129c-4b96-982b-2c364b8314d7), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Microsoft Intune (0000000a-0000-0000-c000-000000000000), Windows Cloud Login (270efc09-cd0d-444b-a71f-39af4910ec45), Microsoft Activity Feed Service (d32c68ad-72d2-4acb-a0c7-46bb2cf93873), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000) |
 | Client app types | mobileAppsAndDesktopClients |
 | Platforms | macOS |
 | Locations include | Any |
