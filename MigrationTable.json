@@ -82,7 +82,7 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant-EXCL",
+      "DisplayName": "CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL",
       "Id": "c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b",
       "Type": "Group"
     },
