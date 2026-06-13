@@ -60,8 +60,7 @@
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
         "9f027ad8-042b-4c85-9727-9008f6851597",
-        "dd68178f-b5b1-45c3-be04-304ad8b5c91a",
-        "e8050e22-eb33-4557-8c41-1b543156fc80"
+        "dd68178f-b5b1-45c3-be04-304ad8b5c91a"
       ],
       "includeRoles@odata.type": "#Collection(String)",
       "includeRoles": [],

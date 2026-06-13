@@ -70,7 +70,7 @@ Policy numbers are allocated by family:
 ## Inventory
 
 - Policies: **50** (GLB 6, ADM 4, USR 19, SVC 3, WLI 2, GST 6, IDP 5, AGT 5)
-- Groups: **46** (43 dedicated policy EXCL groups, shared CA000 emergency access, CA-SVC-Interactive-ServiceAccounts, and CA-ADM-CustomRoleAccounts)
+- Groups: **45** (43 dedicated policy EXCL groups, shared CA000 emergency access, and CA-SVC-Interactive-ServiceAccounts)
 - Policy states in source: **50 disabled**
 - Named locations: **3**
 - Administrator standard: **34 built-in roles**
@@ -144,7 +144,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 
 ## Design Notes
 
-- ADM policies (CA101–CA104) target 34 built-in privileged roles. Accounts with custom roles or administrative-unit-scoped assignments that cannot be targeted directly go in `CA-ADM-CustomRoleAccounts`; ADM policies include this group and equivalent USR policies exclude it.
+- ADM policies (CA101–CA104) target 34 built-in privileged roles directly via role targeting in Conditional Access.
 - `CA-SVC-Interactive-ServiceAccounts` contains interactive service-account user objects targeted by SVC policies. Workload identities and service principals are governed separately by WLI policies.
 - A block grant control always wins. Where multiple policies apply, all grant and session controls must be satisfied — a weaker overlapping policy is not a fallback.
 - CA219 and CA601–CA605 should be enabled in report-only mode until preview and licensing dependencies are validated in the tenant.
