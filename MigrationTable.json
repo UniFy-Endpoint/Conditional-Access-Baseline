@@ -7,11 +7,6 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA-SVC-Interactive-ServiceAccounts",
-      "Id": "%ServiceAccountsGroupId%",
-      "Type": "Group"
-    },
-    {
       "DisplayName": "CA000-GLB-BGA-EmergencyAccess-EXCL",
       "Id": "9f027ad8-042b-4c85-9727-9008f6851597",
       "Type": "Group"
@@ -142,11 +137,6 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime-EXCL",
-      "Id": "%CA217ExclGroupId%",
-      "Type": "Group"
-    },
-    {
       "DisplayName": "CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block-EXCL",
       "Id": "e2b1a316-387a-46d0-b918-d7b5ca56e2dc",
       "Type": "Group"
@@ -159,21 +149,6 @@
     {
       "DisplayName": "CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL",
       "Id": "f5f17fee-8aed-429d-ab88-86c7ba96fa40",
-      "Type": "Group"
-    },
-    {
-      "DisplayName": "CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL",
-      "Id": "%CA300ExclGroupId%",
-      "Type": "Group"
-    },
-    {
-      "DisplayName": "CA302-SVC-Interactive-AllApps-AnyOS-AnyCli-UntrustedLocation-Block-EXCL",
-      "Id": "%CA301ExclGroupId%",
-      "Type": "Group"
-    },
-    {
-      "DisplayName": "CA303-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL",
-      "Id": "%CA303ExclGroupId%",
       "Type": "Group"
     },
     {
@@ -219,16 +194,6 @@
     {
       "DisplayName": "CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block-EXCL",
       "Id": "c5b52f76-4b2d-43e7-a27b-df4c1f455ef4",
-      "Type": "Group"
-    },
-    {
-      "DisplayName": "CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-Block-EXCL",
-      "Id": "%CA504ExclGroupId%",
-      "Type": "Group"
-    },
-    {
-      "DisplayName": "CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-Block-EXCL",
-      "Id": "%CA505ExclGroupId%",
       "Type": "Group"
     },
     {
