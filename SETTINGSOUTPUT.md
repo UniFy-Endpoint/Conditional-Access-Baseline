@@ -29,8 +29,8 @@ Generated from the repository JSON inventory on **June 12, 2026**.
 | CA203 | `CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Workforce users | MicrosoftAdminPortals, Azure Resource Manager (797f4846-ba00-4fd7-ba43-dac1f8f63013) | block | None | Disabled |
 | CA204 | `CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession` | Workforce users | All | Session controls only | Sign-in frequency: 12 hours; Persistent browser: never | Disabled |
 | CA205 | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Workforce users | All | Session controls only | CAE: strictLocation | Disabled |
-| CA206 | `CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant` | Workforce users | Office365 | compliantDevice OR domainJoinedDevice | None | Disabled |
-| CA207 | `CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant` | Workforce users | Office365 | compliantDevice | None | Disabled |
+| CA206 | `CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice OR domainJoinedDevice | None | Disabled |
+| CA207 | `CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
 | CA208 | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
 | CA209 | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
 | CA210 | `CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
@@ -478,7 +478,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Any / none |
-| Client app types | browser, mobileAppsAndDesktopClients |
+| Client app types | all |
 | Platforms | all |
 | Locations include | Any |
 | Locations exclude | None |
@@ -491,7 +491,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Session | CAE: strictLocation |
 | Dedicated EXCL | CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL |
 
-### CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant
+### CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
@@ -500,11 +500,11 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant-EXCL (c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL (c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office365 |
+| Include resources | All |
 | Exclude resources | Edge Sync (a4f2693f-129c-4b96-982b-2c364b8314d7), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Microsoft Intune (0000000a-0000-0000-c000-000000000000), Windows Cloud Login (270efc09-cd0d-444b-a71f-39af4910ec45), Microsoft Activity Feed Service (d32c68ad-72d2-4acb-a0c7-46bb2cf93873), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000) |
 | Client app types | mobileAppsAndDesktopClients |
 | Platforms | windows |
@@ -517,9 +517,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantDevice OR domainJoinedDevice |
 | Session | None |
-| Dedicated EXCL | CA206-USR-O365-Win-Desktop-AnyLoc-ReqCompliant-EXCL |
+| Dedicated EXCL | CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL |
 
-### CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant
+### CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
@@ -528,11 +528,11 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant-EXCL (c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL (c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office365 |
+| Include resources | All |
 | Exclude resources | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000) |
 | Client app types | mobileAppsAndDesktopClients |
 | Platforms | macOS |
@@ -545,7 +545,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA207-USR-O365-macOS-Desktop-AnyLoc-ReqCompliant-EXCL |
+| Dedicated EXCL | CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL |
 
 ### CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant
 

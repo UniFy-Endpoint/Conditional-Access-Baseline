@@ -23,8 +23,7 @@
     "signInRiskLevels": [],
     "clientAppTypes@odata.type": "#Collection(microsoft.graph.conditionalAccessClientApp)",
     "clientAppTypes": [
-      "browser",
-      "mobileAppsAndDesktopClients"
+      "all"
     ],
     "locations": null,
     "times": null,
