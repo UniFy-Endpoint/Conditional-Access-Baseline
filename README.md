@@ -1,6 +1,6 @@
 ﻿# Microsoft Entra Conditional Access Baseline
 
-A structured Microsoft Entra Conditional Access baseline derived from Microsoft Zero Trust and Conditional Access guidance, containing **50 policies**, **46 security groups**, **3 named locations**, a migration dependency table, and PowerShell backup/restore tooling.
+A structured Microsoft Entra Conditional Access baseline derived from Microsoft Zero Trust and Conditional Access guidance, containing **51 policies**, **47 security groups**, **3 named locations**, a migration dependency table, and PowerShell backup/restore tooling.
 
 The restore workflow creates policies disabled, and preview policies remain report-only until tenant prerequisites and impact evidence are approved.
 
@@ -69,9 +69,9 @@ Policy numbers are allocated by family:
 
 ## Inventory
 
-- Policies: **50** (GLB 6, ADM 4, USR 19, SVC 3, WLI 2, GST 6, IDP 5, AGT 5)
-- Groups: **45** (43 dedicated policy EXCL groups, shared CA000 emergency access, and CA-SVC-Interactive-ServiceAccounts)
-- Policy states in source: **50 disabled**
+- Policies: **51** (GLB 6, ADM 6, USR 18, SVC 3, WLI 2, GST 6, IDP 5, AGT 5)
+- Groups: **46** (44 dedicated policy EXCL groups, shared CA000 emergency access, and CA-SVC-Interactive-ServiceAccounts)
+- Policy states in source: **51 disabled**
 - Named locations: **3**
 - Administrator standard: **34 built-in roles**
 
@@ -95,30 +95,31 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA004 | GLB | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Disabled | block | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL` |
 | CA005 | GLB | `CA005-GLB-DeviceRegistration-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA005-GLB-DeviceRegistration-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
 | CA006 | GLB | `CA006-GLB-SecurityInfoReg-AnyOS-AnyCli-UntrustedLocation-ReqMFA` | Disabled | mfa | `CA006-GLB-SecurityInfoReg-AnyOS-AnyCli-UntrustedLocation-ReqMFA-EXCL` |
-| CA101 | ADM | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA` | Disabled | Authentication strength: Phishing-resistant MFA | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL` |
-| CA102 | ADM | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession` | Disabled | Sign-in frequency: 8 hours; Persistent browser: never | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL` |
-| CA103 | ADM | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
-| CA104 | ADM | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid` | Disabled | compliantDevice OR domainJoinedDevice | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL` |
+| CA101 | ADM | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
+| CA102 | ADM | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPasswordlessMFA` | Disabled | Authentication strength: Passwordless MFA | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPasswordlessMFA-EXCL` |
+| CA103 | ADM | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA` | Disabled | Authentication strength: Phishing-resistant MFA | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL` |
+| CA104 | ADM | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession` | Disabled | Sign-in frequency: 8 hours; Persistent browser: never | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL` |
+| CA105 | ADM | `CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
+| CA106 | ADM | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid` | Disabled | compliantDevice OR domainJoinedDevice | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL` |
 | CA201 | USR | `CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
 | CA202 | USR | `CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA` | Disabled | Authentication strength: Passwordless MFA | `CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA-EXCL` |
-| CA203 | USR | `CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Disabled | block | `CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL` |
-| CA204 | USR | `CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession` | Disabled | Sign-in frequency: 12 hours; Persistent browser: never | `CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL` |
-| CA205 | USR | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
-| CA206 | USR | `CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice OR domainJoinedDevice | `CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL` |
-| CA207 | USR | `CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL` |
-| CA208 | USR | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant` | Disabled | compliantDevice | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL` |
-| CA209 | USR | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant` | Disabled | compliantDevice | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL` |
-| CA210 | USR | `CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL` |
-| CA211 | USR | `CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL` |
-| CA212 | USR | `CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication | `CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect-EXCL` |
-| CA213 | USR | `CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication | `CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect-EXCL` |
-| CA214 | USR | `CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions` | Disabled | Application-enforced restrictions | `CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL` |
-| CA215 | USR | `CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect` | Disabled | Token protection | `CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect-EXCL` |
-| CA216 | USR | `CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime` | Disabled | mfa; Sign-in frequency: every time | `CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime-EXCL` |
-| CA217 | USR | `CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block` | Disabled | block | `CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block-EXCL` |
-| CA218 | USR | `CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block` | Disabled | block | `CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block-EXCL` |
-| CA219 | USR | `CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview` | Disabled | Token protection | `CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL` |
-| CA301 | SVC | `CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
+| CA203 | USR | `CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA` | Disabled | Authentication strength: Phishing-resistant MFA | `CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL` |
+| CA204 | USR | `CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Disabled | block | `CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL` |
+| CA205 | USR | `CA205-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession` | Disabled | Sign-in frequency: 12 hours; Persistent browser: never | `CA205-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL` |
+| CA206 | USR | `CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
+| CA207 | USR | `CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice OR domainJoinedDevice | `CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL` |
+| CA208 | USR | `CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL` |
+| CA209 | USR | `CA209-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant` | Disabled | compliantDevice | `CA209-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL` |
+| CA210 | USR | `CA210-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant` | Disabled | compliantDevice | `CA210-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL` |
+| CA211 | USR | `CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL` |
+| CA212 | USR | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL` |
+| CA213 | USR | `CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication | `CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL` |
+| CA214 | USR | `CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication | `CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL` |
+| CA215 | USR | `CA215-USR-AllApps-macOS-Browser-AnyLoc-AppEnforcedRestrictions` | Disabled | Application-enforced restrictions | `CA215-USR-AllApps-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL` |
+| CA216 | USR | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect` | Disabled | Token protection | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect-EXCL` |
+| CA217 | USR | `CA217-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime` | Disabled | mfa; Sign-in frequency: every time | `CA217-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime-EXCL` |
+| CA218 | USR | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview` | Disabled | Token protection | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL` |
+| CA301 | SVC | `CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | Authentication strength: Phishing-resistant MFA | `CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
 | CA302 | SVC | `CA302-SVC-Interactive-AllApps-AnyOS-AnyCli-UntrustedLocation-Block` | Disabled | block | `CA302-SVC-Interactive-AllApps-AnyOS-AnyCli-UntrustedLocation-Block-EXCL` |
 | CA303 | SVC | `CA303-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Disabled | CAE: strictLocation | `CA303-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL` |
 | CA401 | GST | `CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
@@ -144,10 +145,12 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 
 ## Design Notes
 
-- ADM policies (CA101–CA104) target 34 built-in privileged roles directly via role targeting in Conditional Access.
+- ADM policies (CA101–CA106) target 34 built-in privileged roles directly via role targeting in Conditional Access. The three-tier MFA stack (CA101 plain MFA → CA102 passwordless MFA → CA103 phishing-resistant MFA) provides a graduated enforcement path for administrator authentication uplift.
 - `CA-SVC-Interactive-ServiceAccounts` contains interactive service-account user objects targeted by SVC policies. Workload identities and service principals are governed separately by WLI policies.
 - A block grant control always wins. Where multiple policies apply, all grant and session controls must be satisfied — a weaker overlapping policy is not a fallback.
-- CA219 and CA601–CA605 should be enabled in report-only mode until preview and licensing dependencies are validated in the tenant.
+- CA218 and CA601–CA605 should be enabled in report-only mode until preview and licensing dependencies are validated in the tenant.
+- CA203 enforces phishing-resistant MFA on all workforce users. Prerequisite: all users must have FIDO2, Windows Hello for Business, or certificate-based authentication registered before enabling this policy.
+- CA212–CA215 (BYOD device controls) now apply to all cloud resources, not only Office 365. Microsoft Defender for Cloud Apps onboarding is recommended to proxy non-Microsoft 365 app sessions for CA212 (blockDownloads) and CA215 (application-enforced restrictions).
 
 ---
 
@@ -155,16 +158,16 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 
 - Maintain at least two cloud-only emergency-access accounts and test them every 90 days.
 - Assign owners, justification, approval, expiration, access review, and monitoring to every EXCL group membership.
-- Configure and test phishing-resistant methods before piloting CA101.
+- Configure and test phishing-resistant methods (FIDO2, Windows Hello for Business, certificate-based authentication) before piloting CA103, CA203, or CA301.
 - Validate Intune compliance and App Protection policies before device and MAM enforcement.
-- Configure SharePoint/OneDrive limited access and Exchange application-enforced restrictions before CA214 or CA405.
-- Validate Defender for Cloud Apps session controls before CA211.
+- Configure SharePoint/OneDrive limited access and Exchange application-enforced restrictions before CA215 or CA405.
+- Validate Defender for Cloud Apps session controls before CA212.
 - Validate CAE authentication IP and resource-seen IP before strict location enforcement.
 - Populate `CA-SVC-Interactive-ServiceAccounts` only with user objects that can complete MFA. Prefer managed identities or workload identity federation for automation.
 - Microsoft Entra Workload ID Premium is required for CA701 and CA702.
 - Create the `AgentIdentity` custom security attribute set and `AgentApprovalStatus` attribute before evaluating CA602.
 - Reconcile Security Defaults, legacy per-user MFA, cross-tenant trust, and Microsoft-managed Conditional Access policies before enforcement.
-- Enable FIDO2, Windows Hello for Business, and certificate-based authentication in the tenant Authentication Methods Policy before piloting CA101, CA501, or CA502; those policies will fail at runtime if the required methods are not enabled.
+- Enable FIDO2, Windows Hello for Business, and certificate-based authentication in the tenant Authentication Methods Policy before piloting CA102, CA103, CA203, CA301, CA501, or CA502; those policies will fail at runtime if the required methods are not enabled.
 - If regulatory requirements mandate geography-based access restrictions regardless of device compliance state (SOX, GDPR data-residency controls), review whether the CA001 device filter exclusion for compliant corporate devices is appropriate for your compliance posture.
 - The **Allowed Countries** named locations in this baseline are pre-configured for **Belgium (BE) and The Netherlands (NL)**. Update `NamedLocations/Allowed Countries.json` and `NamedLocations/Allowed Countries - Service Accounts.json` to match your organization's permitted countries before running the restore. These locations are referenced by CA001, CA006, CA202 (all users) and CA302, CA702 (service accounts and workload identities).
 
@@ -178,7 +181,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 4. Pilot device compliance, MAM, browser restrictions, and session controls by platform.
 5. Enable guest controls only after cross-tenant MFA trust and external collaboration tests.
 6. Pilot SVC and WLI policies after identity inventory approval.
-7. Enable CA219 and CA601–CA605 in report-only mode until preview and licensing dependencies are validated.
+7. Enable CA218 and CA601–CA605 in report-only mode until preview and licensing dependencies are validated.
 8. Review at least one normal business cycle of Conditional Access insights before enforcement.
 
 ---

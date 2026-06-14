@@ -4,11 +4,11 @@ Generated from the repository JSON inventory on **June 12, 2026**.
 
 | Metric | Value |
 | :--- | :--- |
-| Policies | 50 |
-| Security groups | 46 |
+| Policies | 51 |
+| Security groups | 47 |
 | Named locations | 3 |
 | Administrator role standard | 34 roles |
-| Disabled policies | 50 |
+| Disabled policies | 51 |
 
 ## Summary
 
@@ -20,30 +20,31 @@ Generated from the repository JSON inventory on **June 12, 2026**.
 | CA004 | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Workforce users | All | block | None | Disabled |
 | CA005 | `CA005-GLB-DeviceRegistration-AnyOS-AnyCli-AnyLoc-ReqMFA` | Workforce users | Any / none | mfa | None | Disabled |
 | CA006 | `CA006-GLB-SecurityInfoReg-AnyOS-AnyCli-UntrustedLocation-ReqMFA` | Workforce users | Any / none | mfa | None | Disabled |
-| CA101 | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA` | Administrators (34 roles) | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
-| CA102 | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession` | Administrators (34 roles) | All | Session controls only | Sign-in frequency: 8 hours; Persistent browser: never | Disabled |
-| CA103 | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Administrators (34 roles) | All | Session controls only | CAE: strictLocation | Disabled |
-| CA104 | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid` | Administrators (34 roles) | All | compliantDevice OR domainJoinedDevice | None | Disabled |
+| CA101 | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Administrators (34 roles) | All | mfa | None | Disabled |
+| CA102 | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPasswordlessMFA` | Administrators (34 roles) | All | Authentication strength: Passwordless MFA | None | Disabled |
+| CA103 | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA` | Administrators (34 roles) | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
+| CA104 | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession` | Administrators (34 roles) | All | Session controls only | Sign-in frequency: 8 hours; Persistent browser: never | Disabled |
+| CA105 | `CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Administrators (34 roles) | All | Session controls only | CAE: strictLocation | Disabled |
+| CA106 | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid` | Administrators (34 roles) | All | compliantDevice OR domainJoinedDevice | None | Disabled |
 | CA201 | `CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Workforce users | All | mfa | None | Disabled |
 | CA202 | `CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA` | Workforce users | All | Authentication strength: Passwordless MFA | None | Disabled |
-| CA203 | `CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Workforce users | MicrosoftAdminPortals, Azure Resource Manager (797f4846-ba00-4fd7-ba43-dac1f8f63013) | block | None | Disabled |
-| CA204 | `CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession` | Workforce users | All | Session controls only | Sign-in frequency: 12 hours; Persistent browser: never | Disabled |
-| CA205 | `CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Workforce users | All | Session controls only | CAE: strictLocation | Disabled |
-| CA206 | `CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice OR domainJoinedDevice | None | Disabled |
-| CA207 | `CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
-| CA208 | `CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
-| CA209 | `CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
-| CA210 | `CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
-| CA211 | `CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Workforce users | Office365 | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
-| CA212 | `CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect` | Workforce users | Office365 | compliantApplication | None | Disabled |
-| CA213 | `CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect` | Workforce users | Office365 | compliantApplication | None | Disabled |
-| CA214 | `CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions` | Workforce users | Office365 | Session controls only | Application-enforced restrictions | Disabled |
-| CA215 | `CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
-| CA216 | `CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime` | Workforce users | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) | mfa | Sign-in frequency: every time | Disabled |
-| CA217 | `CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block` | Workforce users | All | block | None | Disabled |
-| CA218 | `CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block` | Workforce users | All | block | None | Disabled |
-| CA219 | `CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
-| CA301 | `CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Targeted group | All | mfa | None | Disabled |
+| CA203 | `CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA` | Workforce users | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
+| CA204 | `CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Workforce users | MicrosoftAdminPortals, Azure Resource Manager (797f4846-ba00-4fd7-ba43-dac1f8f63013) | block | None | Disabled |
+| CA205 | `CA205-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession` | Workforce users | All | Session controls only | Sign-in frequency: 12 hours; Persistent browser: never | Disabled |
+| CA206 | `CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Workforce users | All | Session controls only | CAE: strictLocation | Disabled |
+| CA207 | `CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice OR domainJoinedDevice | None | Disabled |
+| CA208 | `CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
+| CA209 | `CA209-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
+| CA210 | `CA210-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
+| CA211 | `CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
+| CA212 | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
+| CA213 | `CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect` | Workforce users | All | compliantApplication | None | Disabled |
+| CA214 | `CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect` | Workforce users | All | compliantApplication | None | Disabled |
+| CA215 | `CA215-USR-AllApps-macOS-Browser-AnyLoc-AppEnforcedRestrictions` | Workforce users | All | Session controls only | Application-enforced restrictions | Disabled |
+| CA216 | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
+| CA217 | `CA217-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime` | Workforce users | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) | mfa | Sign-in frequency: every time | Disabled |
+| CA218 | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
+| CA301 | `CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Targeted group | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
 | CA302 | `CA302-SVC-Interactive-AllApps-AnyOS-AnyCli-UntrustedLocation-Block` | Targeted group | All | block | None | Disabled |
 | CA303 | `CA303-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval` | Targeted group | All | Session controls only | CAE: strictLocation | Disabled |
 | CA401 | `CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Guests/external users | All | mfa | None | Disabled |
@@ -67,7 +68,7 @@ Generated from the repository JSON inventory on **June 12, 2026**.
 
 ## Administrator Scope
 
-CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR policies except CA215, CA216, and CA219 contain that full role exclusion set. CA201, CA202, CA203, CA206, and CA211 retain two additional directory-synchronization service-role exceptions. CA215, CA216, and CA219 retain only synchronization exceptions because their controls are unique and must continue to protect administrators.
+CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standard. All USR policies except CA216, CA217, and CA218 contain that full role exclusion set. CA201, CA202, CA203, CA204, CA207, and CA212 retain two additional directory-synchronization service-role exceptions. CA216, CA217, and CA218 retain only synchronization exceptions because their controls are unique and must continue to protect administrators.
 
 ## Policy Details
 
@@ -239,7 +240,63 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Session | None |
 | Dedicated EXCL | CA006-GLB-SecurityInfoReg-AnyOS-AnyCli-UntrustedLocation-ReqMFA-EXCL |
 
-### CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA
+### CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA
+
+| Property | Configuration |
+| :--- | :--- |
+| ID | `%CA101ReqMFAId%` |
+| State | Disabled |
+| Audience | Administrators (34 roles) |
+| Include users | Any / none |
+| Include groups | None |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (%CA101ReqMFAExclGroupId%) |
+| Include roles | 34 roles |
+| Exclude roles | 1 roles |
+| Guest/external scope | Not configured |
+| Include resources | All |
+| Exclude resources | Any / none |
+| Client app types | all |
+| Platforms | Any |
+| Locations include | Any |
+| Locations exclude | None |
+| Device filter | None |
+| Sign-in risk | Any / none |
+| User risk | Any / none |
+| Service-principal risk | Any / none |
+| Agent risk | None |
+| Grant | mfa |
+| Session | None |
+| Dedicated EXCL | CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
+
+### CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPasswordlessMFA
+
+| Property | Configuration |
+| :--- | :--- |
+| ID | `%CA102ReqPasswordlessMFAId%` |
+| State | Disabled |
+| Audience | Administrators (34 roles) |
+| Include users | Any / none |
+| Include groups | None |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPasswordlessMFA-EXCL (%CA102ReqPasswordlessMFAExclGroupId%) |
+| Include roles | 34 roles |
+| Exclude roles | 1 roles |
+| Guest/external scope | Not configured |
+| Include resources | All |
+| Exclude resources | Any / none |
+| Client app types | all |
+| Platforms | Any |
+| Locations include | Any |
+| Locations exclude | None |
+| Device filter | None |
+| Sign-in risk | Any / none |
+| User risk | Any / none |
+| Service-principal risk | Any / none |
+| Agent risk | None |
+| Grant | Authentication strength: Passwordless MFA |
+| Session | None |
+| Dedicated EXCL | CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPasswordlessMFA-EXCL |
+
+### CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA
 
 | Property | Configuration |
 | :--- | :--- |
@@ -248,7 +305,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Administrators (34 roles) |
 | Include users | Any / none |
 | Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL (7b32cf4c-58c1-4fe8-9547-983e4d57a098) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL (7b32cf4c-58c1-4fe8-9547-983e4d57a098) |
 | Include roles | 34 roles |
 | Exclude roles | 1 roles |
 | Guest/external scope | Not configured |
@@ -265,9 +322,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | Authentication strength: Phishing-resistant MFA |
 | Session | None |
-| Dedicated EXCL | CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL |
+| Dedicated EXCL | CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL |
 
-### CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession
+### CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession
 
 | Property | Configuration |
 | :--- | :--- |
@@ -276,7 +333,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Administrators (34 roles) |
 | Include users | Any / none |
 | Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL (9c00db91-443d-403d-aa57-a936717a05a8) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL (9c00db91-443d-403d-aa57-a936717a05a8) |
 | Include roles | 34 roles |
 | Exclude roles | None |
 | Guest/external scope | Not configured |
@@ -293,9 +350,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | Session controls only |
 | Session | Sign-in frequency: 8 hours; Persistent browser: never |
-| Dedicated EXCL | CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL |
+| Dedicated EXCL | CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL |
 
-### CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval
+### CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval
 
 | Property | Configuration |
 | :--- | :--- |
@@ -304,7 +361,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Administrators (34 roles) |
 | Include users | Any / none |
 | Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL (a570fe91-63a6-40f4-ae55-aecef9ffa324) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL (a570fe91-63a6-40f4-ae55-aecef9ffa324) |
 | Include roles | 34 roles |
 | Exclude roles | None |
 | Guest/external scope | Not configured |
@@ -321,9 +378,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | Session controls only |
 | Session | CAE: strictLocation |
-| Dedicated EXCL | CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL |
+| Dedicated EXCL | CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL |
 
-### CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid
+### CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid
 
 | Property | Configuration |
 | :--- | :--- |
@@ -332,7 +389,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Administrators (34 roles) |
 | Include users | Any / none |
 | Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL (a247a2a0-0a3d-47cb-83c3-df185d806f8d) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL (a247a2a0-0a3d-47cb-83c3-df185d806f8d) |
 | Include roles | 34 roles |
 | Exclude roles | 2 roles |
 | Guest/external scope | Not configured |
@@ -349,7 +406,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantDevice OR domainJoinedDevice |
 | Session | None |
-| Dedicated EXCL | CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL |
+| Dedicated EXCL | CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL |
 
 ### CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA
 
@@ -407,7 +464,35 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Session | None |
 | Dedicated EXCL | CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA-EXCL |
 
-### CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block
+### CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA
+
+| Property | Configuration |
+| :--- | :--- |
+| ID | `%CA203PolicyId%` |
+| State | Disabled |
+| Audience | Workforce users |
+| Include users | All |
+| Include groups | Any / none |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL (%CA203ExclGroupId%) |
+| Include roles | None |
+| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Guest/external scope | Explicitly excluded |
+| Include resources | All |
+| Exclude resources | Any / none |
+| Client app types | all |
+| Platforms | all |
+| Locations include | Any |
+| Locations exclude | None |
+| Device filter | None |
+| Sign-in risk | Any / none |
+| User risk | Any / none |
+| Service-principal risk | Any / none |
+| Agent risk | None |
+| Grant | Authentication strength: Phishing-resistant MFA |
+| Session | None |
+| Dedicated EXCL | CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL |
+
+### CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block
 
 | Property | Configuration |
 | :--- | :--- |
@@ -416,7 +501,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL (5273dd03-b602-4a55-b42a-7d8819ea3a0c) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL (5273dd03-b602-4a55-b42a-7d8819ea3a0c) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -433,9 +518,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL |
+| Dedicated EXCL | CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL |
 
-### CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession
+### CA205-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession
 
 | Property | Configuration |
 | :--- | :--- |
@@ -444,7 +529,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL (8d1356e9-235c-4fb3-85ff-b6f6fd33639f) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA205-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL (8d1356e9-235c-4fb3-85ff-b6f6fd33639f) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -461,9 +546,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | Session controls only |
 | Session | Sign-in frequency: 12 hours; Persistent browser: never |
-| Dedicated EXCL | CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL |
+| Dedicated EXCL | CA205-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL |
 
-### CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval
+### CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval
 
 | Property | Configuration |
 | :--- | :--- |
@@ -472,7 +557,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL (18fa41d2-7057-43bc-a7dc-b319f0ae6606) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL (18fa41d2-7057-43bc-a7dc-b319f0ae6606) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -489,9 +574,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | Session controls only |
 | Session | CAE: strictLocation |
-| Dedicated EXCL | CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL |
+| Dedicated EXCL | CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL |
 
-### CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant
+### CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
@@ -500,7 +585,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL (c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL (c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -517,9 +602,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantDevice OR domainJoinedDevice |
 | Session | None |
-| Dedicated EXCL | CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL |
+| Dedicated EXCL | CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL |
 
-### CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant
+### CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
@@ -528,7 +613,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL (c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL (c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -545,9 +630,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL |
+| Dedicated EXCL | CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL |
 
-### CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant
+### CA209-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
@@ -556,7 +641,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL (dd68178f-b5b1-45c3-be04-304ad8b5c91a) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA209-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL (dd68178f-b5b1-45c3-be04-304ad8b5c91a) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -573,9 +658,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL |
+| Dedicated EXCL | CA209-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL |
 
-### CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant
+### CA210-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
@@ -584,7 +669,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL (1bed65eb-3c26-449e-bb1d-eb61e193de9e) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA210-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL (1bed65eb-3c26-449e-bb1d-eb61e193de9e) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -601,9 +686,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL |
+| Dedicated EXCL | CA210-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL |
 
-### CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant
+### CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
@@ -612,7 +697,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL (24ce71a0-a35c-4d76-b473-98deae1de32b) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL (24ce71a0-a35c-4d76-b473-98deae1de32b) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
@@ -629,9 +714,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL |
+| Dedicated EXCL | CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL |
 
-### CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl
+### CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl
 
 | Property | Configuration |
 | :--- | :--- |
@@ -640,11 +725,11 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL (236772fa-5f88-4345-8de1-e6b2b6cc0c8b) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL (236772fa-5f88-4345-8de1-e6b2b6cc0c8b) |
 | Include roles | None |
 | Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office365 |
+| Include resources | All |
 | Exclude resources | Any / none |
 | Client app types | browser |
 | Platforms | windows |
@@ -657,9 +742,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantApplication |
 | Session | Defender for Cloud Apps: blockDownloads |
-| Dedicated EXCL | CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL |
+| Dedicated EXCL | CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL |
 
-### CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect
+### CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect
 
 | Property | Configuration |
 | :--- | :--- |
@@ -668,11 +753,11 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect-EXCL (f69eda77-f120-4ffb-beba-fce593e90119) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL (f69eda77-f120-4ffb-beba-fce593e90119) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office365 |
+| Include resources | All |
 | Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
 | Client app types | mobileAppsAndDesktopClients |
 | Platforms | android |
@@ -685,9 +770,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantApplication |
 | Session | None |
-| Dedicated EXCL | CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect-EXCL |
+| Dedicated EXCL | CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL |
 
-### CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect
+### CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect
 
 | Property | Configuration |
 | :--- | :--- |
@@ -696,11 +781,11 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect-EXCL (b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL (b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office365 |
+| Include resources | All |
 | Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
 | Client app types | mobileAppsAndDesktopClients |
 | Platforms | iOS |
@@ -713,9 +798,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | compliantApplication |
 | Session | None |
-| Dedicated EXCL | CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect-EXCL |
+| Dedicated EXCL | CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL |
 
-### CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions
+### CA215-USR-AllApps-macOS-Browser-AnyLoc-AppEnforcedRestrictions
 
 | Property | Configuration |
 | :--- | :--- |
@@ -724,11 +809,11 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL (6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA215-USR-AllApps-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL (6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9) |
 | Include roles | None |
 | Exclude roles | 34 roles |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office365 |
+| Include resources | All |
 | Exclude resources | Any / none |
 | Client app types | browser |
 | Platforms | macOS |
@@ -741,9 +826,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | Session controls only |
 | Session | Application-enforced restrictions |
-| Dedicated EXCL | CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL |
+| Dedicated EXCL | CA215-USR-AllApps-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL |
 
-### CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect
+### CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect
 
 | Property | Configuration |
 | :--- | :--- |
@@ -752,7 +837,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect-EXCL (fb64ed78-b96f-4cc8-9eaf-6f1999c2c80b) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect-EXCL (fb64ed78-b96f-4cc8-9eaf-6f1999c2c80b) |
 | Include roles | None |
 | Exclude roles | 1 roles |
 | Guest/external scope | Explicitly excluded |
@@ -769,9 +854,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | Session controls only |
 | Session | Token protection |
-| Dedicated EXCL | CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect-EXCL |
+| Dedicated EXCL | CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect-EXCL |
 
-### CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime
+### CA217-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime
 
 | Property | Configuration |
 | :--- | :--- |
@@ -780,7 +865,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime-EXCL (%CA216ExclGroupId%) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA217-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime-EXCL (%CA216ExclGroupId%) |
 | Include roles | None |
 | Exclude roles | 2 roles |
 | Guest/external scope | Explicitly excluded |
@@ -797,65 +882,9 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | mfa |
 | Session | Sign-in frequency: every time |
-| Dedicated EXCL | CA216-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime-EXCL |
+| Dedicated EXCL | CA217-USR-IntuneEnrollment-AnyOS-AnyCli-ReqMFA-SignInEveryTime-EXCL |
 
-### CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `8af96a43-00fc-4e8e-8956-a17ef300dec2` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block-EXCL (e2b1a316-387a-46d0-b918-d7b5ca56e2dc) |
-| Include roles | None |
-| Exclude roles | 34 roles |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Office365, Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Device Registration Service (01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9) |
-| Client app types | all |
-| Platforms | iOS |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -or device.isCompliant -ne True` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | block |
-| Session | None |
-| Dedicated EXCL | CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block-EXCL |
-
-### CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `de6d9082-56c4-4c91-8dab-c1db7165b061` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block-EXCL (d95b7bb3-0e51-4d1a-8371-8f9f118b2d83) |
-| Include roles | None |
-| Exclude roles | 34 roles |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Office365, Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Device Registration Service (01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9) |
-| Client app types | all |
-| Platforms | android |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -or device.isCompliant -ne True` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | block |
-| Session | None |
-| Dedicated EXCL | CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block-EXCL |
-
-### CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview
+### CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview
 
 | Property | Configuration |
 | :--- | :--- |
@@ -864,7 +893,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL (f5f17fee-8aed-429d-ab88-86c7ba96fa40) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL (f5f17fee-8aed-429d-ab88-86c7ba96fa40) |
 | Include roles | None |
 | Exclude roles | 1 roles |
 | Guest/external scope | Explicitly excluded |
@@ -881,7 +910,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | Agent risk | None |
 | Grant | Session controls only |
 | Session | Token protection |
-| Dedicated EXCL | CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL |
+| Dedicated EXCL | CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL |
 
 ### CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA
 
@@ -907,7 +936,7 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 | User risk | Any / none |
 | Service-principal risk | Any / none |
 | Agent risk | None |
-| Grant | mfa |
+| Grant | Authentication strength: Phishing-resistant MFA |
 | Session | None |
 | Dedicated EXCL | CA301-SVC-Interactive-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
 
@@ -1483,11 +1512,11 @@ CA101, CA102, CA103, and CA104 target the identical 34-role standard. All USR po
 
 ## Required Workload Configuration
 
-- CA211 requires the Windows Intune App Protection policy and Defender for Cloud Apps session policy.
-- CA212 and CA213 require platform-specific Intune App Protection policies.
-- CA214 and CA405 require SharePoint/OneDrive limited-access and Exchange application-enforced restriction settings.
-- CA103, CA205, CA303, and CA406 require validated named locations and CAE resource-seen IP testing.
-- CA215 targets supported Windows M365 desktop resources. CA219 is the separate macOS preview policy and should be enabled in report-only mode until token-protection support for macOS is confirmed in the tenant.
+- CA212 requires the Windows Intune App Protection policy and Defender for Cloud Apps session policy.
+- CA213 and CA214 require platform-specific Intune App Protection policies.
+- CA215 and CA405 require SharePoint/OneDrive limited-access and Exchange application-enforced restriction settings.
+- CA105, CA206, CA303, and CA406 require validated named locations and CAE resource-seen IP testing.
+- CA216 targets supported Windows M365 desktop resources. CA218 is the separate macOS preview policy and should be enabled in report-only mode until token-protection support for macOS is confirmed in the tenant.
 - CA701 and CA702 require Microsoft Entra Workload ID Premium and approved service-principal inventory.
 - CA602 requires `CustomSecurityAttribute.AgentIdentity_AgentApprovalStatus` with value `Approved` for allowed agents.
 - CA605 requires Global Secure Access compliant-network signals.
