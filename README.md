@@ -114,8 +114,8 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA210 | USR | `CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant-EXCL` |
 | CA211 | USR | `CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Disabled | compliantDevice | `CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL` |
 | CA212 | USR | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL` |
-| CA213 | USR | `CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication | `CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL` |
-| CA214 | USR | `CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication | `CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL` |
+| CA213 | USR | `CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL` |
+| CA214 | USR | `CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL` |
 | CA215 | USR | `CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr` | Disabled | Application-enforced restrictions | `CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr-EXCL` |
 | CA216 | USR | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt` | Disabled | Token protection | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt-EXCL` |
 | CA217 | USR | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Disabled | mfa; Sign-in frequency: every time | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL` |
