@@ -1,4 +1,4 @@
-﻿{
+{
   "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies/$entity",
   "@odata.type": "#microsoft.graph.conditionalAccessPolicy",
   "@odata.id": "identity/conditionalAccess/policies('0293b8bd-ce33-4fc6-a2ee-c8a8089c3110')",

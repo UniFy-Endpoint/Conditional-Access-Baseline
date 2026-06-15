@@ -63,7 +63,10 @@
       "includeRoles@odata.type": "#Collection(String)",
       "includeRoles": [],
       "excludeRoles@odata.type": "#Collection(String)",
-      "excludeRoles": [],
+      "excludeRoles": [
+        "d29b2b05-8046-44ba-8758-1e26182fcf32",
+        "a92aed5d-d78a-4d16-b381-09adb37eb3b0"
+      ],
       "includeGuestsOrExternalUsers": null,
       "excludeGuestsOrExternalUsers": null
     },
@@ -79,7 +82,7 @@
     "authenticationFlows": {
       "@odata.type": "#microsoft.graph.conditionalAccessAuthenticationFlows",
       "transferMethods@odata.type": "#microsoft.graph.conditionalAccessTransferMethods",
-      "transferMethods": "deviceCodeFlow,authenticationTransfer"
+      "transferMethods": "deviceCodeFlow"
     }
   },
   "grantControls": {

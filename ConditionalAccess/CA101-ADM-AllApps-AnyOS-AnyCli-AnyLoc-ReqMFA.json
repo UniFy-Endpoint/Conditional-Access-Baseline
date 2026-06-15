@@ -55,7 +55,7 @@
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
         "9f027ad8-042b-4c85-9727-9008f6851597",
-        "%CA101ReqMFAExclGroupId%"
+        "%CA101ExclGroupId%"
       ],
       "includeRoles@odata.type": "#Collection(String)",
       "includeRoles": [
@@ -95,9 +95,7 @@
         "fe930be7-5e62-47db-91af-98c3a49a38b1"
       ],
       "excludeRoles@odata.type": "#Collection(String)",
-      "excludeRoles": [
-        "d29b2b05-8046-44ba-8758-1e26182fcf32"
-      ],
+      "excludeRoles": [],
       "includeGuestsOrExternalUsers": null,
       "excludeGuestsOrExternalUsers": null
     }

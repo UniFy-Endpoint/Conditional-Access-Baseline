@@ -1,13 +1,18 @@
-﻿{
+{
   "SchemaVersion": 2,
   "Objects": [
+    {
+      "DisplayName": "CA-SVC-IntSvcAcc-ServiceAccounts",
+      "Id": "%ServiceAccountsGroupId%",
+      "Type": "Group"
+    },
     {
       "DisplayName": "CA000-GLB-BGA-EmergencyAccess-EXCL",
       "Id": "9f027ad8-042b-4c85-9727-9008f6851597",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA001-GLB-AllApps-AnyOS-AnyCli-UntrustedLocation-Block-EXCL",
+      "DisplayName": "CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL",
       "Id": "abd4c0ac-aaaa-4683-827a-e326873dd454",
       "Type": "Group"
     },
@@ -17,7 +22,7 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA003-GLB-AllApps-AnyOS-Legacy-LegacyAuth-Block-EXCL",
+      "DisplayName": "CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block-EXCL",
       "Id": "a90133c8-9a64-47b4-bd50-3bc45556a0bf",
       "Type": "Group"
     },
@@ -27,32 +32,47 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA005-GLB-DeviceRegistration-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL",
+      "DisplayName": "CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL",
       "Id": "e0a3310d-fd7b-42ec-9a6e-6fc064f02358",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA006-GLB-SecurityInfoReg-AnyOS-AnyCli-UntrustedLocation-ReqMFA-EXCL",
+      "DisplayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL",
       "Id": "6a1fd238-bfef-470e-be4d-813bd29cf80e",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResistantMFA-EXCL",
+      "DisplayName": "CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block-EXCL",
+      "Id": "%CA007ExclGroupId%",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL",
+      "Id": "%CA101ExclGroupId%",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL",
+      "Id": "%CA102ExclGroupId%",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL",
       "Id": "7b32cf4c-58c1-4fe8-9547-983e4d57a098",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFreq-PersistSession-EXCL",
+      "DisplayName": "CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL",
       "Id": "9c00db91-443d-403d-aa57-a936717a05a8",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL",
+      "DisplayName": "CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL",
       "Id": "a570fe91-63a6-40f4-ae55-aecef9ffa324",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqCompliantOrHybrid-EXCL",
+      "DisplayName": "CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid-EXCL",
       "Id": "a247a2a0-0a3d-47cb-83c3-df185d806f8d",
       "Type": "Group"
     },
@@ -62,88 +82,103 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA202-USR-AllApps-AnyOS-ModernClient-UntrustedLocation-ReqPasswordlessMFA-EXCL",
+      "DisplayName": "CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA-EXCL",
       "Id": "1444d9a4-a764-4127-a1f9-716342cb904b",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA203-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL",
+      "DisplayName": "CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL",
+      "Id": "%CA203ExclGroupId%",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL",
       "Id": "5273dd03-b602-4a55-b42a-7d8819ea3a0c",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA204-USR-AllApps-AnyOS-AnyLoc-Browser-SignInFreq-PersistSession-EXCL",
+      "DisplayName": "CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrq-PrstSess-EXCL",
       "Id": "8d1356e9-235c-4fb3-85ff-b6f6fd33639f",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA205-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContinuousAccessEval-EXCL",
+      "DisplayName": "CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL",
       "Id": "18fa41d2-7057-43bc-a7dc-b319f0ae6606",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA206-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL",
+      "DisplayName": "CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL",
       "Id": "c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA207-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL",
+      "DisplayName": "CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL",
       "Id": "c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA208-USR-AllApps-iOS-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL",
+      "DisplayName": "CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant-EXCL",
       "Id": "dd68178f-b5b1-45c3-be04-304ad8b5c91a",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA209-USR-AllApps-Android-AnyCli-AnyLoc-Managed-ReqCompliant-EXCL",
+      "DisplayName": "CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant-EXCL",
       "Id": "1bed65eb-3c26-449e-bb1d-eb61e193de9e",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA210-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL",
+      "DisplayName": "CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL",
       "Id": "24ce71a0-a35c-4d76-b473-98deae1de32b",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA211-USR-O365-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL",
+      "DisplayName": "CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL",
       "Id": "236772fa-5f88-4345-8de1-e6b2b6cc0c8b",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA212-USR-O365-Android-Mobile-BYOD-ReqAppProtect-EXCL",
+      "DisplayName": "CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL",
       "Id": "f69eda77-f120-4ffb-beba-fce593e90119",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA213-USR-O365-iOS-Mobile-BYOD-ReqAppProtect-EXCL",
+      "DisplayName": "CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL",
       "Id": "b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA214-USR-O365-macOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL",
+      "DisplayName": "CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr-EXCL",
       "Id": "6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA215-USR-M365-Win-Desktop-AnyLoc-ReqTokenProtect-EXCL",
+      "DisplayName": "CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt-EXCL",
       "Id": "fb64ed78-b96f-4cc8-9eaf-6f1999c2c80b",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA217-USR-ExceptO365-iOS-AnyCli-AnyLoc-Unmanaged-Block-EXCL",
-      "Id": "e2b1a316-387a-46d0-b918-d7b5ca56e2dc",
+      "DisplayName": "CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL",
+      "Id": "%CA217ExclGroupId%",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA218-USR-ExceptO365-Android-AnyCli-AnyLoc-Unmanaged-Block-EXCL",
-      "Id": "d95b7bb3-0e51-4d1a-8371-8f9f118b2d83",
-      "Type": "Group"
-    },
-    {
-      "DisplayName": "CA219-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProtect-Preview-EXCL",
+      "DisplayName": "CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt-EXCL",
       "Id": "f5f17fee-8aed-429d-ab88-86c7ba96fa40",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL",
+      "Id": "%CA301ExclGroupId%",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL",
+      "Id": "%CA302ExclGroupId%",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA303-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL",
+      "Id": "%CA303ExclGroupId%",
       "Type": "Group"
     },
     {
@@ -152,7 +187,7 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA402-GST-ExceptAllowed-AnyOS-ModernClient-AnyLoc-Block-EXCL",
+      "DisplayName": "CA402-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block-EXCL",
       "Id": "d09b644e-696a-4e92-affa-29dd0afdf9d1",
       "Type": "Group"
     },
@@ -162,33 +197,43 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-Browser-SignInFreq-PersistSession-EXCL",
+      "DisplayName": "CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL",
       "Id": "ed33faf7-bd1f-4481-9ba2-17508998226c",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnforcedRestrictions-EXCL",
+      "DisplayName": "CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr-EXCL",
       "Id": "5e930f19-7ed3-404d-8381-9ebbdc74bcac",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA406-GST-AllApps-AnyOS-ModernClient-AnyLoc-ContinuousAccessEval-EXCL",
+      "DisplayName": "CA406-GST-AllApps-AnyOS-ModernCli-AnyLoc-ContAccEval-EXCL",
       "Id": "b00d9511-f97e-4aea-a1a5-faee05c8ab38",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishResistantMFA-EXCL",
+      "DisplayName": "CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishMFA-EXCL",
       "Id": "16443a68-7c9a-4880-8018-9712da9cdfe9",
       "Type": "Group"
     },
     {
-      "DisplayName": "CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemediation-EXCL",
+      "DisplayName": "CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemed-EXCL",
       "Id": "c32d5ef2-7411-4c01-9f25-3650e7be61f4",
       "Type": "Group"
     },
     {
       "DisplayName": "CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block-EXCL",
       "Id": "c5b52f76-4b2d-43e7-a27b-df4c1f455ef4",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA-EXCL",
+      "Id": "%CA504ExclGroupId%",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed-EXCL",
+      "Id": "%CA505ExclGroupId%",
       "Type": "Group"
     },
     {
@@ -316,14 +361,6 @@
       "Id": null,
       "AppId": "8c59ead7-d703-4a27-9e55-c96a0054c8d2",
       "PolicyReferenceId": "8c59ead7-d703-4a27-9e55-c96a0054c8d2",
-      "ReferenceKind": "AppId",
-      "Type": "ServicePrincipal"
-    },
-    {
-      "DisplayName": "9cdead84-a844-4324-93f2-b2e6bb768d07",
-      "Id": null,
-      "AppId": "9cdead84-a844-4324-93f2-b2e6bb768d07",
-      "PolicyReferenceId": "9cdead84-a844-4324-93f2-b2e6bb768d07",
       "ReferenceKind": "AppId",
       "Type": "ServicePrincipal"
     },

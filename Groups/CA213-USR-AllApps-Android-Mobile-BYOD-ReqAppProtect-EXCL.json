@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "f69eda77-f120-4ffb-beba-fce593e90119",
   "deletedDateTime": null,
   "classification": null,
@@ -14,7 +14,7 @@
   "isManagementRestricted": null,
   "mail": null,
   "mailEnabled": false,
-  "mailNickname": "CA212-usr-excl",
+  "mailNickname": "CA213-usr-allapps-android-excl",
   "membershipRule": null,
   "membershipRuleProcessingState": null,
   "onPremisesDomainName": null,

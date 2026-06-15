@@ -1,4 +1,4 @@
-﻿{
+{
   "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies/$entity",
   "@odata.type": "#microsoft.graph.conditionalAccessPolicy",
   "@odata.id": "identity/conditionalAccess/policies('b6ed4c3f-1d0c-41b8-bd51-e14a63198c68')",
@@ -39,7 +39,8 @@
       ],
       "excludeApplications@odata.type": "#Collection(String)",
       "excludeApplications": [
-        "0000000a-0000-0000-c000-000000000000"
+        "0000000a-0000-0000-c000-000000000000",
+        "d4ebce55-015a-49b5-a083-c84d1797ae8c"
       ],
       "includeUserActions@odata.type": "#Collection(String)",
       "includeUserActions": [],
@@ -99,7 +100,9 @@
         "5f2222b1-57c3-48ba-8ad5-d4759f1fde6f",
         "5d6b6bb7-de71-4623-b4af-96380a352509",
         "f28a1f50-f6e7-4571-818b-6a12f2af6b6c",
-        "fe930be7-5e62-47db-91af-98c3a49a38b1"
+        "fe930be7-5e62-47db-91af-98c3a49a38b1",
+        "a92aed5d-d78a-4d16-b381-09adb37eb3b0",
+        "d29b2b05-8046-44ba-8758-1e26182fcf32"
       ],
       "includeGuestsOrExternalUsers": null,
       "excludeGuestsOrExternalUsers": {
