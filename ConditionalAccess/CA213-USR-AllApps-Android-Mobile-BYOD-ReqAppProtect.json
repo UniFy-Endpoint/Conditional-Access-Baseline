@@ -14,7 +14,22 @@
   "state": "disabled",
   "deletedDateTime": null,
   "partialEnablementStrategy": null,
-  "sessionControls": null,
+  "sessionControls": {
+    "@odata.type": "#microsoft.graph.conditionalAccessSessionControls",
+    "disableResilienceDefaults": null,
+    "applicationEnforcedRestrictions": null,
+    "signInFrequency": null,
+    "persistentBrowser": null,
+    "continuousAccessEvaluation": null,
+    "secureSignInSession": null,
+    "blockSensitiveActions": null,
+    "cloudAppSecurity": {
+      "@odata.type": "#microsoft.graph.cloudAppSecuritySessionControl",
+      "cloudAppSecurityType@odata.type": "#microsoft.graph.cloudAppSecuritySessionControlType",
+      "cloudAppSecurityType": "blockDownloads",
+      "isEnabled": true
+    }
+  },
   "conditions": {
     "@odata.type": "#microsoft.graph.conditionalAccessConditionSet",
     "userRiskLevels@odata.type": "#Collection(microsoft.graph.riskLevel)",
@@ -23,7 +38,8 @@
     "signInRiskLevels": [],
     "clientAppTypes@odata.type": "#Collection(microsoft.graph.conditionalAccessClientApp)",
     "clientAppTypes": [
-      "mobileAppsAndDesktopClients"
+      "mobileAppsAndDesktopClients",
+      "browser"
     ],
     "locations": null,
     "times": null,
