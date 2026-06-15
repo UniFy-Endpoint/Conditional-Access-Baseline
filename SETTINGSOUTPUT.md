@@ -7,7 +7,7 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | Policies | 52 |
 | Security groups | 47 |
 | Named locations | 3 |
-| Administrator role standard | 34 roles |
+| Administrator role standard | 35 roles |
 | Disabled policies | 52 |
 
 ## Summary
@@ -21,12 +21,12 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | CA005 | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA` | Workforce users | Any / none | mfa | None | Disabled |
 | CA006 | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA` | Workforce users | Any / none | mfa | None | Disabled |
 | CA007 | `CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block` | Workforce users | All | block | None | Disabled |
-| CA101 | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Administrators (34 roles) | All | mfa | None | Disabled |
-| CA102 | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA` | Administrators (34 roles) | All | Authentication strength: Passwordless MFA | None | Disabled |
-| CA103 | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA` | Administrators (34 roles) | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
-| CA104 | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess` | Administrators (34 roles) | All | Session controls only | Sign-in frequency: 8 hours; Persistent browser: never | Disabled |
-| CA105 | `CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval` | Administrators (34 roles) | All | Session controls only | CAE: strictLocation | Disabled |
-| CA106 | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid` | Administrators (34 roles) | All | compliantDevice OR domainJoinedDevice | None | Disabled |
+| CA101 | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Administrators (35 roles) | All | mfa | None | Disabled |
+| CA102 | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA` | Administrators (35 roles) | All | Authentication strength: Passwordless MFA | None | Disabled |
+| CA103 | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA` | Administrators (35 roles) | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
+| CA104 | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess` | Administrators (35 roles) | All | Session controls only | Sign-in frequency: 8 hours; Persistent browser: never | Disabled |
+| CA105 | `CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval` | Administrators (35 roles) | All | Session controls only | CAE: strictLocation | Disabled |
+| CA106 | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid` | Administrators (35 roles) | All | compliantDevice OR domainJoinedDevice | None | Disabled |
 | CA201 | `CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Workforce users | All | mfa | None | Disabled |
 | CA202 | `CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA` | Workforce users | All | Authentication strength: Passwordless MFA | None | Disabled |
 | CA203 | `CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA` | Workforce users | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
@@ -69,7 +69,7 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 
 ## Administrator Scope
 
-CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standard. CA201–CA215 exclude that full 34-role standard plus two directory-synchronization/service-role exceptions. CA216, CA217, and CA218 exclude only the two synchronization/service-role roles because their controls are unique and must continue to protect administrators. GLB policies exclude the same two service roles plus the emergency-access and dedicated exception groups.
+CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standard. CA201–CA215 exclude that full 35-role standard plus two directory-synchronization/service-role exceptions. CA216, CA217, and CA218 exclude only the two synchronization/service-role roles because their controls are unique and must continue to protect administrators. GLB policies exclude the same two service roles plus the emergency-access and dedicated exception groups.
 
 ## Policy Details
 
@@ -277,11 +277,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | :--- | :--- |
 | ID | `%CA101ReqMFAId%` |
 | State | Disabled |
-| Audience | Administrators (34 roles) |
+| Audience | Administrators (35 roles) |
 | Include users | Any / none |
 | Include groups | None |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (%CA101ExclGroupId%) |
-| Include roles | 34 roles |
+| Include roles | 35 roles |
 | Exclude roles | None |
 | Guest/external scope | Not configured |
 | Include resources | All |
@@ -305,11 +305,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | :--- | :--- |
 | ID | `%CA102PolicyId%` |
 | State | Disabled |
-| Audience | Administrators (34 roles) |
+| Audience | Administrators (35 roles) |
 | Include users | Any / none |
 | Include groups | None |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL (%CA102ExclGroupId%) |
-| Include roles | 34 roles |
+| Include roles | 35 roles |
 | Exclude roles | None |
 | Guest/external scope | Not configured |
 | Include resources | All |
@@ -333,11 +333,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | :--- | :--- |
 | ID | `3e7161c6-61f6-48e4-a12c-0b1a80285bcd` |
 | State | Disabled |
-| Audience | Administrators (34 roles) |
+| Audience | Administrators (35 roles) |
 | Include users | Any / none |
 | Include groups | None |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL (7b32cf4c-58c1-4fe8-9547-983e4d57a098) |
-| Include roles | 34 roles |
+| Include roles | 35 roles |
 | Exclude roles | None |
 | Guest/external scope | Not configured |
 | Include resources | All |
@@ -361,11 +361,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | :--- | :--- |
 | ID | `4fc32cfa-e7f3-4bf5-b0c1-d9cf03727a0a` |
 | State | Disabled |
-| Audience | Administrators (34 roles) |
+| Audience | Administrators (35 roles) |
 | Include users | Any / none |
 | Include groups | None |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL (9c00db91-443d-403d-aa57-a936717a05a8) |
-| Include roles | 34 roles |
+| Include roles | 35 roles |
 | Exclude roles | None |
 | Guest/external scope | Not configured |
 | Include resources | All |
@@ -389,11 +389,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | :--- | :--- |
 | ID | `fd8ebdac-ccee-4867-b616-62321f6f7954` |
 | State | Disabled |
-| Audience | Administrators (34 roles) |
+| Audience | Administrators (35 roles) |
 | Include users | Any / none |
 | Include groups | None |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL (a570fe91-63a6-40f4-ae55-aecef9ffa324) |
-| Include roles | 34 roles |
+| Include roles | 35 roles |
 | Exclude roles | None |
 | Guest/external scope | Not configured |
 | Include resources | All |
@@ -417,11 +417,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | :--- | :--- |
 | ID | `49466c67-e8bb-4e0c-a50e-694579314365` |
 | State | Disabled |
-| Audience | Administrators (34 roles) |
+| Audience | Administrators (35 roles) |
 | Include users | Any / none |
 | Include groups | None |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid-EXCL (a247a2a0-0a3d-47cb-83c3-df185d806f8d) |
-| Include roles | 34 roles |
+| Include roles | 35 roles |
 | Exclude roles | 2 roles |
 | Guest/external scope | Not configured |
 | Include resources | All |
@@ -450,7 +450,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (3f9c97fb-8087-4992-b912-bfc471201a59) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Any / none |
@@ -478,7 +478,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA-EXCL (1444d9a4-a764-4127-a1f9-716342cb904b) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Any / none |
@@ -506,7 +506,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL (%CA203ExclGroupId%) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Any / none |
@@ -534,7 +534,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL (5273dd03-b602-4a55-b42a-7d8819ea3a0c) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | MicrosoftAdminPortals, Azure Resource Manager (797f4846-ba00-4fd7-ba43-dac1f8f63013) |
 | Exclude resources | Any / none |
@@ -562,7 +562,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrq-PrstSess-EXCL (8d1356e9-235c-4fb3-85ff-b6f6fd33639f) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Any / none |
@@ -590,7 +590,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL (18fa41d2-7057-43bc-a7dc-b319f0ae6606) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Any / none |
@@ -618,7 +618,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL (c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Edge Sync (a4f2693f-129c-4b96-982b-2c364b8314d7), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Microsoft Intune (0000000a-0000-0000-c000-000000000000), Windows Cloud Login (270efc09-cd0d-444b-a71f-39af4910ec45), Microsoft Activity Feed Service (d32c68ad-72d2-4acb-a0c7-46bb2cf93873), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000) |
@@ -646,7 +646,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL (c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Edge Sync (a4f2693f-129c-4b96-982b-2c364b8314d7), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Microsoft Intune (0000000a-0000-0000-c000-000000000000), Windows Cloud Login (270efc09-cd0d-444b-a71f-39af4910ec45), Microsoft Activity Feed Service (d32c68ad-72d2-4acb-a0c7-46bb2cf93873), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000) |
@@ -674,7 +674,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant-EXCL (dd68178f-b5b1-45c3-be04-304ad8b5c91a) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
@@ -702,7 +702,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant-EXCL (1bed65eb-3c26-449e-bb1d-eb61e193de9e) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
@@ -730,7 +730,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL (24ce71a0-a35c-4d76-b473-98deae1de32b) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All |
 | Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
@@ -758,7 +758,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL (236772fa-5f88-4345-8de1-e6b2b6cc0c8b) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All cloud apps |
 | Exclude resources | Any / none |
@@ -786,7 +786,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL (f69eda77-f120-4ffb-beba-fce593e90119) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All cloud apps |
 | Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
@@ -814,7 +814,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL (b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | All cloud apps |
 | Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
@@ -842,7 +842,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 34-role standa
 | Include groups | Any / none |
 | Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr-EXCL (6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9) |
 | Include roles | None |
-| Exclude roles | 36 roles (34-role standard plus 2 directory-synchronization exceptions) |
+| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
 | Include resources | Office365 |
 | Exclude resources | Any / none |
