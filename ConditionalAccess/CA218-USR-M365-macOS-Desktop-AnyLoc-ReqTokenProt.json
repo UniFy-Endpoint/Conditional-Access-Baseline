@@ -69,7 +69,8 @@
       "excludeRoles@odata.type": "#Collection(String)",
       "excludeRoles": [
         "d29b2b05-8046-44ba-8758-1e26182fcf32",
-        "a92aed5d-d78a-4d16-b381-09adb37eb3b0"
+        "a92aed5d-d78a-4d16-b381-09adb37eb3b0",
+        "69091246-20e8-4a56-aa4d-066075b2a7a8"
       ],
       "includeGuestsOrExternalUsers": null,
       "excludeGuestsOrExternalUsers": {
