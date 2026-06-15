@@ -5,7 +5,7 @@
   "@odata.editLink": "identity/conditionalAccess/policies('1ece068a-9766-4626-ac17-afc7262ad15d')",
   "id": "1ece068a-9766-4626-ac17-afc7262ad15d",
   "templateId": null,
-  "displayName": "CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect",
+  "displayName": "CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2025-12-02T14:38:42.9532391Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",

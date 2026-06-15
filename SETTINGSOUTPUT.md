@@ -39,8 +39,8 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | CA210 | `CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
 | CA211 | `CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
 | CA212 | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
-| CA213 | `CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
-| CA214 | `CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
+| CA213 | `CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
+| CA214 | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
 | CA215 | `CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr` | Workforce users | Office365 | Session controls only | Application-enforced restrictions | Disabled |
 | CA216 | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
 | CA217 | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Workforce users | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) | mfa | Sign-in frequency: every time | Disabled |
@@ -775,7 +775,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Session | Defender for Cloud Apps: blockDownloads |
 | Dedicated EXCL | CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL |
 
-### CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect
+### CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl
 
 | Property | Configuration |
 | :--- | :--- |
@@ -784,7 +784,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL (f69eda77-f120-4ffb-beba-fce593e90119) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL (f69eda77-f120-4ffb-beba-fce593e90119) |
 | Include roles | None |
 | Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -801,9 +801,9 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Agent risk | None |
 | Grant | compliantApplication |
 | Session | Defender for Cloud Apps: blockDownloads |
-| Dedicated EXCL | CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL |
+| Dedicated EXCL | CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL |
 
-### CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect
+### CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl
 
 | Property | Configuration |
 | :--- | :--- |
@@ -812,7 +812,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL (b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL (b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912) |
 | Include roles | None |
 | Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -829,7 +829,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Agent risk | None |
 | Grant | compliantApplication |
 | Session | Defender for Cloud Apps: blockDownloads |
-| Dedicated EXCL | CA214-USR-AllApps-iOS-Mobile-BYOD-ReqAppProtect-EXCL |
+| Dedicated EXCL | CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL |
 
 ### CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr
 
