@@ -1,4 +1,4 @@
-﻿{
+{
   "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies/$entity",
   "@odata.type": "#microsoft.graph.conditionalAccessPolicy",
   "@odata.id": "identity/conditionalAccess/policies('%CA302PolicyId%')",
@@ -53,12 +53,12 @@
       "excludeUsers": [],
       "includeGroups@odata.type": "#Collection(String)",
       "includeGroups": [
-        "%ServiceAccountsGroupId%"
+        "3dcddfa2-c120-43c2-a01a-a36e1e5824ba"
       ],
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
         "9f027ad8-042b-4c85-9727-9008f6851597",
-        "%CA302ExclGroupId%"
+        "6886387c-5ece-4163-89c6-5b3da9e530d2"
       ],
       "includeRoles@odata.type": "#Collection(String)",
       "includeRoles": [],

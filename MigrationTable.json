@@ -3,7 +3,7 @@
   "Objects": [
     {
       "DisplayName": "CA-SVC-IntSvcAcc-ServiceAccounts",
-      "Id": "%ServiceAccountsGroupId%",
+      "Id": "3dcddfa2-c120-43c2-a01a-a36e1e5824ba",
       "Type": "Group"
     },
     {
@@ -43,17 +43,17 @@
     },
     {
       "DisplayName": "CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block-EXCL",
-      "Id": "%CA007ExclGroupId%",
+      "Id": "6fc30b78-b926-43dd-9156-e2574722a56c",
       "Type": "Group"
     },
     {
       "DisplayName": "CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL",
-      "Id": "%CA101ExclGroupId%",
+      "Id": "970ebaf7-3f86-4d67-8b6f-c7d8daefddda",
       "Type": "Group"
     },
     {
       "DisplayName": "CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL",
-      "Id": "%CA102ExclGroupId%",
+      "Id": "b6869dc3-0dcb-4114-972d-a5665c279f58",
       "Type": "Group"
     },
     {
@@ -88,7 +88,7 @@
     },
     {
       "DisplayName": "CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL",
-      "Id": "%CA203ExclGroupId%",
+      "Id": "6aab9ef2-dbb3-4ba9-aef2-1b01671c20ee",
       "Type": "Group"
     },
     {
@@ -158,7 +158,7 @@
     },
     {
       "DisplayName": "CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL",
-      "Id": "%CA217ExclGroupId%",
+      "Id": "851794e1-64b4-4473-8a9c-85ef838269c8",
       "Type": "Group"
     },
     {
@@ -168,17 +168,17 @@
     },
     {
       "DisplayName": "CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL",
-      "Id": "%CA301ExclGroupId%",
+      "Id": "f6586a28-f2d9-4d12-bfe7-ecdeb3a2e257",
       "Type": "Group"
     },
     {
       "DisplayName": "CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL",
-      "Id": "%CA302ExclGroupId%",
+      "Id": "6886387c-5ece-4163-89c6-5b3da9e530d2",
       "Type": "Group"
     },
     {
       "DisplayName": "CA303-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL",
-      "Id": "%CA303ExclGroupId%",
+      "Id": "ece8edf1-2f76-479e-9a7c-15817e6133a8",
       "Type": "Group"
     },
     {

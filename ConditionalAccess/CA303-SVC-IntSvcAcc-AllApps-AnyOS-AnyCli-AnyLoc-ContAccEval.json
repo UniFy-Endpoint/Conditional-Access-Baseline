@@ -62,12 +62,12 @@
       "excludeUsers": [],
       "includeGroups@odata.type": "#Collection(String)",
       "includeGroups": [
-        "%ServiceAccountsGroupId%"
+        "3dcddfa2-c120-43c2-a01a-a36e1e5824ba"
       ],
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
         "9f027ad8-042b-4c85-9727-9008f6851597",
-        "%CA303ExclGroupId%"
+        "ece8edf1-2f76-479e-9a7c-15817e6133a8"
       ],
       "includeRoles@odata.type": "#Collection(String)",
       "includeRoles": [],
