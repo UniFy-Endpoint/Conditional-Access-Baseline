@@ -41,7 +41,7 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | CA212 | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
 | CA213 | `CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
 | CA214 | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
-| CA215 | `CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr` | Workforce users | Office365 | Session controls only | Application-enforced restrictions | Disabled |
+| CA215 | `CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl` | Workforce users | All cloud apps | Session controls only | Application-enforced restrictions; Defender for Cloud Apps: blockDownloads | Disabled |
 | CA216 | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
 | CA217 | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Workforce users | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) | mfa | Sign-in frequency: every time | Disabled |
 | CA218 | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
@@ -831,7 +831,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Session | Defender for Cloud Apps: blockDownloads |
 | Dedicated EXCL | CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL |
 
-### CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr
+### CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl
 
 | Property | Configuration |
 | :--- | :--- |
@@ -840,11 +840,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr-EXCL (6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl-EXCL (6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9) |
 | Include roles | None |
 | Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office365 |
+| Include resources | All cloud apps |
 | Exclude resources | Any / none |
 | Client app types | browser |
 | Platforms | macOS |
@@ -856,8 +856,8 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Service-principal risk | Any / none |
 | Agent risk | None |
 | Grant | Session controls only |
-| Session | Application-enforced restrictions |
-| Dedicated EXCL | CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr-EXCL |
+| Session | Application-enforced restrictions; Defender for Cloud Apps: blockDownloads |
+| Dedicated EXCL | CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl-EXCL |
 
 ### CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt
 
@@ -1545,7 +1545,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 
 - CA212 targets all cloud apps and requires Windows Intune App Protection for Microsoft Edge plus a tested Defender for Cloud Apps session policy. Before enabling, add any non-MAM-capable third-party cloud apps to excludeApplications.
 - CA213 and CA214 target all cloud apps and require platform-specific Intune App Protection policies for all supported Microsoft applications across both native app and browser (Microsoft Edge) client types. Browser sessions also enforce Defender for Cloud Apps download blocking. Before enabling, add any non-MAM-capable third-party cloud apps to excludeApplications.
-- CA215 and CA405 target Office 365 and require SharePoint/OneDrive limited-access and Exchange application-enforced restriction settings.
+- CA215 targets all cloud apps on unmanaged macOS browser sessions and requires SharePoint/OneDrive limited-access and Exchange application-enforced restriction settings, plus Defender for Cloud Apps download blocking. CA405 targets Office 365 and requires SharePoint/OneDrive limited-access and Exchange application-enforced restriction settings.
 - CA004 blocks device code flow. CA007 separately blocks authentication transfer.
 - CA505 requires Entra ID P2, registered Passwordless MFA methods, and working user-risk remediation prerequisites.
 - CA105, CA206, CA303, and CA406 require validated named locations and CAE resource-seen IP testing.

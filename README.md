@@ -116,7 +116,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA212 | USR | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL` |
 | CA213 | USR | `CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL` |
 | CA214 | USR | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL` |
-| CA215 | USR | `CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr` | Disabled | Application-enforced restrictions | `CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr-EXCL` |
+| CA215 | USR | `CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl` | Disabled | Application-enforced restrictions; Defender for Cloud Apps: blockDownloads | `CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl-EXCL` |
 | CA216 | USR | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt` | Disabled | Token protection | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt-EXCL` |
 | CA217 | USR | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Disabled | mfa; Sign-in frequency: every time | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL` |
 | CA218 | USR | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt` | Disabled | Token protection | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt-EXCL` |

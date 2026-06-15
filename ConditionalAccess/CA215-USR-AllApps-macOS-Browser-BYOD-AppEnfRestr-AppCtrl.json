@@ -5,7 +5,7 @@
   "@odata.editLink": "identity/conditionalAccess/policies('bd42493a-8e90-4f7b-bdcf-5d80a4c0dd19')",
   "id": "bd42493a-8e90-4f7b-bdcf-5d80a4c0dd19",
   "templateId": null,
-  "displayName": "CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr",
+  "displayName": "CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2026-04-24T12:40:42.1462457Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
@@ -51,7 +51,7 @@
       "@odata.type": "#microsoft.graph.conditionalAccessApplications",
       "includeApplications@odata.type": "#Collection(String)",
       "includeApplications": [
-        "Office365"
+        "All"
       ],
       "excludeApplications@odata.type": "#Collection(String)",
       "excludeApplications": [],
@@ -143,7 +143,12 @@
   "sessionControls": {
     "@odata.type": "#microsoft.graph.conditionalAccessSessionControls",
     "disableResilienceDefaults": null,
-    "cloudAppSecurity": null,
+    "cloudAppSecurity": {
+      "@odata.type": "#microsoft.graph.cloudAppSecuritySessionControl",
+      "cloudAppSecurityType@odata.type": "#microsoft.graph.cloudAppSecuritySessionControlType",
+      "cloudAppSecurityType": "blockDownloads",
+      "isEnabled": true
+    },
     "signInFrequency": null,
     "persistentBrowser": null,
     "continuousAccessEvaluation": null,
