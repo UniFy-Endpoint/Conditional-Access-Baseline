@@ -36,7 +36,9 @@
         "All"
       ],
       "excludeApplications@odata.type": "#Collection(String)",
-      "excludeApplications": [],
+      "excludeApplications": [
+        "a4f2693f-129c-4b96-982b-2c364b8314d7"
+      ],
       "includeUserActions@odata.type": "#Collection(String)",
       "includeUserActions": [],
       "includeAuthenticationContextClassReferences@odata.type": "#Collection(String)",
