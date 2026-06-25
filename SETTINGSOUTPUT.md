@@ -43,7 +43,7 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | CA214 | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
 | CA215 | `CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl` | Workforce users | All cloud apps | Session controls only | Application-enforced restrictions; Defender for Cloud Apps: blockDownloads | Disabled |
 | CA216 | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
-| CA217 | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Workforce users | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) | mfa | Sign-in frequency: every time | Disabled |
+| CA217 | `CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Workforce users | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) | mfa | Sign-in frequency: every time | Disabled |
 | CA218 | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
 | CA301 | `CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Targeted group | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
 | CA302 | `CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block` | Targeted group | All | block | None | Disabled |
@@ -887,7 +887,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Session | Token protection |
 | Dedicated EXCL | CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt-EXCL |
 
-### CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys
+### CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys
 
 | Property | Configuration |
 | :--- | :--- |
@@ -896,7 +896,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL (%CA217ExclGroupId%) |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL (%CA217ExclGroupId%) |
 | Include roles | None |
 | Exclude roles | 2 roles |
 | Guest/external scope | Explicitly excluded |
@@ -913,7 +913,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Agent risk | None |
 | Grant | mfa |
 | Session | Sign-in frequency: every time |
-| Dedicated EXCL | CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL |
+| Dedicated EXCL | CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL |
 
 ### CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt
 

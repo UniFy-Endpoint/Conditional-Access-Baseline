@@ -5,7 +5,7 @@
   "@odata.editLink": "identity/conditionalAccess/policies('%CA217PolicyId%')",
   "id": "%CA217PolicyId%",
   "templateId": null,
-  "displayName": "CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys",
+  "displayName": "CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "%CreatedDateTime%",
   "modifiedDateTime@odata.type": "#DateTimeOffset",

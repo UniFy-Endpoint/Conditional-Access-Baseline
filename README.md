@@ -118,7 +118,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA214 | USR | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Disabled | compliantApplication; Defender for Cloud Apps: blockDownloads | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL` |
 | CA215 | USR | `CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl` | Disabled | Application-enforced restrictions; Defender for Cloud Apps: blockDownloads | `CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl-EXCL` |
 | CA216 | USR | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt` | Disabled | Token protection | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt-EXCL` |
-| CA217 | USR | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Disabled | mfa; Sign-in frequency: every time | `CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL` |
+| CA217 | USR | `CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Disabled | mfa; Sign-in frequency: every time | `CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL` |
 | CA218 | USR | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt` | Disabled | Token protection | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt-EXCL` |
 | CA301 | SVC | `CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | Authentication strength: Phishing-resistant MFA | `CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
 | CA302 | SVC | `CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block` | Disabled | block | `CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL` |

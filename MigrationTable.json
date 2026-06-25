@@ -157,7 +157,7 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA217-USR-IntuMDMEnroll-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL",
+      "DisplayName": "CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL",
       "Id": "851794e1-64b4-4473-8a9c-85ef838269c8",
       "Type": "Group"
     },
