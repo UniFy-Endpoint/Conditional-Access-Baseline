@@ -135,7 +135,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA504 | IDP | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA` | Disabled | Authentication strength: Phishing-resistant MFA; Sign-in frequency: every time | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA-EXCL` |
 | CA505 | IDP | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed` | Disabled | riskRemediation AND Passwordless MFA; Sign-in frequency: every time | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed-EXCL` |
 | CA601 | AGT | `CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-HighRiskAgt-Block` | Disabled | block | None |
-| CA602 | AGT | `CA602-AGT-UnapprvdAgt-AllApps-AnyOS-AnyCli-Block` | Disabled | block | None |
+| CA602 | AGT | `CA602-AGT-AllAgent-AllApps-AnyOS-AnyCli-Block` | Disabled | block | None |
 | CA603 | AGT | `CA603-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Disabled | compliantDevice | None |
 | CA604 | AGT | `CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
 | CA605 | AGT | `CA605-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Disabled | block | None |

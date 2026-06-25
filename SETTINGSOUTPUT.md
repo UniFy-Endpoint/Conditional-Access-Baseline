@@ -60,7 +60,7 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | CA504 | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA` | Workforce users | All | Authentication strength: Phishing-resistant MFA | Sign-in frequency: every time | Disabled |
 | CA505 | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed` | Workforce users | All | riskRemediation AND Authentication strength: Passwordless MFA | Sign-in frequency: every time | Disabled |
 | CA601 | `CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-HighRiskAgt-Block` | Agent identities | All | block | None | Disabled |
-| CA602 | `CA602-AGT-UnapprvdAgt-AllApps-AnyOS-AnyCli-Block` | Agent identities | All | block | None | Disabled |
+| CA602 | `CA602-AGT-AllAgent-AllApps-AnyOS-AnyCli-Block` | Agent identities | All | block | None | Disabled |
 | CA603 | `CA603-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Scoped identities | All | compliantDevice | None | Disabled |
 | CA604 | `CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Scoped identities | All | block | None | Disabled |
 | CA605 | `CA605-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Scoped identities | AllAgentIdResources | block | None | Disabled |
@@ -1368,7 +1368,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Agent approval filter | None |
 | Dedicated EXCL | None |
 
-### CA602-AGT-UnapprvdAgt-AllApps-AnyOS-AnyCli-Block
+### CA602-AGT-AllAgent-AllApps-AnyOS-AnyCli-Block
 
 | Property | Configuration |
 | :--- | :--- |
