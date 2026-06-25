@@ -1,0 +1,39 @@
+{
+  "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/authenticationStrengths/policies/$entity",
+  "@odata.type": "#microsoft.graph.authenticationStrengthPolicy",
+  "@odata.id": "identity/conditionalAccess/authenticationStrengths/policies('135c9ac8-1c38-4427-bced-8ee241bbe32e')",
+  "@odata.editLink": "identity/conditionalAccess/authenticationStrengths/policies('135c9ac8-1c38-4427-bced-8ee241bbe32e')",
+  "id": "135c9ac8-1c38-4427-bced-8ee241bbe32e",
+  "createdDateTime@odata.type": "#DateTimeOffset",
+  "createdDateTime": "2026-06-25T13:39:55.5033266Z",
+  "modifiedDateTime@odata.type": "#DateTimeOffset",
+  "modifiedDateTime": "2026-06-25T13:39:55.5033266Z",
+  "displayName": "Temp Access Pass - Strength",
+  "description": "Temporary Access Pass Strength",
+  "policyType@odata.type": "#microsoft.graph.authenticationStrengthPolicyType",
+  "policyType": "custom",
+  "requirementsSatisfied@odata.type": "#microsoft.graph.authenticationStrengthRequirements",
+  "requirementsSatisfied": "none",
+  "allowedCombinations@odata.type": "#Collection(microsoft.graph.authenticationMethodModes)",
+  "allowedCombinations": [
+    "temporaryAccessPassOneTime",
+    "temporaryAccessPassMultiUse",
+    "password,microsoftAuthenticatorPush",
+    "deviceBasedPush",
+    "fido2",
+    "windowsHelloForBusiness",
+    "x509CertificateMultiFactor"
+  ],
+  "combinationConfigurations@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/authenticationStrengths/policies('135c9ac8-1c38-4427-bced-8ee241bbe32e')/combinationConfigurations",
+  "combinationConfigurations@odata.associationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/authenticationStrengths/policies('135c9ac8-1c38-4427-bced-8ee241bbe32e')/combinationConfigurations/$ref",
+  "combinationConfigurations@odata.navigationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/authenticationStrengths/policies('135c9ac8-1c38-4427-bced-8ee241bbe32e')/combinationConfigurations",
+  "combinationConfigurations": [],
+  "#microsoft.graph.updateAllowedCombinations": {
+    "title": "microsoft.graph.updateAllowedCombinations",
+    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/authenticationStrengths/policies('135c9ac8-1c38-4427-bced-8ee241bbe32e')/microsoft.graph.updateAllowedCombinations"
+  },
+  "#microsoft.graph.usage": {
+    "title": "microsoft.graph.usage",
+    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/authenticationStrengths/policies('135c9ac8-1c38-4427-bced-8ee241bbe32e')/microsoft.graph.usage"
+  }
+}

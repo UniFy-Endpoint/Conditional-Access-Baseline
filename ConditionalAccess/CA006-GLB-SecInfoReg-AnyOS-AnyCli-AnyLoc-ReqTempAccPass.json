@@ -5,7 +5,7 @@
   "@odata.editLink": "identity/conditionalAccess/policies('d0bd7a4c-7428-40fa-a44b-0db4dd387e58')",
   "id": "d0bd7a4c-7428-40fa-a44b-0db4dd387e58",
   "templateId": null,
-  "displayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA",
+  "displayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2025-11-27T17:04:43.9125392Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
@@ -79,25 +79,13 @@
         }
       }
     },
-    "locations": {
-      "@odata.type": "#microsoft.graph.conditionalAccessLocations",
-      "includeLocations@odata.type": "#Collection(String)",
-      "includeLocations": [
-        "All"
-      ],
-      "excludeLocations@odata.type": "#Collection(String)",
-      "excludeLocations": [
-        "10725f98-e039-43b4-9084-ae8e9450d3fe"
-      ]
-    }
+    "locations": null
   },
   "grantControls": {
     "@odata.type": "#microsoft.graph.conditionalAccessGrantControls",
     "operator": "OR",
     "builtInControls@odata.type": "#Collection(microsoft.graph.conditionalAccessGrantControl)",
-    "builtInControls": [
-      "mfa"
-    ],
+    "builtInControls": [],
     "customAuthenticationFactors@odata.type": "#Collection(String)",
     "customAuthenticationFactors": [],
     "termsOfUse@odata.type": "#Collection(String)",
@@ -105,7 +93,27 @@
     "authenticationStrength@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies('d0bd7a4c-7428-40fa-a44b-0db4dd387e58')/grantControls/authenticationStrength/$entity",
     "authenticationStrength@odata.associationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('d0bd7a4c-7428-40fa-a44b-0db4dd387e58')/grantControls/authenticationStrength/$ref",
     "authenticationStrength@odata.navigationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('d0bd7a4c-7428-40fa-a44b-0db4dd387e58')/grantControls/authenticationStrength",
-    "authenticationStrength": null
+    "authenticationStrength": {
+      "@odata.type": "#microsoft.graph.authenticationStrengthPolicy",
+      "id": "%TempAccessPassStrengthId%",
+      "displayName": "Temp Access Pass - Strength",
+      "description": "Bootstrap authentication strength for registering security information with Temporary Access Pass.",
+      "policyType@odata.type": "#microsoft.graph.authenticationStrengthPolicyType",
+      "policyType": "custom",
+      "requirementsSatisfied@odata.type": "#microsoft.graph.authenticationStrengthRequirements",
+      "requirementsSatisfied": "mfa",
+      "allowedCombinations@odata.type": "#Collection(microsoft.graph.authenticationMethodModes)",
+      "allowedCombinations": [
+        "temporaryAccessPassOneTime",
+        "temporaryAccessPassMultiUse",
+        "password,microsoftAuthenticatorPush",
+        "deviceBasedPush",
+        "fido2",
+        "windowsHelloForBusiness",
+        "x509CertificateMultiFactor"
+      ],
+      "combinationConfigurations": []
+    }
   },
   "#microsoft.graph.restore": {
     "title": "microsoft.graph.restore",

@@ -48,6 +48,7 @@ Policies are organized into eight audience families:
 | GST | Guests | Guest and external identities |
 | IDP | Identity Protection | Risk-driven policies requiring Microsoft Entra ID P2 |
 | AGT | Agents | AI agent and autonomous workload identities |
+| GSA | Global Secure Access | Entra Internet Access, Entra Private Access, and compliant-network controls |
 
 Policy numbers are allocated by family:
 
@@ -62,6 +63,7 @@ Policy numbers are allocated by family:
 | CA500 – CA599 | IDP — Identity Protection policies (requires Entra ID P2) |
 | CA600 – CA699 | AGT — Agent and autonomous workload policies |
 | CA700 – CA799 | WLI — Workload identity policies (requires Workload ID Premium) |
+| CA800 – CA899 | GSA — Global Secure Access policies |
 
 ---
 
@@ -69,11 +71,11 @@ Policy numbers are allocated by family:
 
 ## Inventory
 
-- Policies: **52** (GLB 7, ADM 6, USR 18, SVC 3, WLI 2, GST 6, IDP 5, AGT 5)
-- Groups: **47** (45 dedicated policy EXCL groups, shared CA000 emergency access, and CA-SVC-IntSvcAcc-ServiceAccounts)
-- Policy states in source: **52 disabled**
+- Policies: **54** (GLB 7, ADM 6, USR 18, SVC 3, WLI 2, GST 6, IDP 5, AGT 4, GSA 3)
+- Groups: **49** (47 dedicated policy EXCL groups, shared CA000 emergency access, and CA-SVC-IntSvcAcc-ServiceAccounts)
+- Policy states in source: **54 disabled**
 - Named locations: **3**
-- Administrator standard: **34 built-in roles**
+- Administrator standard: **35 built-in roles**
 
 ---
 
@@ -81,7 +83,7 @@ Policy numbers are allocated by family:
 
 `CA###-Audience-Resource-Platform-Client-Location-Control`
 
-Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. Workforce (`USR`) and guest (`GST`) policies are always separate. A dedicated exclusion group is named exactly `<policy-displayName>-EXCL`.
+Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, `AGT`, and `GSA`. Workforce (`USR`) and guest (`GST`) policies are always separate. A dedicated exclusion group is named exactly `<policy-displayName>-EXCL`.
 
 ---
 
@@ -94,7 +96,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA003 | GLB | `CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block` | Disabled | block | `CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block-EXCL` |
 | CA004 | GLB | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Disabled | block | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL` |
 | CA005 | GLB | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
-| CA006 | GLB | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA` | Disabled | mfa | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL` |
+| CA006 | GLB | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass` | Disabled | Authentication strength: Temp Access Pass - Strength | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass-EXCL` |
 | CA007 | GLB | `CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block` | Disabled | block | `CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block-EXCL` |
 | CA101 | ADM | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
 | CA102 | ADM | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA` | Disabled | Authentication strength: Passwordless MFA | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL` |
@@ -136,24 +138,30 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA505 | IDP | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed` | Disabled | riskRemediation AND Passwordless MFA; Sign-in frequency: every time | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed-EXCL` |
 | CA601 | AGT | `CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block` | Disabled | block | None |
 | CA602 | AGT | `CA602-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Disabled | compliantDevice | None |
-| CA603 | AGT | `CA603-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Disabled | block | None |
-| CA604 | AGT | `CA604-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
-| CA605 | AGT | `CA605-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
+| CA603 | AGT | `CA603-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
+| CA604 | AGT | `CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
 | CA701 | WLI | `CA701-WLI-AllApps-AnyLoc-WorkloadRiskHigh-Block` | Disabled | block | None |
 | CA702 | WLI | `CA702-WLI-AllApps-AnyLoc-UntrustedNetwork-Block` | Disabled | block | None |
+| CA801 | GSA | `CA801-GSA-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Disabled | block | None |
+| CA802 | GSA | `CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant` | Disabled | mfa OR compliantDevice OR domainJoinedDevice | `CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL` |
+| CA803 | GSA | `CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant` | Disabled | mfa OR compliantDevice OR domainJoinedDevice | `CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL` |
 
 ---
 
 ## Design Notes
 
-- ADM policies (CA101–CA106) target 34 built-in privileged roles directly via role targeting in Conditional Access. The three-tier MFA stack (CA101 plain MFA → CA102 passwordless MFA → CA103 phishing-resistant MFA) provides a graduated enforcement path for administrator authentication uplift.
+- ADM policies (CA101–CA106) target 35 built-in privileged roles directly via role targeting in Conditional Access. The three-tier MFA stack (CA101 plain MFA → CA102 passwordless MFA → CA103 phishing-resistant MFA) provides a graduated enforcement path for administrator authentication uplift.
 - `CA-SVC-IntSvcAcc-ServiceAccounts` contains interactive service-account user objects targeted by SVC policies. Workload identities and service principals are governed separately by WLI policies.
 - A block grant control always wins. Where multiple policies apply, all grant and session controls must be satisfied — a weaker overlapping policy is not a fallback.
-- CA218 and CA601–CA605 should be enabled in report-only mode until preview and licensing dependencies are validated in the tenant.
+- CA218, CA601–CA604, and CA801–CA803 should be enabled in report-only mode until preview, Global Secure Access, and licensing dependencies are validated in the tenant.
 - CA203 enforces phishing-resistant MFA on all workforce users. Prerequisite: all users must have FIDO2, Windows Hello for Business, or certificate-based authentication registered before enabling this policy.
 - CA004 blocks device code flow, while CA007 separately blocks authentication transfer so each flow can be piloted and excepted independently.
+- CA006 protects the `Register security information` user action from any location with the custom authentication strength `Temp Access Pass - Strength`. This strength should include TAP for bootstrap plus approved existing strong methods for users who already have MFA. Keep TAP out of normal all-app sign-in strengths so TAP is only usable for bootstrap/recovery flows. See `Security-Info-Registration-Readiness-Guide.md` for the operational checklist to run before enabling CA202 or CA203 for a user.
 - CA212, CA213, and CA214 target **All cloud apps** rather than Office 365. This follows Microsoft's own Zero Trust guidance: scope broadly and exclude what does not fit, rather than allowlisting specific services. Scoping to Office 365 only protects Exchange, SharePoint, and Teams — leaving apps such as Dynamics 365, Power BI, Power Apps, Power Automate, Planner, Loop, Viva Engage, Whiteboard, Microsoft Designer, Azure Information Protection, and Work Folders unprotected from browser-based access on BYOD devices, because users can reach those services without a MAM-compliant client. With All cloud apps scope, any access attempt on a BYOD device must come from a client app that satisfies the Intune App Protection Policy requirement. **Before enabling CA212, CA213, or CA214**, review `excludeApplications` in each policy and add any non-MAM-capable third-party cloud apps your organisation uses on BYOD devices — those apps cannot satisfy the grant and will be blocked without an exclusion. CA215 intentionally remains scoped to Office 365 because Application Enforced Restrictions is a SharePoint/Exchange server-side feature and only applies to those services. CA212 also requires Windows App Protection for Microsoft Edge and a tested Defender for Cloud Apps session policy.
 - CA505 follows Microsoft's high-user-risk remediation model: risk remediation, Passwordless MFA authentication strength, and reauthentication every time.
+- CA801 uses the Global Secure Access compliant-network named location to block agent-resource access when traffic is not coming from a compliant network.
+- CA802 targets **All internet resources with Global Secure Access** (`5dc48733-b5df-475c-a49b-fa307ef00853`) and follows Microsoft's example control model: require one of MFA, compliant device, or Microsoft Entra hybrid joined device.
+- CA803 is a Private Access template. Microsoft does not support a single Conditional Access target for the whole Private Access tunnel; each Quick Access or Private Access enterprise application must be targeted directly. Replace `%GsaPrivateAccessAppId%` with the target Private Access enterprise application object ID, or duplicate CA803 per private app/app group.
 - CA501 and CA504 allow medium- and high-risk sign-ins to self-remediate with phishing-resistant MFA and every-time reauthentication.
 - CA001 uses the strict geography profile. Compliant corporate devices do not bypass the disallowed-country block.
 
@@ -163,6 +171,8 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 
 - Maintain at least two cloud-only emergency-access accounts and test them every 90 days.
 - Assign owners, justification, approval, expiration, access review, and monitoring to every EXCL group membership.
+- Create a custom authentication strength named `Temp Access Pass - Strength` before restoring/enabling CA006. Include `temporaryAccessPassOneTime`; include `temporaryAccessPassMultiUse` only if your Temporary Access Pass authentication methods policy allows multi-use TAPs. Also include approved existing methods such as `password,microsoftAuthenticatorPush`, `deviceBasedPush`, `fido2`, `windowsHelloForBusiness`, and `x509CertificateMultiFactor` so registered users can maintain security info without needing a fresh TAP.
+- Enable Temporary Access Pass in the Authentication Methods policy for the users who need registration bootstrap. Prefer one-time, short-lived TAPs unless Windows/device setup requires multi-use TAPs.
 - Configure and test phishing-resistant methods (FIDO2, Windows Hello for Business, certificate-based authentication) before piloting CA103, CA203, or CA301.
 - Validate Intune compliance and App Protection policies before device and MAM enforcement.
 - Configure SharePoint/OneDrive limited access and Exchange application-enforced restrictions before CA215 or CA405.
@@ -171,10 +181,13 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 - Populate `CA-SVC-IntSvcAcc-ServiceAccounts` only with user objects that can complete MFA. Prefer managed identities or workload identity federation for automation.
 - Microsoft Entra Workload ID Premium is required for CA701 and CA702.
 - Create the `AgentIdentity` custom security attribute set and `AgentApprovalStatus` attribute before evaluating CA601.
+- Enable Global Secure Access Conditional Access signaling before evaluating CA801. Confirm that the `All Compliant Network locations` named location exists.
+- Enable and license Microsoft Entra Internet Access before evaluating CA802. Ensure Intune and compliance-remediation endpoints are bypassed where needed so a noncompliant device is not locked out of becoming compliant.
+- Configure Quick Access or per-app Microsoft Entra Private Access enterprise applications before evaluating CA803. Replace `%GsaPrivateAccessAppId%` with the actual Private Access enterprise application object ID.
 - Reconcile Security Defaults, legacy per-user MFA, cross-tenant trust, and Microsoft-managed Conditional Access policies before enforcement.
 - Enable FIDO2, Windows Hello for Business, and certificate-based authentication in the tenant Authentication Methods Policy before piloting CA102, CA103, CA203, CA301, CA501, or CA502; those policies will fail at runtime if the required methods are not enabled.
 - CA001 enforces the allowed-country boundary regardless of device ownership, Intune enrollment, or compliance state. Create a separately reviewed travel exception only when the accepted risk and compensating controls are documented.
-- The **Allowed Countries** named locations in this baseline are pre-configured for **Belgium (BE) and The Netherlands (NL)**. Update `NamedLocations/Allowed Countries.json` and `NamedLocations/Allowed Countries - Service Accounts.json` to match your organization's permitted countries before running the restore. These locations are referenced by CA001, CA006, CA202 (all users) and CA302, CA702 (service accounts and workload identities).
+- The **Allowed Countries** named locations in this baseline are pre-configured for **Belgium (BE) and The Netherlands (NL)**. Update `NamedLocations/Allowed Countries.json` and `NamedLocations/Allowed Countries - Service Accounts.json` to match your organization's permitted countries before running the restore. These locations are referenced by CA001, CA202 (all users) and CA302, CA702 (service accounts and workload identities).
 
 ---
 
@@ -186,7 +199,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 4. Pilot device compliance, MAM, browser restrictions, and session controls by platform.
 5. Enable guest controls only after cross-tenant MFA trust and external collaboration tests.
 6. Pilot SVC and WLI policies after identity inventory approval.
-7. Enable CA218 and CA601–CA605 in report-only mode until preview and licensing dependencies are validated.
+7. Enable CA218, CA601–CA604, and CA801–CA803 in report-only mode until preview, Global Secure Access, and licensing dependencies are validated.
 8. Review at least one normal business cycle of Conditional Access insights before enforcement.
 
 ---
@@ -199,6 +212,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 - `MigrationTable.json`: dependency identity mapping
 - `Invoke-ConditionalAccessBaseline.ps1`: backup and restore utility
 - `SETTINGSOUTPUT.md`: complete policy settings reference
+- `Security-Info-Registration-Readiness-Guide.md`: operational checklist for validating user readiness before enabling CA202 or CA203
 
 ---
 

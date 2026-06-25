@@ -37,9 +37,14 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL",
+      "DisplayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass-EXCL",
       "Id": "6a1fd238-bfef-470e-be4d-813bd29cf80e",
       "Type": "Group"
+    },
+    {
+      "DisplayName": "Temp Access Pass - Strength",
+      "Id": "%TempAccessPassStrengthId%",
+      "Type": "AuthenticationStrength"
     },
     {
       "DisplayName": "CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block-EXCL",
@@ -237,6 +242,16 @@
       "Type": "Group"
     },
     {
+      "DisplayName": "CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL",
+      "Id": "9a4b35b3-abea-405c-8b95-032d7cc21087",
+      "Type": "Group"
+    },
+    {
+      "DisplayName": "CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL",
+      "Id": "1004aec6-aa43-4e52-9206-7af65569768a",
+      "Type": "Group"
+    },
+    {
       "DisplayName": "Windows Azure Active Directory",
       "Id": null,
       "AppId": "00000002-0000-0000-c000-000000000000",
@@ -418,6 +433,21 @@
       "AppId": "01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9",
       "PolicyReferenceId": "01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9",
       "ReferenceKind": "AppId",
+      "Type": "ServicePrincipal"
+    },
+    {
+      "DisplayName": "All internet resources with Global Secure Access",
+      "Id": null,
+      "AppId": "5dc48733-b5df-475c-a49b-fa307ef00853",
+      "PolicyReferenceId": "5dc48733-b5df-475c-a49b-fa307ef00853",
+      "ReferenceKind": "AppId",
+      "Type": "ServicePrincipal"
+    },
+    {
+      "DisplayName": "Global Secure Access Private Access app placeholder",
+      "Id": "%GsaPrivateAccessAppId%",
+      "PolicyReferenceId": "%GsaPrivateAccessAppId%",
+      "ReferenceKind": "ObjectId",
       "Type": "ServicePrincipal"
     }
   ],

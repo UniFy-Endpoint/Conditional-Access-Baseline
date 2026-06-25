@@ -1,14 +1,14 @@
 # Conditional Access Baseline - Policy Configuration Reference
 
-Generated from the repository JSON inventory on **June 15, 2026**.
+Generated from the repository JSON inventory on **June 25, 2026**.
 
 | Metric | Value |
 | :--- | :--- |
-| Policies | 52 |
-| Security groups | 47 |
+| Policies | 54 |
+| Security groups | 49 |
 | Named locations | 3 |
 | Administrator role standard | 35 roles |
-| Disabled policies | 52 |
+| Disabled policies | 54 |
 
 ## Summary
 
@@ -19,7 +19,7 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | CA003 | `CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block` | Workforce users | All | block | None | Disabled |
 | CA004 | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Workforce users | All | block | None | Disabled |
 | CA005 | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA` | Workforce users | Any / none | mfa | None | Disabled |
-| CA006 | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA` | Workforce users | Any / none | mfa | None | Disabled |
+| CA006 | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass` | Workforce users | Any / none | Authentication strength: Temp Access Pass - Strength | None | Disabled |
 | CA007 | `CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block` | Workforce users | All | block | None | Disabled |
 | CA101 | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Administrators (35 roles) | All | mfa | None | Disabled |
 | CA102 | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA` | Administrators (35 roles) | All | Authentication strength: Passwordless MFA | None | Disabled |
@@ -61,11 +61,13 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | CA505 | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed` | Workforce users | All | riskRemediation AND Authentication strength: Passwordless MFA | Sign-in frequency: every time | Disabled |
 | CA601 | `CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block` | Agent identities | All | block | None | Disabled |
 | CA602 | `CA602-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Scoped identities | All | compliantDevice | None | Disabled |
-| CA603 | `CA603-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Scoped identities | AllAgentIdResources | block | None | Disabled |
-| CA604 | `CA604-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Agent identities | All | block | None | Disabled |
-| CA605 | `CA605-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Scoped identities | All | block | None | Disabled |
+| CA603 | `CA603-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Agent identities | All | block | None | Disabled |
+| CA604 | `CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Scoped identities | All | block | None | Disabled |
 | CA701 | `CA701-WLI-AllApps-AnyLoc-WorkloadRiskHigh-Block` | Workload identities | All | block | None | Disabled |
 | CA702 | `CA702-WLI-AllApps-AnyLoc-UntrustedNetwork-Block` | Workload identities | All | block | None | Disabled |
+| CA801 | `CA801-GSA-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Scoped identities | AllAgentIdResources | block | None | Disabled |
+| CA802 | `CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant` | All users | All internet resources with Global Secure Access | mfa OR compliantDevice OR domainJoinedDevice | None | Disabled |
+| CA803 | `CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant` | All users | Private Access enterprise app placeholder | mfa OR compliantDevice OR domainJoinedDevice | None | Disabled |
 
 ## Administrator Scope
 
@@ -214,7 +216,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Session | None |
 | Dedicated EXCL | CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
 
-### CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA
+### CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass
 
 | Property | Configuration |
 | :--- | :--- |
@@ -223,7 +225,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL (6a1fd238-bfef-470e-be4d-813bd29cf80e), CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597) |
+| Exclude groups | CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass-EXCL (6a1fd238-bfef-470e-be4d-813bd29cf80e), CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597) |
 | Include roles | None |
 | Exclude roles | 2 roles (directory-synchronization/service-role exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -231,16 +233,16 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Exclude resources | Any / none |
 | Client app types | all |
 | Platforms | Any |
-| Locations include | All |
-| Locations exclude | Allowed Countries (10725f98-e039-43b4-9084-ae8e9450d3fe) |
+| Locations include | Any |
+| Locations exclude | None |
 | Device filter | None |
 | Sign-in risk | Any / none |
 | User risk | Any / none |
 | Service-principal risk | Any / none |
 | Agent risk | None |
-| Grant | mfa |
+| Grant | Authentication strength: Temp Access Pass - Strength |
 | Session | None |
-| Dedicated EXCL | CA006-GLB-SecInfoReg-AnyOS-AnyCli-UntrustLoc-ReqMFA-EXCL |
+| Dedicated EXCL | CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass-EXCL |
 
 ### CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block
 
@@ -1396,39 +1398,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Session | None |
 | Dedicated EXCL | None |
 
-### CA603-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block
+### CA603-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block
 
 | Property | Configuration |
 | :--- | :--- |
 | ID | `%CA603PolicyId%` |
-| State | Disabled |
-| Audience | Scoped identities |
-| Include users | None |
-| Include groups | Any / none |
-| Exclude groups | Any / none |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | AllAgentIdResources |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | All |
-| Locations exclude | All Compliant Network locations (%CompliantNetworkLocationId%) |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | block |
-| Session | None |
-| Dedicated EXCL | None |
-
-### CA604-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA604PolicyId%` |
 | State | Disabled |
 | Audience | Agent identities |
 | Include users | None |
@@ -1447,7 +1421,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Sign-in risk | Any / none |
 | User risk | Any / none |
 | Service-principal risk | Any / none |
-| Agent risk | medium, high |
+| Agent risk | medium,high |
 | Grant | block |
 | Session | None |
 | Include service principals | Any / none |
@@ -1457,11 +1431,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Agent approval filter | None |
 | Dedicated EXCL | None |
 
-### CA605-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block
+### CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA605PolicyId%` |
+| ID | `%CA604PolicyId%` |
 | State | Disabled |
 | Audience | Scoped identities |
 | Include users | None |
@@ -1541,6 +1515,90 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Agent approval filter | None |
 | Dedicated EXCL | None |
 
+### CA801-GSA-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block
+
+| Property | Configuration |
+| :--- | :--- |
+| ID | `%CA801PolicyId%` |
+| State | Disabled |
+| Audience | Scoped identities |
+| Include users | None |
+| Include groups | Any / none |
+| Exclude groups | Any / none |
+| Include roles | None |
+| Exclude roles | None |
+| Guest/external scope | Not configured |
+| Include resources | AllAgentIdResources |
+| Exclude resources | Any / none |
+| Client app types | all |
+| Platforms | Any |
+| Locations include | All |
+| Locations exclude | All Compliant Network locations (%CompliantNetworkLocationId%) |
+| Device filter | None |
+| Sign-in risk | Any / none |
+| User risk | Any / none |
+| Service-principal risk | Any / none |
+| Agent risk | None |
+| Grant | block |
+| Session | None |
+| Dedicated EXCL | None |
+
+### CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant
+
+| Property | Configuration |
+| :--- | :--- |
+| ID | `%CA802PolicyId%` |
+| State | Disabled |
+| Audience | All users |
+| Include users | All |
+| Include groups | Any / none |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL (9a4b35b3-abea-405c-8b95-032d7cc21087) |
+| Include roles | None |
+| Exclude roles | None |
+| Guest/external scope | Not configured |
+| Include resources | All internet resources with Global Secure Access (5dc48733-b5df-475c-a49b-fa307ef00853) |
+| Exclude resources | Any / none |
+| Client app types | all |
+| Platforms | Any |
+| Locations include | Any |
+| Locations exclude | None |
+| Device filter | None |
+| Sign-in risk | Any / none |
+| User risk | Any / none |
+| Service-principal risk | Any / none |
+| Agent risk | None |
+| Grant | mfa OR compliantDevice OR domainJoinedDevice |
+| Session | None |
+| Dedicated EXCL | CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL |
+
+### CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant
+
+| Property | Configuration |
+| :--- | :--- |
+| ID | `%CA803PolicyId%` |
+| State | Disabled |
+| Audience | All users |
+| Include users | All |
+| Include groups | Any / none |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL (1004aec6-aa43-4e52-9206-7af65569768a) |
+| Include roles | None |
+| Exclude roles | None |
+| Guest/external scope | Not configured |
+| Include resources | `%GsaPrivateAccessAppId%` |
+| Exclude resources | Any / none |
+| Client app types | all |
+| Platforms | Any |
+| Locations include | Any |
+| Locations exclude | None |
+| Device filter | None |
+| Sign-in risk | Any / none |
+| User risk | Any / none |
+| Service-principal risk | Any / none |
+| Agent risk | None |
+| Grant | mfa OR compliantDevice OR domainJoinedDevice |
+| Session | None |
+| Dedicated EXCL | CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL |
+
 ## Required Workload Configuration
 
 - CA212 targets all cloud apps and requires Windows Intune App Protection for Microsoft Edge plus a tested Defender for Cloud Apps session policy. Before enabling, add any non-MAM-capable third-party cloud apps to excludeApplications.
@@ -1552,4 +1610,6 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 - CA216 targets supported Windows M365 desktop resources. CA218 is the separate macOS preview policy and should be enabled in report-only mode until token-protection support for macOS is confirmed in the tenant.
 - CA701 and CA702 require Microsoft Entra Workload ID Premium and approved service-principal inventory.
 - CA601 requires `CustomSecurityAttribute.AgentIdentity_AgentApprovalStatus` with value `Approved` for allowed agents.
-- CA603 requires Global Secure Access compliant-network signals.
+- CA801 requires Global Secure Access compliant-network signals.
+- CA802 requires Microsoft Entra Internet Access and targets the Microsoft-published `All internet resources with Global Secure Access` resource app ID.
+- CA803 requires Quick Access or per-app Microsoft Entra Private Access enterprise applications. Replace `%GsaPrivateAccessAppId%` with the Private Access enterprise application object ID, or duplicate the policy for each app/app group.

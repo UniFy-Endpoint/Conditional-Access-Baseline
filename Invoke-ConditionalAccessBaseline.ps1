@@ -47,6 +47,51 @@ $script:KnownAppNames = @{
     'a4f2693f-129c-4b96-982b-2c364b8314d7' = 'Edge Sync'
 }
 
+# App IDs that are only present when Global Secure Access (Entra Suite) is provisioned.
+# Policies referencing these IDs are skipped when GSA is not available in the target tenant.
+$script:GsaRequiredAppIds = [System.Collections.Generic.HashSet[string]]@(
+    '5dc48733-b5df-475c-a49b-fa307ef00853'   # Entra Internet Access (All internet resources)
+)
+
+# Cached result of the per-session GSA availability check. $null = not yet checked.
+$script:GsaAvailable = $null
+
+# Cached results of per-session license checks. $null = not yet known.
+$script:EntraP2Available             = $null
+$script:EntraSuiteAvailable          = $null
+$script:WorkloadIdPremiumAvailable   = $null
+
+$script:EntraP2ServicePlanNames = @(
+    'AAD_PREMIUM_P2'
+)
+
+$script:EntraP2SkuPartNumbers = @(
+    'AAD_PREMIUM_P2',
+    'EMS',
+    'EMSPREMIUM',
+    'ENTERPRISEPREMIUM',
+    'ENTERPRISEPREMIUM_NOPSTNCONF',
+    'M365EDU_A5_FACULTY',
+    'M365EDU_A5_STUDENT'
+)
+
+$script:EntraSuiteServicePlanNames = @(
+    'Entra_Premium_Internet_Access',
+    'Entra_Premium_Private_Access'
+)
+
+$script:EntraSuiteSkuPartNumbers = @(
+    'Microsoft_Entra_Suite_Step_Up_for_Microsoft_Entra_ID_P2'
+)
+
+$script:WorkloadIdPremiumServicePlanNames = @(
+    'AAD_WRKLDID_P2'
+)
+
+$script:WorkloadIdPremiumSkuPartNumbers = @(
+    'Workload_Identities_P2'
+)
+
 # ─────────────────────────────────────────────────────────────────────────────
 # TROUBLESHOOTING LOG
 # ─────────────────────────────────────────────────────────────────────────────
@@ -101,6 +146,19 @@ function Initialize-Logging {
         Write-Host "      $script:LogPath" -ForegroundColor DarkGray
         Write-Host "      $($_.Exception.Message)" -ForegroundColor DarkGray
         return $false
+    }
+}
+
+function Wait-ForUserContinue {
+    param(
+        [string]$Prompt = "  Press Enter to continue"
+    )
+
+    try {
+        $null = Read-Host $Prompt
+    }
+    catch {
+        Start-Sleep -Seconds 2
     }
 }
 
@@ -248,6 +306,7 @@ function Connect-ToGraph {
     $requiredScopes = @(
         "Policy.Read.All",
         "Policy.ReadWrite.ConditionalAccess",
+        "Policy.Read.AuthenticationMethod",
         "Application.ReadWrite.All",
         "Group.ReadWrite.All",
         "Directory.Read.All"
@@ -282,8 +341,7 @@ function Connect-ToGraph {
             Write-Host "  ✗ Failed to connect to Microsoft Graph." -ForegroundColor Red
             Write-Host "    $errMsg" -ForegroundColor DarkGray
             Write-Host ""
-            Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            Wait-ForUserContinue
         }
     }
 }
@@ -292,6 +350,7 @@ function Confirm-GraphConnection {
     $requiredScopes = @(
         "Policy.Read.All",
         "Policy.ReadWrite.ConditionalAccess",
+        "Policy.Read.AuthenticationMethod",
         "Application.ReadWrite.All",
         "Group.ReadWrite.All",
         "Directory.Read.All"
@@ -623,15 +682,13 @@ function Get-CleanPolicyBody {
     }
 
     # Reduce authenticationStrength to a minimal typed reference (all other
-    # properties are tenant-specific metadata that Graph does not accept on POST)
+    # properties are tenant-specific metadata that Graph does not accept on POST).
+    # The ID is remapped to the target-tenant GUID by Invoke-ApplyIdRemapping;
+    # Restore-SinglePolicy validates that no unresolved placeholder remains.
     if ($body['grantControls'] -and $body['grantControls']['authenticationStrength']) {
         $as = $body['grantControls']['authenticationStrength']
         $asId = if ($as -is [PSCustomObject]) { $as.id } else { $as['id'] }
         if ($asId) {
-            $policyType = if ($as -is [PSCustomObject]) { $as.policyType } else { $as['policyType'] }
-            if ($policyType -and $policyType -ne 'builtIn') {
-                Write-Host "    [!] Custom authenticationStrength '$($as.displayName ?? $asId)' may not exist in the target tenant." -ForegroundColor Yellow
-            }
             $body['grantControls']['authenticationStrength'] = [ordered]@{ id = $asId }
         }
         else {
@@ -827,8 +884,7 @@ function Invoke-BackupConditionalAccess {
         Write-Host "  [!] Not connected to Microsoft Graph." -ForegroundColor Red
         Write-Host "      Select option [1] to connect first." -ForegroundColor Yellow
         Write-Host ""
-        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue
         return
     }
 
@@ -866,16 +922,14 @@ function Invoke-BackupConditionalAccess {
         Write-LogError -ErrorRecord $_ -Context "Retrieve Conditional Access policies for backup"
         Write-Host "  ✗ Failed to retrieve policies: $graphError" -ForegroundColor Red
         Write-Host ""
-        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue
         return
     }
 
     if ($allPolicies.Count -eq 0) {
         Write-Host "  No Conditional Access policies found in this tenant." -ForegroundColor Yellow
         Write-Host ""
-        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue
         return
     }
 
@@ -951,23 +1005,24 @@ function Invoke-BackupConditionalAccess {
     if ($selectedPolicies.Count -eq 0) { return }
 
     # ── Step 4: Create timestamped output folder ──────────────────────────────
-    $timestamp  = Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'
-    $backupRoot = Join-Path $baseFolder "Backup-ConditionalAccess_$timestamp"
-    $caDir      = Join-Path $backupRoot "ConditionalAccess"
-    $grpDir     = Join-Path $backupRoot "Groups"
-    $locDir     = Join-Path $backupRoot "NamedLocations"
+    $timestamp   = Get-Date -Format 'yyyy-MM-dd_HH-mm-ss'
+    $backupRoot  = Join-Path $baseFolder "Backup-ConditionalAccess_$timestamp"
+    $caDir       = Join-Path $backupRoot "ConditionalAccess"
+    $grpDir      = Join-Path $backupRoot "Groups"
+    $locDir      = Join-Path $backupRoot "NamedLocations"
+    $authStrDir  = Join-Path $backupRoot "AuthenticationStrengths"
 
     try {
-        New-Item -ItemType Directory -Path $caDir  -Force -ErrorAction Stop | Out-Null
-        New-Item -ItemType Directory -Path $grpDir -Force -ErrorAction Stop | Out-Null
-        New-Item -ItemType Directory -Path $locDir -Force -ErrorAction Stop | Out-Null
+        New-Item -ItemType Directory -Path $caDir      -Force -ErrorAction Stop | Out-Null
+        New-Item -ItemType Directory -Path $grpDir     -Force -ErrorAction Stop | Out-Null
+        New-Item -ItemType Directory -Path $locDir     -Force -ErrorAction Stop | Out-Null
+        New-Item -ItemType Directory -Path $authStrDir -Force -ErrorAction Stop | Out-Null
     }
     catch {
         Write-LogError -ErrorRecord $_ -Context "Create backup output folders under '$backupRoot'"
         Write-Host "  ✗ Cannot create output folders: $($_.Exception.Message)" -ForegroundColor Red
         Write-Host ""
-        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue
         return
     }
 
@@ -1044,6 +1099,21 @@ function Invoke-BackupConditionalAccess {
         }
     }
 
+    # Collect authentication strength IDs referenced by selected policies
+    $referencedAuthStrengthIds = [System.Collections.Generic.HashSet[string]]::new()
+    foreach ($p in $selectedPolicies) {
+        $grant = $p['grantControls']
+        if ($grant) {
+            $as = $grant['authenticationStrength']
+            if ($as) {
+                $asId = if ($as -is [PSCustomObject]) { $as.id } else { $as['id'] }
+                if ($asId -and $asId -match $uuidPattern) {
+                    $null = $referencedAuthStrengthIds.Add($asId)
+                }
+            }
+        }
+    }
+
     # ── Step 7: Save Named Locations referenced by selected policies ──────────
     $savedLocCount = 0
     foreach ($lid in $referencedLocationIds) {
@@ -1070,6 +1140,7 @@ function Invoke-BackupConditionalAccess {
 
     $savedGroups   = [System.Collections.Generic.List[object]]::new()
     $failedGroups  = @()
+    $missingGroups = [System.Collections.Generic.HashSet[string]]::new()
     $gCounter      = 0
     $gTotal        = $referencedGroupIds.Count
 
@@ -1084,10 +1155,17 @@ function Invoke-BackupConditionalAccess {
             $savedGroups.Add($grp)
         }
         catch {
-            $failedGroups += $gid
             $graphError = Get-GraphErrorMessage -ErrorRecord $_
-            Write-LogError -ErrorRecord $_ -Context "Retrieve or save referenced group '$gid'"
-            Write-Host "  [!] Could not fetch/save group $gid`: $graphError" -ForegroundColor Yellow
+            if ($graphError -match 'Request_ResourceNotFound|ResourceNotFound|does not exist') {
+                $null = $missingGroups.Add($gid)
+                Write-Log -Level WARN -Message "Referenced group '$gid' no longer exists in the tenant. It will be removed from exported policy group references."
+                Write-Host "  [SKIPPED - stale group reference removed: $gid]" -ForegroundColor Yellow
+            }
+            else {
+                $failedGroups += $gid
+                Write-LogError -ErrorRecord $_ -Context "Retrieve or save referenced group '$gid'"
+                Write-Host "  [!] Could not fetch/save group $gid`: $graphError" -ForegroundColor Yellow
+            }
         }
     }
     Write-Progress -Activity "Fetching Groups" -Completed
@@ -1141,6 +1219,32 @@ function Invoke-BackupConditionalAccess {
         }
     }
 
+    # ── Step 9b: Fetch and save custom authentication strengths ──────────────
+    Write-Host "  Fetching referenced authentication strengths ($($referencedAuthStrengthIds.Count) unique IDs)..." -ForegroundColor Cyan
+
+    $savedAuthStrengths = [System.Collections.Generic.List[object]]::new()
+    foreach ($asId in $referencedAuthStrengthIds) {
+        try {
+            $strength = Invoke-MgGraphRequest -Method GET `
+                            -Uri "https://graph.microsoft.com/beta/policies/authenticationStrengthPolicies/$asId" `
+                            -ErrorAction Stop
+            $asDispName  = if ($strength -is [PSCustomObject]) { $strength.displayName  } else { $strength['displayName']  }
+            $asPolicyType = if ($strength -is [PSCustomObject]) { $strength.policyType   } else { $strength['policyType']   }
+            if ($asPolicyType -and $asPolicyType -ne 'builtIn') {
+                # Save only custom strengths — built-in ones always exist in every tenant
+                $safeName = Get-SafeFileName -Name $asDispName
+                $filePath = Join-Path $authStrDir "$safeName.json"
+                $strength | ConvertTo-Json -Depth 10 | Set-Content -Path $filePath -Encoding UTF8 -ErrorAction Stop
+            }
+            $savedAuthStrengths.Add($strength)
+        }
+        catch {
+            $graphError = Get-GraphErrorMessage -ErrorRecord $_
+            Write-LogError -ErrorRecord $_ -Context "Retrieve authentication strength '$asId' for backup"
+            Write-Host "  [!] Could not fetch authentication strength $asId`: $graphError" -ForegroundColor Yellow
+        }
+    }
+
     # ── Step 10: Save each selected CA policy JSON ────────────────────────────
     $savedPolicies  = @()
     $failedPolicies = @()
@@ -1155,6 +1259,18 @@ function Invoke-BackupConditionalAccess {
         $safeName = Get-SafeFileName -Name $p['displayName']
         $filePath = Join-Path $caDir "$safeName.json"
         try {
+            if ($missingGroups.Count -gt 0 -and $p['conditions'] -and $p['conditions']['users']) {
+                $users = $p['conditions']['users']
+                foreach ($groupProperty in @('includeGroups', 'excludeGroups')) {
+                    if ($users[$groupProperty]) {
+                        $beforeCount = @($users[$groupProperty]).Count
+                        $users[$groupProperty] = @($users[$groupProperty] | Where-Object { -not $missingGroups.Contains([string]$_) })
+                        if (@($users[$groupProperty]).Count -lt $beforeCount) {
+                            Write-Log -Level WARN -Message "Removed stale group reference(s) from exported policy '$($p['displayName'])' property '$groupProperty'."
+                        }
+                    }
+                }
+            }
             $p | ConvertTo-Json -Depth 20 | Set-Content -Path $filePath -Encoding UTF8 -ErrorAction Stop
             $savedPolicies += $p['displayName']
         }
@@ -1180,6 +1296,14 @@ function Invoke-BackupConditionalAccess {
         }
         foreach ($sp in $resolvedServicePrincipals) {
             $migObjects += $sp
+        }
+        foreach ($strength in $savedAuthStrengths) {
+            $asDispName  = if ($strength -is [PSCustomObject]) { $strength.displayName } else { $strength['displayName'] }
+            $asSrcId     = if ($strength -is [PSCustomObject]) { $strength.id          } else { $strength['id']          }
+            $asPolicyType = if ($strength -is [PSCustomObject]) { $strength.policyType  } else { $strength['policyType']  }
+            if ($asPolicyType -and $asPolicyType -ne 'builtIn') {
+                $migObjects += [ordered]@{ DisplayName = $asDispName; Id = $asSrcId; Type = "AuthenticationStrength" }
+            }
         }
         $migTable = [ordered]@{
             SchemaVersion    = 2
@@ -1210,17 +1334,18 @@ function Invoke-BackupConditionalAccess {
     Write-Host "    Policies failed   : $($failedPolicies.Count)" -ForegroundColor $(if ($failedPolicies.Count -gt 0) { 'Red' } else { 'Green' })
     Write-Host "    Groups saved      : $($savedGroups.Count)" -ForegroundColor Green
     Write-Host "    Groups failed     : $($failedGroups.Count)" -ForegroundColor $(if ($failedGroups.Count -gt 0) { 'Red' } else { 'Green' })
+    Write-Host "    Groups stale      : $($missingGroups.Count)" -ForegroundColor $(if ($missingGroups.Count -gt 0) { 'Yellow' } else { 'Green' })
     Write-Host "    Locations saved   : $savedLocCount" -ForegroundColor Green
+    Write-Host "    Auth Strengths    : $($savedAuthStrengths.Count)" -ForegroundColor Green
     Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
     Write-Host "    Output folder : $backupRoot" -ForegroundColor White
     if (($failedPolicies.Count -gt 0 -or $failedGroups.Count -gt 0) -and $script:LogEnabled) {
         Write-Host "    Troubleshooting log: $script:LogPath" -ForegroundColor DarkGray
     }
     Write-Host "  ══════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Log -Message "Backup completed. Policies saved: $($savedPolicies.Count); policies failed: $($failedPolicies.Count); groups saved: $($savedGroups.Count); groups failed: $($failedGroups.Count); locations saved: $savedLocCount; output: '$backupRoot'."
+    Write-Log -Message "Backup completed. Policies saved: $($savedPolicies.Count); policies failed: $($failedPolicies.Count); groups saved: $($savedGroups.Count); groups failed: $($failedGroups.Count); groups stale: $($missingGroups.Count); locations saved: $savedLocCount; auth strengths: $($savedAuthStrengths.Count); output: '$backupRoot'."
     Write-Host ""
-    Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    Wait-ForUserContinue
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1340,8 +1465,7 @@ function Restore-ExclusionGroups {
     $grpFiles = @(Get-ChildItem -Path $grpDir -Filter "*.json" -File | Sort-Object Name)
     if ($grpFiles.Count -eq 0) { return $idMap }
 
-    Write-Host ""
-    Write-Host "  ── Exclusion Groups ────────────────────────────────────────────────────" -ForegroundColor Cyan
+    $sectionShown = $false
 
     foreach ($file in $grpFiles) {
         try {
@@ -1358,6 +1482,12 @@ function Restore-ExclusionGroups {
 
         # Filter to only required IDs when doing a targeted restore
         if ($RequiredOldIds -and $RequiredOldIds.Count -gt 0 -and $oldId -notin $RequiredOldIds) { continue }
+
+        if (-not $sectionShown) {
+            Write-Host ""
+            Write-Host "  ── Exclusion Groups ────────────────────────────────────────────────────" -ForegroundColor Cyan
+            $sectionShown = $true
+        }
 
         Write-Host "    $dispName" -NoNewline -ForegroundColor White
 
@@ -1406,6 +1536,313 @@ function Restore-ExclusionGroups {
     return $idMap
 }
 
+function Get-ObjectPropertyValue {
+    param(
+        $InputObject,
+        [string]$PropertyName
+    )
+
+    if (-not $InputObject) { return $null }
+    if ($InputObject -is [System.Collections.IDictionary]) { return $InputObject[$PropertyName] }
+    return $InputObject.$PropertyName
+}
+
+function Get-PolicyConditions {
+    param($PolicyJson)
+
+    return Get-ObjectPropertyValue -InputObject $PolicyJson -PropertyName 'conditions'
+}
+
+function Format-PlaceholderReferenceList {
+    param(
+        [object[]]$References
+    )
+
+    return (@(
+        foreach ($reference in @($References)) {
+            if (-not $reference) { continue }
+            $cleanReference = ([string]$reference).Trim('%')
+            if ($cleanReference -eq 'GsaPrivateAccessAppId') { $cleanReference = 'GSAPrivateAccessAppId' }
+            "'$cleanReference'"
+        }
+    ) -join ', ')
+}
+
+function Test-TenantHasSubscribedSkuCapability {
+    param(
+        [string[]]$SkuPartNumbers = @(),
+        [string[]]$ServicePlanNames = @(),
+        [string]$Context = 'Check tenant license capability'
+    )
+
+    $skuLookup = @{}
+    foreach ($skuPartNumber in @($SkuPartNumbers)) {
+        if ($skuPartNumber) { $skuLookup[$skuPartNumber.ToLowerInvariant()] = $true }
+    }
+
+    $planLookup = @{}
+    foreach ($servicePlanName in @($ServicePlanNames)) {
+        if ($servicePlanName) { $planLookup[$servicePlanName.ToLowerInvariant()] = $true }
+    }
+
+    try {
+        $skuResponse = Invoke-MgGraphRequest -Method GET `
+                         -Uri "https://graph.microsoft.com/v1.0/subscribedSkus?`$select=skuPartNumber,capabilityStatus,servicePlans" `
+                         -ErrorAction Stop
+        foreach ($sku in @($skuResponse.value)) {
+            $skuPartNumber = [string](Get-ObjectPropertyValue -InputObject $sku -PropertyName 'skuPartNumber')
+            $capabilityStatus = [string](Get-ObjectPropertyValue -InputObject $sku -PropertyName 'capabilityStatus')
+            if ($capabilityStatus -and $capabilityStatus -notin @('Enabled', 'Warning')) { continue }
+
+            if ($skuPartNumber -and $skuLookup.ContainsKey($skuPartNumber.ToLowerInvariant())) {
+                return $true
+            }
+
+            $servicePlans = @(Get-ObjectPropertyValue -InputObject $sku -PropertyName 'servicePlans')
+            foreach ($plan in $servicePlans) {
+                $servicePlanName = [string](Get-ObjectPropertyValue -InputObject $plan -PropertyName 'servicePlanName')
+                $provisioningStatus = [string](Get-ObjectPropertyValue -InputObject $plan -PropertyName 'provisioningStatus')
+                if ($servicePlanName -and $planLookup.ContainsKey($servicePlanName.ToLowerInvariant()) -and $provisioningStatus -ne 'Disabled') {
+                    return $true
+                }
+            }
+        }
+
+        return $false
+    }
+    catch {
+        Write-LogError -ErrorRecord $_ -Context $Context
+        return $null
+    }
+}
+
+function Test-TenantHasEntraP2 {
+    if ($null -ne $script:EntraP2Available) { return $script:EntraP2Available }
+
+    $script:EntraP2Available = Test-TenantHasSubscribedSkuCapability `
+        -SkuPartNumbers $script:EntraP2SkuPartNumbers `
+        -ServicePlanNames $script:EntraP2ServicePlanNames `
+        -Context "Check tenant Entra ID P2 license availability"
+
+    return $script:EntraP2Available
+}
+
+function Test-TenantHasEntraSuiteLicense {
+    if ($null -ne $script:EntraSuiteAvailable) { return $script:EntraSuiteAvailable }
+
+    $script:EntraSuiteAvailable = Test-TenantHasSubscribedSkuCapability `
+        -SkuPartNumbers $script:EntraSuiteSkuPartNumbers `
+        -ServicePlanNames $script:EntraSuiteServicePlanNames `
+        -Context "Check tenant Entra Suite / Global Secure Access license availability"
+
+    return $script:EntraSuiteAvailable
+}
+
+function Test-TenantHasWorkloadIdentityPremium {
+    if ($null -ne $script:WorkloadIdPremiumAvailable) { return $script:WorkloadIdPremiumAvailable }
+
+    $script:WorkloadIdPremiumAvailable = Test-TenantHasSubscribedSkuCapability `
+        -SkuPartNumbers $script:WorkloadIdPremiumSkuPartNumbers `
+        -ServicePlanNames $script:WorkloadIdPremiumServicePlanNames `
+        -Context "Check tenant Workload Identity Premium license availability"
+
+    return $script:WorkloadIdPremiumAvailable
+}
+
+function Test-PolicyRequiresEntraP2 {
+    param($PolicyJson)
+
+    $conditions = Get-PolicyConditions -PolicyJson $PolicyJson
+    if (-not $conditions) { return $false }
+
+    foreach ($propertyName in @('signInRiskLevels', 'userRiskLevels', 'insiderRiskLevels')) {
+        $value = Get-ObjectPropertyValue -InputObject $conditions -PropertyName $propertyName
+        if (@($value | Where-Object { $_ }).Count -gt 0) { return $true }
+    }
+
+    $agentRisk = Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'agentIdRiskLevels'
+    if ($agentRisk -and $agentRisk -ne 'none') { return $true }
+
+    return $false
+}
+
+function Test-PolicyRequiresWorkloadIdentityPremium {
+    param($PolicyJson)
+
+    $conditions = Get-PolicyConditions -PolicyJson $PolicyJson
+    if (-not $conditions) { return $false }
+
+    $riskLevels = Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'servicePrincipalRiskLevels'
+    if (@($riskLevels | Where-Object { $_ }).Count -gt 0) { return $true }
+
+    $clientApplications = Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'clientApplications'
+    if ($clientApplications) {
+        $servicePrincipalRefs = @(
+            @(Get-ObjectPropertyValue -InputObject $clientApplications -PropertyName 'includeServicePrincipals') +
+            @(Get-ObjectPropertyValue -InputObject $clientApplications -PropertyName 'excludeServicePrincipals')
+        )
+        if (@($servicePrincipalRefs | Where-Object { $_ }).Count -gt 0) { return $true }
+    }
+
+    return $false
+}
+
+function Test-PolicyRequiresEntraSuite {
+    param($PolicyJson)
+
+    $conditions = Get-PolicyConditions -PolicyJson $PolicyJson
+    if (-not $conditions) { return $false }
+
+    $applications = Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'applications'
+    if ($applications) {
+        $appRefs = @(
+            @(Get-ObjectPropertyValue -InputObject $applications -PropertyName 'includeApplications') +
+            @(Get-ObjectPropertyValue -InputObject $applications -PropertyName 'excludeApplications')
+        )
+        if (@($appRefs | Where-Object { $script:GsaRequiredAppIds.Contains([string]$_) -or ([string]$_ -match '^%Gsa.+%$') }).Count -gt 0) {
+            return $true
+        }
+    }
+
+    $locations = Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'locations'
+    if ($locations) {
+        $locRefs = @(
+            @(Get-ObjectPropertyValue -InputObject $locations -PropertyName 'includeLocations') +
+            @(Get-ObjectPropertyValue -InputObject $locations -PropertyName 'excludeLocations')
+        )
+        if (@($locRefs | Where-Object { [string]$_ -match '^%CompliantNetworkLocationId%$' }).Count -gt 0) {
+            return $true
+        }
+    }
+
+    return $false
+}
+
+function Test-TenantHasEntraSuitePrerequisite {
+    if ($null -ne $script:GsaAvailable) { return $script:GsaAvailable }
+
+    $hasSuiteLicense = Test-TenantHasEntraSuiteLicense
+    if ($hasSuiteLicense -ne $true) {
+        $script:GsaAvailable = $false
+        return $script:GsaAvailable
+    }
+
+    try {
+        $gsaCheck = Invoke-MgGraphRequest -Method GET `
+                        -Uri "https://graph.microsoft.com/v1.0/servicePrincipals?`$filter=appId eq '5dc48733-b5df-475c-a49b-fa307ef00853'&`$select=id" `
+                        -ErrorAction Stop
+        $script:GsaAvailable = @($gsaCheck.value).Count -gt 0
+    }
+    catch {
+        Write-LogError -ErrorRecord $_ -Context "Check tenant Entra Suite / Global Secure Access application availability"
+        $script:GsaAvailable = $false
+    }
+
+    return $script:GsaAvailable
+}
+
+function Get-PolicyUnavailableTenantCapabilityReason {
+    param(
+        $PolicyJson
+    )
+
+    $displayName = Get-ObjectPropertyValue -InputObject $PolicyJson -PropertyName 'displayName'
+
+    if (Test-PolicyRequiresEntraP2 -PolicyJson $PolicyJson) {
+        $hasP2 = Test-TenantHasEntraP2
+        if ($hasP2 -eq $false) {
+            return [PSCustomObject]@{
+                Code       = 'EntraP2'
+                HostStatus = '[SKIPPED - Required Entra ID P2]'
+                LogMessage = "Conditional Access policy '$displayName' was not created because the target tenant does not have the required Entra ID P2 capability."
+            }
+        }
+    }
+
+    if (Test-PolicyRequiresWorkloadIdentityPremium -PolicyJson $PolicyJson) {
+        $hasWorkloadIdentityPremium = Test-TenantHasWorkloadIdentityPremium
+        if ($hasWorkloadIdentityPremium -eq $false) {
+            return [PSCustomObject]@{
+                Code       = 'WorkloadIdentityPremium'
+                HostStatus = '[SKIPPED - Required Workload Identity Premium]'
+                LogMessage = "Conditional Access policy '$displayName' was not created because the target tenant does not have the required Workload Identity Premium capability."
+            }
+        }
+    }
+
+    if (Test-PolicyRequiresEntraSuite -PolicyJson $PolicyJson) {
+        $hasSuitePrereq = Test-TenantHasEntraSuitePrerequisite
+        if (-not $hasSuitePrereq) {
+            return [PSCustomObject]@{
+                Code       = 'EntraSuite'
+                HostStatus = '[SKIPPED - Required Entra Suite]'
+                LogMessage = "Conditional Access policy '$displayName' was not created because Global Secure Access / Entra Suite is not provisioned in the target tenant."
+            }
+        }
+    }
+
+    return $null
+}
+
+function Get-PolicyUnsupportedRestoreReason {
+    param(
+        $PolicyJson,
+        [hashtable]$LocationIdMap = @{},
+        [hashtable]$ServicePrincipalIdMap = @{},
+        [hashtable]$AuthStrengthIdMap = @{}
+    )
+
+    $displayName = Get-ObjectPropertyValue -InputObject $PolicyJson -PropertyName 'displayName'
+    $conditions = Get-PolicyConditions -PolicyJson $PolicyJson
+    $capabilityReason = Get-PolicyUnavailableTenantCapabilityReason -PolicyJson $PolicyJson
+    if ($capabilityReason) { return $capabilityReason }
+
+    $rawLocs = if ($conditions) { Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'locations' } else { $null }
+    $unresolvedLoc = @(
+        @(if ($rawLocs) { @(Get-ObjectPropertyValue -InputObject $rawLocs -PropertyName 'includeLocations') } else { @() }) +
+        @(if ($rawLocs) { @(Get-ObjectPropertyValue -InputObject $rawLocs -PropertyName 'excludeLocations') } else { @() }) |
+        Where-Object { $_ -match '^%.+%$' -and -not $LocationIdMap.ContainsKey([string]$_) }
+    ) | Select-Object -Unique
+    if ($unresolvedLoc.Count -gt 0) {
+        $missing = $unresolvedLoc -join ', '
+        $missingDisplay = Format-PlaceholderReferenceList -References $unresolvedLoc
+        return [PSCustomObject]@{
+            Code       = 'NamedLocation'
+            HostStatus = "[SKIPPED - Required Entra Suite prerequisite not configured: $missingDisplay]"
+            LogMessage = "Conditional Access policy '$displayName' was not created because required named location(s) could not be resolved: $missing. Enable the corresponding tenant prerequisite (e.g., Global Secure Access) and re-run the restore."
+        }
+    }
+
+    $rawGrant    = Get-ObjectPropertyValue -InputObject $PolicyJson -PropertyName 'grantControls'
+    $rawStrength = if ($rawGrant) { Get-ObjectPropertyValue -InputObject $rawGrant -PropertyName 'authenticationStrength' } else { $null }
+    $rawStrId    = if ($rawStrength) { Get-ObjectPropertyValue -InputObject $rawStrength -PropertyName 'id' } else { $null }
+    if ($rawStrId -and $rawStrId -match '^%.+%$' -and -not $AuthStrengthIdMap.ContainsKey([string]$rawStrId)) {
+        return [PSCustomObject]@{
+            Code       = 'AuthenticationStrength'
+            HostStatus = "[SKIPPED - Required authentication strength not found: $rawStrId]"
+            LogMessage = "Conditional Access policy '$displayName' was not created because authentication strength '$rawStrId' could not be resolved in the target tenant. Create the required custom authentication strength and re-run the restore."
+        }
+    }
+
+    $rawApps = if ($conditions) { Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'applications' } else { $null }
+    $unresolvedApp = @(
+        @(if ($rawApps) { @(Get-ObjectPropertyValue -InputObject $rawApps -PropertyName 'includeApplications') } else { @() }) +
+        @(if ($rawApps) { @(Get-ObjectPropertyValue -InputObject $rawApps -PropertyName 'excludeApplications') } else { @() }) |
+        Where-Object { $_ -match '^%.+%$' -and -not $ServicePrincipalIdMap.ContainsKey([string]$_) }
+    ) | Select-Object -Unique
+    if ($unresolvedApp.Count -gt 0) {
+        $missing = $unresolvedApp -join ', '
+        $missingDisplay = Format-PlaceholderReferenceList -References $unresolvedApp
+        return [PSCustomObject]@{
+            Code       = 'Application'
+            HostStatus = "[SKIPPED - Required Entra Suite application not configured: $missingDisplay]"
+            LogMessage = "Conditional Access policy '$displayName' was not created because required application(s) could not be resolved: $missing. Configure the application in the target tenant and re-run the restore."
+        }
+    }
+
+    return $null
+}
+
 # Replaces old-tenant UUIDs in a policy body's groups and locations arrays
 # with the corresponding new-tenant UUIDs from the provided maps.
 function Invoke-ApplyIdRemapping {
@@ -1413,7 +1850,8 @@ function Invoke-ApplyIdRemapping {
         [System.Collections.Specialized.OrderedDictionary]$PolicyBody,
         [hashtable]$GroupIdMap,
         [hashtable]$LocationIdMap,
-        [hashtable]$ServicePrincipalIdMap = @{}
+        [hashtable]$ServicePrincipalIdMap = @{},
+        [hashtable]$AuthStrengthIdMap = @{}
     )
 
     $remapList = {
@@ -1479,6 +1917,19 @@ function Invoke-ApplyIdRemapping {
             if ($clientApps['includeServicePrincipals']) { $clientApps['includeServicePrincipals'] = & $remapApplicationList $clientApps['includeServicePrincipals'] }
             if ($clientApps['excludeAgentIdServicePrincipals']) { $clientApps['excludeAgentIdServicePrincipals'] = & $remapApplicationList $clientApps['excludeAgentIdServicePrincipals'] }
             if ($clientApps['includeAgentIdServicePrincipals']) { $clientApps['includeAgentIdServicePrincipals'] = & $remapApplicationList $clientApps['includeAgentIdServicePrincipals'] }
+        }
+    }
+
+    if ($AuthStrengthIdMap.Count -gt 0) {
+        $grant = $PolicyBody['grantControls']
+        if ($grant) {
+            $strength = $grant['authenticationStrength']
+            if ($strength) {
+                $sid = $strength['id']
+                if ($sid -and $AuthStrengthIdMap.ContainsKey($sid)) {
+                    $strength['id'] = $AuthStrengthIdMap[$sid]
+                }
+            }
         }
     }
 
@@ -1685,16 +2136,148 @@ function Restore-ServicePrincipals {
     return $result
 }
 
+function Get-AuthStrengthDependenciesFromMigrationTable {
+    param(
+        [string]$BackupFolder,
+        [string[]]$RequiredReferenceIds = $null
+    )
+
+    $migrationPath = Join-Path $BackupFolder 'MigrationTable.json'
+    if (-not (Test-Path -LiteralPath $migrationPath)) { return @() }
+
+    try {
+        $migrationTable = Get-Content -LiteralPath $migrationPath -Raw -ErrorAction Stop |
+                              ConvertFrom-Json -ErrorAction Stop
+    }
+    catch {
+        Write-LogError -ErrorRecord $_ -Context "Read auth-strength dependencies from '$migrationPath'"
+        return @()
+    }
+
+    $dependencies = @($migrationTable.Objects) | Where-Object { $_.Type -eq 'AuthenticationStrength' }
+    $requiredIds = @($RequiredReferenceIds | Where-Object { $_ } | Sort-Object -Unique)
+    if ($null -eq $RequiredReferenceIds) { return @($dependencies) }
+    if ($requiredIds.Count -eq 0) { return @() }
+
+    return @(
+        $dependencies | Where-Object {
+            $_.Id -in $requiredIds -or $_.PolicyReferenceId -in $requiredIds
+        }
+    )
+}
+
+function Resolve-AuthenticationStrengths {
+    param(
+        [object[]]$Dependencies,
+        [string]$BackupFolder = '',
+        [bool]$Preview = $false
+    )
+
+    $idMap = @{}
+    if (-not $Dependencies -or $Dependencies.Count -eq 0) { return $idMap }
+
+    Write-Host ""
+    Write-Host "  ── Authentication Strengths ───────────────────────────────────────────" -ForegroundColor Cyan
+    foreach ($dep in $Dependencies) {
+        $dispName = $dep.DisplayName
+        $srcId    = $dep.Id
+        if (-not $dispName -or -not $srcId) { continue }
+
+        # Step 1: look up existing strength by displayName in the target tenant
+        $existingStrength = $null
+        try {
+            $escaped  = $dispName -replace "'", "''"
+            $response = Invoke-MgGraphRequest -Method GET `
+                            -Uri "https://graph.microsoft.com/beta/policies/authenticationStrengthPolicies?`$filter=displayName eq '$escaped'" `
+                            -ErrorAction Stop
+            $existingStrength = @($response.value) | Select-Object -First 1
+        }
+        catch {
+            Write-LogError -ErrorRecord $_ -Context "Resolve authentication strength '$dispName'"
+            Write-Host "    [!] Could not query auth strength '$dispName': $(Get-GraphErrorMessage -ErrorRecord $_)" -ForegroundColor Yellow
+            continue
+        }
+
+        if ($existingStrength) {
+            $realId = if ($existingStrength -is [PSCustomObject]) { $existingStrength.id } else { $existingStrength['id'] }
+            $idMap[$srcId] = $realId
+            Write-Log -Message "Authentication strength '$dispName' already exists with ID '$realId'."
+            Write-Host "    '$dispName'  [SKIPPED - already exists]  ->  $realId" -ForegroundColor Yellow
+            continue
+        }
+
+        # Step 2: not found — try to create from the AuthenticationStrengths backup folder
+        $backupData = $null
+        if ($BackupFolder) {
+            $authStrDir = Join-Path $BackupFolder 'AuthenticationStrengths'
+            if (Test-Path -LiteralPath $authStrDir) {
+                $safeName   = Get-SafeFileName -Name $dispName
+                $backupFile = Join-Path $authStrDir "$safeName.json"
+                if (Test-Path -LiteralPath $backupFile) {
+                    try {
+                        $backupData = Get-Content -LiteralPath $backupFile -Raw -ErrorAction Stop | ConvertFrom-Json
+                    }
+                    catch {
+                        Write-LogError -ErrorRecord $_ -Context "Read authentication strength backup '$backupFile'"
+                        Write-Host "    [!] Could not read backup file for '$dispName': $($_.Exception.Message)" -ForegroundColor Yellow
+                    }
+                }
+            }
+        }
+
+        if ($backupData) {
+            if ($Preview) {
+                # In preview mode the pre-checks in Restore-SinglePolicy are bypassed,
+                # so the map value is not needed — but add a placeholder for clarity.
+                $idMap[$srcId] = 'preview-placeholder'
+                Write-Host "    '$dispName'  [WOULD CREATE]" -ForegroundColor Cyan
+                continue
+            }
+            try {
+                $allowedCombinations = if ($backupData -is [PSCustomObject]) { $backupData.allowedCombinations } else { $backupData['allowedCombinations'] }
+                $description         = if ($backupData -is [PSCustomObject]) { $backupData.description         } else { $backupData['description']         }
+                $createBody = [ordered]@{
+                    displayName         = $dispName
+                    allowedCombinations = @($allowedCombinations)
+                }
+                if ($description) { $createBody['description'] = $description }
+
+                $newStrength = Invoke-MgGraphRequest -Method POST `
+                                   -Uri "https://graph.microsoft.com/beta/policies/authenticationStrengthPolicies" `
+                                   -ContentType "application/json" `
+                                   -Body ($createBody | ConvertTo-Json -Depth 5) `
+                                   -ErrorAction Stop
+                $newId = if ($newStrength -is [PSCustomObject]) { $newStrength.id } else { $newStrength['id'] }
+                $idMap[$srcId] = $newId
+                Write-Log -Message "Created authentication strength '$dispName' with ID '$newId'."
+                Write-Host "    '$dispName'  [CREATED]  →  $newId" -ForegroundColor Green
+            }
+            catch {
+                Write-LogError -ErrorRecord $_ -Context "Create authentication strength '$dispName'"
+                Write-Host "    [!] Could not create '$dispName': $(Get-GraphErrorMessage -ErrorRecord $_)" -ForegroundColor Yellow
+            }
+        }
+        else {
+            Write-Log -Level WARN -Message "Authentication strength '$dispName' (source ref: $srcId) was not found in the target tenant and no backup file was available to create it. Create a custom authentication strength named '$dispName' in this tenant and re-run the restore."
+            Write-Host "    [!] '$dispName' not found — create a custom authentication strength named '$dispName' in this tenant, then re-run the restore." -ForegroundColor Yellow
+        }
+    }
+
+    return $idMap
+}
+
 # Restores a single CA policy JSON. Cleans the body, applies ID remapping,
 # then POSTs to Graph. Returns 'created', 'skipped', 'unsupported', 'failed',
 # or 'preview'.
 function Restore-SinglePolicy {
     param(
         $PolicyJson,
-        [hashtable]$GroupIdMap,
+        [string]$BackupFolder,
+        [hashtable]$SharedGroupIdMap,
         [hashtable]$LocationIdMap,
         [hashtable]$ServicePrincipalIdMap = @{},
         [object[]]$ServicePrincipalDependencies = @(),
+        [hashtable]$AuthStrengthIdMap = @{},
         [bool]$Preview
     )
 
@@ -1727,26 +2310,29 @@ function Restore-SinglePolicy {
     }
 
     try {
-        $body = Get-CleanPolicyBody -PolicyJson $PolicyJson
-        $body = Invoke-ApplyIdRemapping -PolicyBody $body -GroupIdMap $GroupIdMap `
-                    -LocationIdMap $LocationIdMap -ServicePrincipalIdMap $ServicePrincipalIdMap
-
-        # Detect unresolved named-location placeholders (e.g. %CompliantNetworkLocationId%
-        # requires Global Secure Access). Fail early with a clear message rather than
-        # letting Graph return a confusing 1040.
-        $locBlock = $body['conditions']
-        $locBlock = if ($locBlock) { $locBlock['locations'] } else { $null }
-        $unresolvedLoc = @(
-            @(if ($locBlock) { @($locBlock['includeLocations']) } else { @() }) +
-            @(if ($locBlock) { @($locBlock['excludeLocations']) } else { @() }) |
-            Where-Object { $_ -match '^%.+%$' }
-        ) | Select-Object -Unique
-        if ($unresolvedLoc.Count -gt 0) {
-            $missing = $unresolvedLoc -join ', '
-            Write-Log -Level WARN -Message "Conditional Access policy '$displayName' was not created because required named location(s) could not be resolved: $missing. Enable the corresponding tenant prerequisite (e.g., Global Secure Access) and re-run the restore."
-            Write-Host "  [SKIPPED — prerequisite named location not available: $missing]" -ForegroundColor Yellow
+        # All checks that can skip the policy happen before exclusion groups are
+        # created, so unsupported policies do not leave orphan baseline groups.
+        $unsupportedReason = Get-PolicyUnsupportedRestoreReason -PolicyJson $PolicyJson `
+                                 -LocationIdMap $LocationIdMap `
+                                 -ServicePrincipalIdMap $ServicePrincipalIdMap `
+                                 -AuthStrengthIdMap $AuthStrengthIdMap
+        if ($unsupportedReason) {
+            Write-Log -Level WARN -Message $unsupportedReason.LogMessage
+            Write-Host "  $($unsupportedReason.HostStatus)" -ForegroundColor Yellow
             return 'unsupported'
         }
+
+        # ── Pre-checks passed — create groups for this policy only ──────────────
+        $policyDeps  = Get-PolicyDependencyIds -PolicyJson $PolicyJson
+        $newGroupMap = Restore-ExclusionGroups -BackupFolder $BackupFolder `
+                           -RequiredOldIds $policyDeps.groups -Preview $false
+        foreach ($k in $newGroupMap.Keys) { $SharedGroupIdMap[$k] = $newGroupMap[$k] }
+
+        # ── Build and remap the policy body ─────────────────────────────────────
+        $body = Get-CleanPolicyBody -PolicyJson $PolicyJson
+        $body = Invoke-ApplyIdRemapping -PolicyBody $body -GroupIdMap $SharedGroupIdMap `
+                    -LocationIdMap $LocationIdMap -ServicePrincipalIdMap $ServicePrincipalIdMap `
+                    -AuthStrengthIdMap $AuthStrengthIdMap
 
         $body = Repair-PolicyCollectionProperties -PolicyBody $body
         $schemaCheck = Test-PolicyRequestSchema -PolicyBody $body
@@ -1827,14 +2413,16 @@ function Restore-SinglePolicy {
         }
 
         if ($graphError -match '1039:.*premium P2') {
+            $script:EntraP2Available = $false   # skip subsequent P2 policies before group creation
             Write-Log -Level WARN -Message "Conditional Access policy '$displayName' was not created because the target tenant does not have the required Entra ID P2 capability. Graph: $graphError"
-            Write-Host "  [SKIPPED — REQUIRES ENTRA ID P2]" -ForegroundColor Yellow
+            Write-Host "  [SKIPPED - Required Entra ID P2]" -ForegroundColor Yellow
             return 'unsupported'
         }
 
         if ($graphError -match '1149:.*workload identity premium') {
+            $script:WorkloadIdPremiumAvailable = $false   # skip subsequent WLP policies before group creation
             Write-Log -Level WARN -Message "Conditional Access policy '$displayName' was not created because the target tenant does not have the required Workload Identity Premium capability. Graph: $graphError"
-            Write-Host "  [SKIPPED — REQUIRES WORKLOAD IDENTITY PREMIUM]" -ForegroundColor Yellow
+            Write-Host "  [SKIPPED - Required Workload Identity Premium]" -ForegroundColor Yellow
             return 'unsupported'
         }
 
@@ -1853,10 +2441,11 @@ function Get-PolicyDependencyIds {
     $groupIds    = [System.Collections.Generic.HashSet[string]]::new()
     $locationIds = [System.Collections.Generic.HashSet[string]]::new()
     $appIds      = [System.Collections.Generic.HashSet[string]]::new()
+    $authStrengthIds = [System.Collections.Generic.HashSet[string]]::new()
     $uuidPattern = '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
 
     $conditions = if ($PolicyJson -is [PSCustomObject]) { $PolicyJson.conditions } else { $PolicyJson['conditions'] }
-    if (-not $conditions) { return @{ groups = @(); locations = @(); applications = @() } }
+    if (-not $conditions) { return @{ groups = @(); locations = @(); applications = @(); authStrengths = @() } }
 
     $users = if ($conditions -is [PSCustomObject]) { $conditions.users } else { $conditions['users'] }
     if ($users) {
@@ -1899,34 +2488,21 @@ function Get-PolicyDependencyIds {
         }
     }
 
+    $grant = if ($PolicyJson -is [PSCustomObject]) { $PolicyJson.grantControls } else { $PolicyJson['grantControls'] }
+    if ($grant) {
+        $strength = if ($grant -is [PSCustomObject]) { $grant.authenticationStrength } else { $grant['authenticationStrength'] }
+        if ($strength) {
+            $strengthId = if ($strength -is [PSCustomObject]) { $strength.id } else { $strength['id'] }
+            if ($strengthId) { $null = $authStrengthIds.Add([string]$strengthId) }
+        }
+    }
+
     return @{
-        groups       = @($groupIds)
-        locations    = @($locationIds)
-        applications = @($appIds)
+        groups        = @($groupIds)
+        locations     = @($locationIds)
+        applications  = @($appIds)
+        authStrengths = @($authStrengthIds)
     }
-}
-
-function Test-PolicyRequiresEntraP2 {
-    param($PolicyJson)
-
-    $conditions = if ($PolicyJson -is [PSCustomObject]) { $PolicyJson.conditions } else { $PolicyJson['conditions'] }
-    if (-not $conditions) { return $false }
-
-    foreach ($propertyName in @('signInRiskLevels', 'userRiskLevels', 'servicePrincipalRiskLevels', 'insiderRiskLevels')) {
-        $value = if ($conditions -is [PSCustomObject]) {
-            $conditions.$propertyName
-        }
-        else {
-            $conditions[$propertyName]
-        }
-        if (@($value | Where-Object { $_ }).Count -gt 0) { return $true }
-    }
-
-    # agentIdRiskLevels is a string condition (e.g. "high", "medium,high") used by AGT risk policies
-    $agentRisk = if ($conditions -is [PSCustomObject]) { $conditions.agentIdRiskLevels } else { $conditions['agentIdRiskLevels'] }
-    if ($agentRisk -and $agentRisk -ne 'none') { return $true }
-
-    return $false
 }
 
 function Show-EntraP2RestoreWarning {
@@ -1943,12 +2519,77 @@ function Show-EntraP2RestoreWarning {
     if ($p2PolicyNames.Count -eq 0) { return }
 
     Write-Host ""
-    Write-Host "  [!] Entra ID P2 required for $($p2PolicyNames.Count) selected policy/policies:" -ForegroundColor Yellow
+    $policyLabel = if ($p2PolicyNames.Count -eq 1) { 'selected policy' } else { 'selected policies' }
+    Write-Host "  Entra ID P2 required for $($p2PolicyNames.Count) ${policyLabel}" -ForegroundColor Yellow
+    Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
     foreach ($policyName in $p2PolicyNames) {
         Write-Host "      - $policyName" -ForegroundColor DarkGray
     }
-    Write-Host "      Without Entra ID P2, these policies will be skipped and reported as LICENSE REQUIRED." -ForegroundColor Yellow
-    Write-Log -Level WARN -Message "Selected restore contains $($p2PolicyNames.Count) Conditional Access policy/policies that require Entra ID P2: $($p2PolicyNames -join '; ')."
+    if ((Test-TenantHasEntraP2) -eq $false) {
+        Write-Host "      This tenant does not have Entra ID P2. These policies will show SKIPPED - Required Entra ID P2." -ForegroundColor Yellow
+    }
+    else {
+        Write-Host "      These policies require Entra ID P2 in the target tenant." -ForegroundColor Yellow
+    }
+    Write-Log -Level WARN -Message "Selected restore contains $($p2PolicyNames.Count) Conditional Access $policyLabel that require Entra ID P2: $($p2PolicyNames -join '; ')."
+}
+
+function Show-EntraSuiteRestoreWarning {
+    param([object[]]$Policies)
+
+    $suitePolicyNames = @(
+        foreach ($policy in $Policies) {
+            if (Test-PolicyRequiresEntraSuite -PolicyJson $policy) {
+                if ($policy -is [PSCustomObject]) { $policy.displayName } else { $policy['displayName'] }
+            }
+        }
+    )
+
+    if ($suitePolicyNames.Count -eq 0) { return }
+
+    Write-Host ""
+    $policyLabel = if ($suitePolicyNames.Count -eq 1) { 'selected policy' } else { 'selected policies' }
+    Write-Host "  Entra Suite required for $($suitePolicyNames.Count) ${policyLabel}" -ForegroundColor Yellow
+    Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
+    foreach ($policyName in $suitePolicyNames) {
+        Write-Host "      - $policyName" -ForegroundColor DarkGray
+    }
+    if ((Test-TenantHasEntraSuitePrerequisite) -eq $false) {
+        Write-Host "      This tenant does not have Entra Suite / Global Secure Access licensed and configured. These policies will show SKIPPED - Required Entra Suite." -ForegroundColor Yellow
+    }
+    else {
+        Write-Host "      These policies require Entra Suite / Global Secure Access in the target tenant." -ForegroundColor Yellow
+    }
+    Write-Log -Level WARN -Message "Selected restore contains $($suitePolicyNames.Count) Conditional Access $policyLabel that require Entra Suite / Global Secure Access: $($suitePolicyNames -join '; ')."
+}
+
+function Show-WorkloadIdentityPremiumRestoreWarning {
+    param([object[]]$Policies)
+
+    $workloadPolicyNames = @(
+        foreach ($policy in $Policies) {
+            if (Test-PolicyRequiresWorkloadIdentityPremium -PolicyJson $policy) {
+                if ($policy -is [PSCustomObject]) { $policy.displayName } else { $policy['displayName'] }
+            }
+        }
+    )
+
+    if ($workloadPolicyNames.Count -eq 0) { return }
+
+    Write-Host ""
+    $policyLabel = if ($workloadPolicyNames.Count -eq 1) { 'selected policy' } else { 'selected policies' }
+    Write-Host "  Workload Identity Premium required for $($workloadPolicyNames.Count) ${policyLabel}" -ForegroundColor Yellow
+    Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
+    foreach ($policyName in $workloadPolicyNames) {
+        Write-Host "      - $policyName" -ForegroundColor DarkGray
+    }
+    if ((Test-TenantHasWorkloadIdentityPremium) -eq $false) {
+        Write-Host "      This tenant does not have Workload Identity Premium. These policies will show SKIPPED - Required Workload Identity Premium." -ForegroundColor Yellow
+    }
+    else {
+        Write-Host "      These policies require Workload Identity Premium in the target tenant." -ForegroundColor Yellow
+    }
+    Write-Log -Level WARN -Message "Selected restore contains $($workloadPolicyNames.Count) Conditional Access $policyLabel that require Workload Identity Premium: $($workloadPolicyNames -join '; ')."
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -1964,8 +2605,7 @@ function Invoke-RestoreConditionalAccess {
         Write-Host "  [!] Not connected to Microsoft Graph." -ForegroundColor Red
         Write-Host "      Select option [1] to connect first." -ForegroundColor Yellow
         Write-Host ""
-        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue
         return
     }
 
@@ -2008,8 +2648,7 @@ function Invoke-RestoreConditionalAccess {
                     Write-Host "  ✗ The selected folder does not contain a 'ConditionalAccess\' subfolder." -ForegroundColor Red
                     Write-Host "    Please select a valid backup folder." -ForegroundColor Yellow
                     Write-Host ""
-                    Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                    Wait-ForUserContinue
                     break
                 }
 
@@ -2027,8 +2666,7 @@ function Invoke-RestoreConditionalAccess {
                 if ($policyFiles.Count -eq 0) {
                     Write-Host ""
                     Write-Host "  No .json files found in ConditionalAccess\ subfolder." -ForegroundColor Yellow
-                    Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                    Wait-ForUserContinue
                     break
                 }
 
@@ -2107,6 +2745,8 @@ function Invoke-RestoreConditionalAccess {
                 if ($selectedItems.Count -eq 0) { break }
 
                 Show-EntraP2RestoreWarning -Policies @($selectedItems | ForEach-Object { $_.Json })
+                Show-EntraSuiteRestoreWarning -Policies @($selectedItems | ForEach-Object { $_.Json })
+                Show-WorkloadIdentityPremiumRestoreWarning -Policies @($selectedItems | ForEach-Object { $_.Json })
 
                 Write-Host ""
                 $previewAns = Read-Host "  Preview only or Apply? (P=preview / A=apply / 0=cancel)"
@@ -2125,15 +2765,18 @@ function Invoke-RestoreConditionalAccess {
                 }
                 Write-Host "  ╚══════════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
 
-                # Collect group UUIDs referenced by selected policies only
-                $neededGroupIds    = [System.Collections.Generic.HashSet[string]]::new()
+                # Collect location and app IDs referenced by selected policies
                 $neededLocationIds = [System.Collections.Generic.HashSet[string]]::new()
                 $neededAppIds      = [System.Collections.Generic.HashSet[string]]::new()
+                $neededAuthStrengthIds = [System.Collections.Generic.HashSet[string]]::new()
                 foreach ($item in $selectedItems) {
+                    if (-not $previewMode -and (Get-PolicyUnavailableTenantCapabilityReason -PolicyJson $item.Json)) {
+                        continue
+                    }
                     $deps = Get-PolicyDependencyIds -PolicyJson $item.Json
-                    foreach ($gid in $deps.groups)    { $null = $neededGroupIds.Add($gid) }
-                    foreach ($lid in $deps.locations) { $null = $neededLocationIds.Add($lid) }
+                    foreach ($lid in $deps.locations)    { $null = $neededLocationIds.Add($lid) }
                     foreach ($appId in $deps.applications) { $null = $neededAppIds.Add($appId) }
+                    foreach ($authStrengthId in $deps.authStrengths) { $null = $neededAuthStrengthIds.Add($authStrengthId) }
                 }
 
                 # Resolve application dependencies through MigrationTable.json,
@@ -2149,21 +2792,27 @@ function Invoke-RestoreConditionalAccess {
                     Write-Host "  [!] Restore stopped: $($_.Exception.Message)" -ForegroundColor Red
                     Write-Host "      Re-export the backup to regenerate MigrationTable.json." -ForegroundColor Yellow
                     Write-Host ""
-                    Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                    Wait-ForUserContinue
                     break
                 }
                 $spRestoreResult = Restore-ServicePrincipals `
                                        -Dependencies $spDependencies `
                                        -Preview $previewMode
 
+                # Resolve authentication strength dependencies
+                $authStrDependencies = Get-AuthStrengthDependenciesFromMigrationTable -BackupFolder $folderPath `
+                                           -RequiredReferenceIds @($neededAuthStrengthIds)
+                $authStrengthIdMap   = Resolve-AuthenticationStrengths -Dependencies $authStrDependencies `
+                                           -BackupFolder $folderPath -Preview $previewMode
+
                 # Restore Named Locations first
                 $locationIdMap = Restore-NamedLocations -BackupFolder $folderPath `
                                      -RequiredOldIds @($neededLocationIds) -Preview $previewMode
 
-                # Restore only the groups needed by selected policies
-                $groupIdMap = Restore-ExclusionGroups -BackupFolder $folderPath `
-                                  -RequiredOldIds @($neededGroupIds) -Preview $previewMode
+                # Groups are created per-policy inside Restore-SinglePolicy only when
+                # the policy passes all pre-checks. This shared map accumulates created
+                # group IDs across the loop so duplicate groups are not re-created.
+                $sharedGroupIdMap = @{}
 
                 # Restore selected policies
                 Write-Host ""
@@ -2176,9 +2825,12 @@ function Invoke-RestoreConditionalAccess {
                                    -Status "$pIdx of $($selectedItems.Count)" `
                                    -PercentComplete (($pIdx / $selectedItems.Count) * 100)
                     $result = Restore-SinglePolicy -PolicyJson $item.Json `
-                                  -GroupIdMap $groupIdMap -LocationIdMap $locationIdMap `
+                                  -BackupFolder $folderPath `
+                                  -SharedGroupIdMap $sharedGroupIdMap `
+                                  -LocationIdMap $locationIdMap `
                                   -ServicePrincipalIdMap $spRestoreResult.ReferenceMap `
                                   -ServicePrincipalDependencies $spDependencies `
+                                  -AuthStrengthIdMap $authStrengthIdMap `
                                   -Preview $previewMode
                     $stats[$result]++
                 }
@@ -2198,7 +2850,7 @@ function Invoke-RestoreConditionalAccess {
                     Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
                     Write-Host "    Created      : $($stats['created'])  (all in DISABLED state)" -ForegroundColor Green
                     Write-Host "    Skipped      : $($stats['skipped'])  (already exist)" -ForegroundColor Yellow
-                    Write-Host "    License req. : $($stats['unsupported'])  (requires Entra ID P2, Workload Identity Premium, or tenant prerequisite)" -ForegroundColor $(if ($stats['unsupported'] -gt 0) { 'Yellow' } else { 'Green' })
+                    Write-Host "    License req. : $($stats['unsupported'])  (requires Entra ID P2, Entra Suite/GSA, Workload Identity Premium, or tenant prerequisite)" -ForegroundColor $(if ($stats['unsupported'] -gt 0) { 'Yellow' } else { 'Green' })
                     Write-Host "    Failed       : $($stats['failed'])" -ForegroundColor $(if ($stats['failed'] -gt 0) { 'Red' } else { 'Green' })
                     if ($stats['failed'] -gt 0 -and $script:LogEnabled) {
                         Write-Host "    Troubleshooting log: $script:LogPath" -ForegroundColor DarkGray
@@ -2212,8 +2864,7 @@ function Invoke-RestoreConditionalAccess {
                 Write-Host "  ══════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
                 Write-Log -Message "Folder restore completed. Preview: $previewMode; created: $($stats['created']); skipped: $($stats['skipped']); license required: $($stats['unsupported']); failed: $($stats['failed']); preview count: $($stats['preview'])."
                 Write-Host ""
-                Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                Wait-ForUserContinue
             }
 
             '2' {
@@ -2229,8 +2880,7 @@ function Invoke-RestoreConditionalAccess {
                     Write-LogError -ErrorRecord $_ -Context "Read single Conditional Access policy file '$filePath'"
                     Write-Host ""
                     Write-Host "  ✗ Could not read file: $($_.Exception.Message)" -ForegroundColor Red
-                    Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                    Wait-ForUserContinue
                     break
                 }
 
@@ -2266,6 +2916,8 @@ function Invoke-RestoreConditionalAccess {
                 Write-Host "  Referenced Locations : $($deps.locations.Count)" -ForegroundColor Gray
                 Write-Host "  Referenced App IDs   : $($deps.applications.Count)" -ForegroundColor Gray
                 Show-EntraP2RestoreWarning -Policies @($policyJson)
+                Show-EntraSuiteRestoreWarning -Policies @($policyJson)
+                Show-WorkloadIdentityPremiumRestoreWarning -Policies @($policyJson)
                 Write-Host ""
 
                 $previewAns = Read-Host "  Preview only or Apply? (P=preview / A=apply / 0=cancel)"
@@ -2274,6 +2926,10 @@ function Invoke-RestoreConditionalAccess {
                 Write-Log -Message "Single-policy restore started for '$policyName' from '$filePath'. Preview: $previewMode."
 
                 Write-Host ""
+
+                if (-not $previewMode -and (Get-PolicyUnavailableTenantCapabilityReason -PolicyJson $policyJson)) {
+                    $deps = @{ groups = @(); locations = @(); applications = @(); authStrengths = @() }
+                }
 
                 # Resolve application dependencies through MigrationTable.json,
                 # then create missing target-tenant service principals by AppId.
@@ -2288,29 +2944,37 @@ function Invoke-RestoreConditionalAccess {
                     Write-Host "  [!] Restore stopped: $($_.Exception.Message)" -ForegroundColor Red
                     Write-Host "      Re-export the backup to regenerate MigrationTable.json." -ForegroundColor Yellow
                     Write-Host ""
-                    Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                    Wait-ForUserContinue
                     break
                 }
                 $spRestoreResult = Restore-ServicePrincipals `
                                        -Dependencies $spDependencies `
                                        -Preview $previewMode
 
+                # Resolve authentication strength dependencies
+                $authStrDependencies = Get-AuthStrengthDependenciesFromMigrationTable -BackupFolder $backupRoot `
+                                           -RequiredReferenceIds $deps.authStrengths
+                $authStrengthIdMap   = Resolve-AuthenticationStrengths -Dependencies $authStrDependencies `
+                                           -BackupFolder $backupRoot -Preview $previewMode
+
                 # Restore only needed Named Locations
                 $locationIdMap = Restore-NamedLocations -BackupFolder $backupRoot `
                                      -RequiredOldIds $deps.locations -Preview $previewMode
 
-                # Restore only needed Groups
-                $groupIdMap = Restore-ExclusionGroups -BackupFolder $backupRoot `
-                                  -RequiredOldIds $deps.groups -Preview $previewMode
+                # The group is created inside Restore-SinglePolicy only if the policy
+                # passes all pre-checks. Initialize a shared map (single-policy case).
+                $sharedGroupIdMap = @{}
 
                 # Restore the policy
                 Write-Host ""
                 Write-Host "  ── Conditional Access Policy ───────────────────────────────────────────" -ForegroundColor Cyan
                 $result = Restore-SinglePolicy -PolicyJson $policyJson `
-                              -GroupIdMap $groupIdMap -LocationIdMap $locationIdMap `
+                              -BackupFolder $backupRoot `
+                              -SharedGroupIdMap $sharedGroupIdMap `
+                              -LocationIdMap $locationIdMap `
                               -ServicePrincipalIdMap $spRestoreResult.ReferenceMap `
                               -ServicePrincipalDependencies $spDependencies `
+                              -AuthStrengthIdMap $authStrengthIdMap `
                               -Preview $previewMode
 
                 Write-Host ""
@@ -2327,7 +2991,7 @@ function Invoke-RestoreConditionalAccess {
                         }
                         'skipped' { Write-Host "  Policy already exists — no changes made." -ForegroundColor Yellow }
                         'unsupported' {
-                            Write-Host "  Policy skipped because a premium license (Entra ID P2 or Workload Identity Premium) is required." -ForegroundColor Yellow
+                            Write-Host "  Policy skipped because a required license or tenant prerequisite is not available." -ForegroundColor Yellow
                         }
                         'failed'  {
                             Write-Host "  Restore failed. See error above." -ForegroundColor Red
@@ -2340,8 +3004,7 @@ function Invoke-RestoreConditionalAccess {
                 Write-Host "  ══════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
                 Write-Log -Message "Single-policy restore completed for '$policyName'. Preview: $previewMode; result: $result."
                 Write-Host ""
-                Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                Wait-ForUserContinue
             }
 
             '0' { return }
@@ -2369,8 +3032,7 @@ function Invoke-ListPolicies {
         Write-Host "  [!] Not connected to Microsoft Graph." -ForegroundColor Red
         Write-Host "      Select option [1] to connect first." -ForegroundColor Yellow
         Write-Host ""
-        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue
         return
     }
 
@@ -2397,16 +3059,14 @@ function Invoke-ListPolicies {
         Write-Host ""
         Write-Host "  ✗ Failed to retrieve policies: $graphError" -ForegroundColor Red
         Write-Host ""
-        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue
         return
     }
 
     if ($allPolicies.Count -eq 0) {
         Write-Host "  No Conditional Access policies found in this tenant." -ForegroundColor Yellow
         Write-Host ""
-        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue
         return
     }
 
@@ -2598,8 +3258,7 @@ function Invoke-ListPolicies {
 
                             Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
                             Write-Host ""
-                            Write-Host "  Press any key to return to the list..." -ForegroundColor DarkGray
-                            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                            Wait-ForUserContinue -Prompt "  Press Enter to return to the list"
                         }
                     }
                 } while ($true)
@@ -2621,16 +3280,14 @@ function Invoke-ListPolicies {
                         Write-Host ""
                         Write-Host "  ✓ CSV saved to: $($saveDialog.FileName)" -ForegroundColor Green
                         Write-Host ""
-                        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                        Wait-ForUserContinue
                     }
                     catch {
                         Write-LogError -ErrorRecord $_ -Context "Export Conditional Access policy list to '$($saveDialog.FileName)'"
                         Write-Host ""
                         Write-Host "  ✗ Failed to save CSV: $($_.Exception.Message)" -ForegroundColor Red
                         Write-Host ""
-                        Write-Host "  Press any key to continue..." -ForegroundColor DarkGray
-                        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+                        Wait-ForUserContinue
                     }
                 }
             }
@@ -2724,8 +3381,7 @@ function Main {
     Write-Host ""
 
     if (-not (Test-AndInstall-GraphModules)) {
-        Write-Host "  Press any key to exit..." -ForegroundColor DarkGray
-        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        Wait-ForUserContinue -Prompt "  Press Enter to exit"
         exit 1
     }
 
