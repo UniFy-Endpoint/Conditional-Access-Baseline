@@ -59,11 +59,11 @@ Generated from the repository JSON inventory on **June 15, 2026**.
 | CA503 | `CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block` | Workforce users | All | block | None | Disabled |
 | CA504 | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA` | Workforce users | All | Authentication strength: Phishing-resistant MFA | Sign-in frequency: every time | Disabled |
 | CA505 | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed` | Workforce users | All | riskRemediation AND Authentication strength: Passwordless MFA | Sign-in frequency: every time | Disabled |
-| CA601 | `CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Agent identities | All | block | None | Disabled |
-| CA602 | `CA602-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block` | Agent identities | All | block | None | Disabled |
-| CA603 | `CA603-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Scoped identities | All | compliantDevice | None | Disabled |
-| CA604 | `CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Scoped identities | All | block | None | Disabled |
-| CA605 | `CA605-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Scoped identities | AllAgentIdResources | block | None | Disabled |
+| CA601 | `CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block` | Agent identities | All | block | None | Disabled |
+| CA602 | `CA602-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Scoped identities | All | compliantDevice | None | Disabled |
+| CA603 | `CA603-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Scoped identities | AllAgentIdResources | block | None | Disabled |
+| CA604 | `CA604-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Agent identities | All | block | None | Disabled |
+| CA605 | `CA605-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Scoped identities | All | block | None | Disabled |
 | CA701 | `CA701-WLI-AllApps-AnyLoc-WorkloadRiskHigh-Block` | Workload identities | All | block | None | Disabled |
 | CA702 | `CA702-WLI-AllApps-AnyLoc-UntrustedNetwork-Block` | Workload identities | All | block | None | Disabled |
 
@@ -1335,44 +1335,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Session | Sign-in frequency: every time |
 | Dedicated EXCL | CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed-EXCL |
 
-### CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block
+### CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block
 
 | Property | Configuration |
 | :--- | :--- |
 | ID | `%CA601PolicyId%` |
-| State | Disabled |
-| Audience | Agent identities |
-| Include users | None |
-| Include groups | Any / none |
-| Exclude groups | Any / none |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | medium, high |
-| Grant | block |
-| Session | None |
-| Include service principals | Any / none |
-| Exclude service principals | Any / none |
-| Include agent identities | All |
-| Exclude agent identities | Any / none |
-| Agent approval filter | None |
-| Dedicated EXCL | None |
-
-### CA602-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA602PolicyId%` |
 | State | Disabled |
 | Audience | Agent identities |
 | Include users | None |
@@ -1401,11 +1368,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Agent approval filter | `exclude: CustomSecurityAttribute.AgentIdentity_AgentApprovalStatus -eq "Approved"` |
 | Dedicated EXCL | None |
 
-### CA603-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant
+### CA602-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA603PolicyId%` |
+| ID | `%CA602PolicyId%` |
 | State | Disabled |
 | Audience | Scoped identities |
 | Include users | None |
@@ -1429,39 +1396,11 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Session | None |
 | Dedicated EXCL | None |
 
-### CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block
+### CA603-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA604PolicyId%` |
-| State | Disabled |
-| Audience | Scoped identities |
-| Include users | None |
-| Include groups | Any / none |
-| Exclude groups | Any / none |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | medium,high |
-| Grant | block |
-| Session | None |
-| Dedicated EXCL | None |
-
-### CA605-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA605PolicyId%` |
+| ID | `%CA603PolicyId%` |
 | State | Disabled |
 | Audience | Scoped identities |
 | Include users | None |
@@ -1481,6 +1420,67 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | User risk | Any / none |
 | Service-principal risk | Any / none |
 | Agent risk | None |
+| Grant | block |
+| Session | None |
+| Dedicated EXCL | None |
+
+### CA604-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block
+
+| Property | Configuration |
+| :--- | :--- |
+| ID | `%CA604PolicyId%` |
+| State | Disabled |
+| Audience | Agent identities |
+| Include users | None |
+| Include groups | Any / none |
+| Exclude groups | Any / none |
+| Include roles | None |
+| Exclude roles | None |
+| Guest/external scope | Not configured |
+| Include resources | All |
+| Exclude resources | Any / none |
+| Client app types | all |
+| Platforms | Any |
+| Locations include | Any |
+| Locations exclude | None |
+| Device filter | None |
+| Sign-in risk | Any / none |
+| User risk | Any / none |
+| Service-principal risk | Any / none |
+| Agent risk | medium, high |
+| Grant | block |
+| Session | None |
+| Include service principals | Any / none |
+| Exclude service principals | Any / none |
+| Include agent identities | All |
+| Exclude agent identities | Any / none |
+| Agent approval filter | None |
+| Dedicated EXCL | None |
+
+### CA605-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block
+
+| Property | Configuration |
+| :--- | :--- |
+| ID | `%CA605PolicyId%` |
+| State | Disabled |
+| Audience | Scoped identities |
+| Include users | None |
+| Include groups | Any / none |
+| Exclude groups | Any / none |
+| Include roles | None |
+| Exclude roles | None |
+| Guest/external scope | Not configured |
+| Include resources | All |
+| Exclude resources | Any / none |
+| Client app types | all |
+| Platforms | Any |
+| Locations include | Any |
+| Locations exclude | None |
+| Device filter | None |
+| Sign-in risk | Any / none |
+| User risk | Any / none |
+| Service-principal risk | Any / none |
+| Agent risk | medium,high |
 | Grant | block |
 | Session | None |
 | Dedicated EXCL | None |
@@ -1551,5 +1551,5 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 - CA105, CA206, CA303, and CA406 require validated named locations and CAE resource-seen IP testing.
 - CA216 targets supported Windows M365 desktop resources. CA218 is the separate macOS preview policy and should be enabled in report-only mode until token-protection support for macOS is confirmed in the tenant.
 - CA701 and CA702 require Microsoft Entra Workload ID Premium and approved service-principal inventory.
-- CA602 requires `CustomSecurityAttribute.AgentIdentity_AgentApprovalStatus` with value `Approved` for allowed agents.
-- CA605 requires Global Secure Access compliant-network signals.
+- CA601 requires `CustomSecurityAttribute.AgentIdentity_AgentApprovalStatus` with value `Approved` for allowed agents.
+- CA603 requires Global Secure Access compliant-network signals.

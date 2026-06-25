@@ -134,11 +134,11 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 | CA503 | IDP | `CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block` | Disabled | block | `CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block-EXCL` |
 | CA504 | IDP | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA` | Disabled | Authentication strength: Phishing-resistant MFA; Sign-in frequency: every time | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA-EXCL` |
 | CA505 | IDP | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed` | Disabled | riskRemediation AND Passwordless MFA; Sign-in frequency: every time | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed-EXCL` |
-| CA601 | AGT | `CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
-| CA602 | AGT | `CA602-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block` | Disabled | block | None |
-| CA603 | AGT | `CA603-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Disabled | compliantDevice | None |
-| CA604 | AGT | `CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
-| CA605 | AGT | `CA605-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Disabled | block | None |
+| CA601 | AGT | `CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block` | Disabled | block | None |
+| CA602 | AGT | `CA602-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Disabled | compliantDevice | None |
+| CA603 | AGT | `CA603-AGT-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Disabled | block | None |
+| CA604 | AGT | `CA604-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
+| CA605 | AGT | `CA605-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Disabled | block | None |
 | CA701 | WLI | `CA701-WLI-AllApps-AnyLoc-WorkloadRiskHigh-Block` | Disabled | block | None |
 | CA702 | WLI | `CA702-WLI-AllApps-AnyLoc-UntrustedNetwork-Block` | Disabled | block | None |
 
@@ -170,7 +170,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, and `AGT`. W
 - Validate CAE authentication IP and resource-seen IP before strict location enforcement.
 - Populate `CA-SVC-IntSvcAcc-ServiceAccounts` only with user objects that can complete MFA. Prefer managed identities or workload identity federation for automation.
 - Microsoft Entra Workload ID Premium is required for CA701 and CA702.
-- Create the `AgentIdentity` custom security attribute set and `AgentApprovalStatus` attribute before evaluating CA602.
+- Create the `AgentIdentity` custom security attribute set and `AgentApprovalStatus` attribute before evaluating CA601.
 - Reconcile Security Defaults, legacy per-user MFA, cross-tenant trust, and Microsoft-managed Conditional Access policies before enforcement.
 - Enable FIDO2, Windows Hello for Business, and certificate-based authentication in the tenant Authentication Methods Policy before piloting CA102, CA103, CA203, CA301, CA501, or CA502; those policies will fail at runtime if the required methods are not enabled.
 - CA001 enforces the allowed-country boundary regardless of device ownership, Intune enrollment, or compliance state. Create a separately reviewed travel exception only when the accepted risk and compensating controls are documented.
