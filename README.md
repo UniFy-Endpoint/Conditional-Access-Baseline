@@ -1,6 +1,6 @@
 # Microsoft Entra Conditional Access Baseline
 
-A structured Microsoft Entra Conditional Access baseline derived from Microsoft Zero Trust and Conditional Access guidance, containing **54 policies**, **49 security groups**, **3 named locations**, a migration dependency table, and PowerShell backup/restore tooling.
+A Zero Trust-aligned Microsoft Entra Conditional Access baseline built on Microsoft's own guidance, containing **54 policies**, **49 security groups**, **3 named locations**, **1 custom authentication strength**, a migration dependency table, and PowerShell backup/restore tooling.
 
 The restore workflow creates policies disabled, and preview policies remain report-only until tenant prerequisites and impact evidence are approved.
 
