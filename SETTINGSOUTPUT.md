@@ -6,6 +6,7 @@ Generated from the repository JSON inventory on **June 25, 2026**.
 | :--- | :--- |
 | Policies | 54 |
 | Security groups | 49 |
+| Custom authentication strengths | 1 |
 | Named locations | 3 |
 | Administrator role standard | 35 roles |
 | Disabled policies | 54 |
