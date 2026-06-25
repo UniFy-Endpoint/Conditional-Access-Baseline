@@ -71,6 +71,7 @@ Policy numbers are allocated by family:
 
 - Policies: **54** (GLB 7, ADM 6, USR 18, SVC 3, WLI 2, GST 6, IDP 5, AGT 4, GSA 3)
 - Groups: **49** (47 dedicated policy EXCL groups, shared CA000 emergency access, and CA-SVC-IntSvcAcc-ServiceAccounts)
+- Custom authentication strengths: **1** (Temp Access Pass - Strength)
 - Policy states in source: **54 disabled**
 - Named locations: **3**
 - Administrator standard: **35 built-in roles**
