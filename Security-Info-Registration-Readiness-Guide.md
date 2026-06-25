@@ -6,7 +6,7 @@ This guide defines the operational checks to complete before enabling `CA202` or
 
 Relevant baseline policies:
 
-- `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass`
+- `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA`
 - `CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA`
 - `CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA`
 

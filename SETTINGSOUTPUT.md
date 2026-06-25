@@ -20,7 +20,7 @@ Generated from the repository JSON inventory on **June 25, 2026**.
 | CA003 | `CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block` | Workforce users | All | block | None | Disabled |
 | CA004 | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Workforce users | All | block | None | Disabled |
 | CA005 | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA` | Workforce users | Any / none | mfa | None | Disabled |
-| CA006 | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass` | Workforce users | Any / none | Authentication strength: Temp Access Pass - Strength | None | Disabled |
+| CA006 | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA` | Workforce users | Any / none | Authentication strength: Temp Access Pass - Strength | None | Disabled |
 | CA007 | `CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block` | Workforce users | All | block | None | Disabled |
 | CA101 | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Administrators (35 roles) | All | mfa | None | Disabled |
 | CA102 | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA` | Administrators (35 roles) | All | Authentication strength: Passwordless MFA | None | Disabled |
@@ -217,7 +217,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Session | None |
 | Dedicated EXCL | CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
 
-### CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass
+### CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA
 
 | Property | Configuration |
 | :--- | :--- |
@@ -226,7 +226,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Audience | Workforce users |
 | Include users | All |
 | Include groups | Any / none |
-| Exclude groups | CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass-EXCL (6a1fd238-bfef-470e-be4d-813bd29cf80e), CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597) |
+| Exclude groups | CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA-EXCL (6a1fd238-bfef-470e-be4d-813bd29cf80e), CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597) |
 | Include roles | None |
 | Exclude roles | 2 roles (directory-synchronization/service-role exceptions) |
 | Guest/external scope | Explicitly excluded |
@@ -243,7 +243,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Agent risk | None |
 | Grant | Authentication strength: Temp Access Pass - Strength |
 | Session | None |
-| Dedicated EXCL | CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass-EXCL |
+| Dedicated EXCL | CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA-EXCL |
 
 ### CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block
 

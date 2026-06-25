@@ -120,7 +120,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, `AGT`, and `
 | CA003 | GLB | `CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block` | Disabled | block | `CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block-EXCL` |
 | CA004 | GLB | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Disabled | block | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL` |
 | CA005 | GLB | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
-| CA006 | GLB | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass` | Disabled | Authentication strength: Temp Access Pass - Strength | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass-EXCL` |
+| CA006 | GLB | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA` | Disabled | Authentication strength: Temp Access Pass - Strength | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA-EXCL` |
 | CA007 | GLB | `CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block` | Disabled | block | `CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block-EXCL` |
 | CA101 | ADM | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Disabled | mfa | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL` |
 | CA102 | ADM | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA` | Disabled | Authentication strength: Passwordless MFA | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL` |

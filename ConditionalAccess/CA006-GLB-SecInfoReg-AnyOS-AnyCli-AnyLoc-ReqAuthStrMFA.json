@@ -5,7 +5,7 @@
   "@odata.editLink": "identity/conditionalAccess/policies('d0bd7a4c-7428-40fa-a44b-0db4dd387e58')",
   "id": "d0bd7a4c-7428-40fa-a44b-0db4dd387e58",
   "templateId": null,
-  "displayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass",
+  "displayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2025-11-27T17:04:43.9125392Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",

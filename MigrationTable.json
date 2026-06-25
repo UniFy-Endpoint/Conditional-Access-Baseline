@@ -37,7 +37,7 @@
       "Type": "Group"
     },
     {
-      "DisplayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqTempAccPass-EXCL",
+      "DisplayName": "CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA-EXCL",
       "Id": "6a1fd238-bfef-470e-be4d-813bd29cf80e",
       "Type": "Group"
     },
