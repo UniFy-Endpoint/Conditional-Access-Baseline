@@ -1457,13 +1457,14 @@ function Restore-ExclusionGroups {
         [bool]$Preview
     )
 
-    $idMap = @{}
+    $idMap       = @{}
+    $reusedNames = [System.Collections.Generic.List[string]]::new()
 
     $grpDir = Join-Path $BackupFolder "Groups"
-    if (-not (Test-Path $grpDir)) { return $idMap }
+    if (-not (Test-Path $grpDir)) { return @{ IdMap = $idMap; ReusedNames = @() } }
 
     $grpFiles = @(Get-ChildItem -Path $grpDir -Filter "*.json" -File | Sort-Object Name)
-    if ($grpFiles.Count -eq 0) { return $idMap }
+    if ($grpFiles.Count -eq 0) { return @{ IdMap = $idMap; ReusedNames = @() } }
 
     $sectionShown = $false
 
@@ -1507,7 +1508,8 @@ function Restore-ExclusionGroups {
         if ($existing) {
             $newId = if ($existing -is [PSCustomObject]) { $existing.id } else { $existing['id'] }
             if ($oldId) { $idMap[$oldId] = $newId }
-            Write-Host "  [SKIPPED — already exists]" -ForegroundColor Yellow
+            $null = $reusedNames.Add($dispName)
+            Write-Host "  [REUSED — already exists in tenant]" -ForegroundColor Cyan
             continue
         }
 
@@ -1533,7 +1535,7 @@ function Restore-ExclusionGroups {
         }
     }
 
-    return $idMap
+    return @{ IdMap = $idMap; ReusedNames = @($reusedNames) }
 }
 
 function Get-ObjectPropertyValue {
@@ -2323,9 +2325,11 @@ function Restore-SinglePolicy {
         }
 
         # ── Pre-checks passed — create groups for this policy only ──────────────
-        $policyDeps  = Get-PolicyDependencyIds -PolicyJson $PolicyJson
-        $newGroupMap = Restore-ExclusionGroups -BackupFolder $BackupFolder `
-                           -RequiredOldIds $policyDeps.groups -Preview $false
+        $policyDeps   = Get-PolicyDependencyIds -PolicyJson $PolicyJson
+        $groupResult  = Restore-ExclusionGroups -BackupFolder $BackupFolder `
+                            -RequiredOldIds $policyDeps.groups -Preview $false
+        $newGroupMap  = $groupResult.IdMap
+        $reusedGroups = @($groupResult.ReusedNames)
         foreach ($k in $newGroupMap.Keys) { $SharedGroupIdMap[$k] = $newGroupMap[$k] }
 
         # ── Build and remap the policy body ─────────────────────────────────────
@@ -2347,6 +2351,10 @@ function Restore-SinglePolicy {
                        -Body $schemaCheck.Json -ErrorAction Stop
         Write-Log -Message "Created Conditional Access policy '$displayName' in disabled state."
         Write-Host "  [CREATED — DISABLED]" -ForegroundColor Green
+        if ($reusedGroups.Count -gt 0) {
+            $grpNoun = if ($reusedGroups.Count -eq 1) { 'group' } else { 'groups' }
+            Write-Host "    ! Exclusion $grpNoun already existed in tenant and was reused — it was not deleted when the policy was removed." -ForegroundColor Yellow
+        }
         return 'created'
     }
     catch {
