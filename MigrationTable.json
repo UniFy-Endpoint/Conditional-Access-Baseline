@@ -293,6 +293,14 @@
       "Type": "ServicePrincipal"
     },
     {
+      "DisplayName": "Azure Virtual Desktop",
+      "Id": null,
+      "AppId": "9cdead84-a844-4324-93f2-b2e6bb768d07",
+      "PolicyReferenceId": "9cdead84-a844-4324-93f2-b2e6bb768d07",
+      "ReferenceKind": "AppId",
+      "Type": "ServicePrincipal"
+    },
+    {
       "DisplayName": "My Signins",
       "Id": null,
       "AppId": "19db86c3-b2b9-44cc-b339-36da233a3be2",

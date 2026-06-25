@@ -872,7 +872,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Include roles | None |
 | Exclude roles | 2 roles |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) |
+| Include resources | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe), Azure Virtual Desktop (9cdead84-a844-4324-93f2-b2e6bb768d07), Windows 365 (0af06dc6-e4b5-4f28-818e-e78e62d137a5) |
 | Exclude resources | Any / none |
 | Client app types | mobileAppsAndDesktopClients |
 | Platforms | windows |
@@ -928,7 +928,7 @@ CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standa
 | Include roles | None |
 | Exclude roles | 2 roles |
 | Guest/external scope | Explicitly excluded |
-| Include resources | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) |
+| Include resources | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe), Azure Virtual Desktop (9cdead84-a844-4324-93f2-b2e6bb768d07), Windows 365 (0af06dc6-e4b5-4f28-818e-e78e62d137a5) |
 | Exclude resources | Any / none |
 | Client app types | mobileAppsAndDesktopClients |
 | Platforms | macOS |
