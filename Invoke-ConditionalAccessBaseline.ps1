@@ -2204,7 +2204,7 @@ function Resolve-AuthenticationStrengths {
             $realId = if ($existingStrength -is [PSCustomObject]) { $existingStrength.id } else { $existingStrength['id'] }
             $idMap[$srcId] = $realId
             Write-Log -Message "Authentication strength '$dispName' already exists with ID '$realId'."
-            Write-Host "    '$dispName'  [SKIPPED - already exists]  ->  $realId" -ForegroundColor Yellow
+            Write-Host "    '$dispName'  [SKIPPED - already exists]  -  $realId" -ForegroundColor Yellow
             continue
         }
 
