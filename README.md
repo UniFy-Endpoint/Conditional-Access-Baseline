@@ -1,6 +1,6 @@
 # Microsoft Entra Conditional Access Baseline
 
-A structured Microsoft Entra Conditional Access baseline derived from Microsoft Zero Trust and Conditional Access guidance, containing **52 policies**, **47 security groups**, **3 named locations**, a migration dependency table, and PowerShell backup/restore tooling.
+A structured Microsoft Entra Conditional Access baseline derived from Microsoft Zero Trust and Conditional Access guidance, containing **54 policies**, **49 security groups**, **3 named locations**, a migration dependency table, and PowerShell backup/restore tooling.
 
 The restore workflow creates policies disabled, and preview policies remain report-only until tenant prerequisites and impact evidence are approved.
 
@@ -36,7 +36,7 @@ The restore workflow creates policies disabled, and preview policies remain repo
 
 Microsoft defines Conditional Access as its Zero Trust policy engine. This baseline aligns with Zero Trust principles: explicitly verify access, enforce least privilege, assume breach, protect privileged roles, require strong authentication, validate device health, limit unmanaged-device access, and respond to identity risk signals.
 
-Policies are organized into eight audience families:
+Policies are organized into nine audience families:
 
 | Code | Family | Scope |
 | :---: | :--- | :--- |
@@ -64,8 +64,6 @@ Policy numbers are allocated by family:
 | CA600 – CA699 | AGT — Agent and autonomous workload policies |
 | CA700 – CA799 | WLI — Workload identity policies (requires Workload ID Premium) |
 | CA800 – CA899 | GSA — Global Secure Access policies |
-
----
 
 ---
 
@@ -209,6 +207,7 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, `AGT`, and `
 - `ConditionalAccess/`: policy JSON files
 - `Groups/`: shared and dedicated group JSON files
 - `NamedLocations/`: named-location JSON files
+- `AuthenticationStrengths/`: custom authentication strength JSON files
 - `MigrationTable.json`: dependency identity mapping
 - `Invoke-ConditionalAccessBaseline.ps1`: backup and restore utility
 - `SETTINGSOUTPUT.md`: complete policy settings reference
