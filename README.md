@@ -21,13 +21,12 @@ The restore workflow creates policies disabled, and preview policies remain repo
 ## Table of Contents
 
 - [Zero Trust Approach](#zero-trust-approach)
-- [Inventory](#inventory)
+- [Repository Structure](#repository-structure)
 - [Naming](#naming)
 - [Policy Catalog](#policy-catalog)
 - [Design Notes](#design-notes)
 - [Tenant Prerequisites](#tenant-prerequisites)
 - [Deployment Order](#deployment-order)
-- [Repository Layout](#repository-layout)
 - [Microsoft Guidance](#microsoft-guidance)
 
 ---
@@ -67,7 +66,7 @@ Policy numbers are allocated by family:
 
 ---
 
-## Inventory
+## Repository Structure
 
 - Policies: **54** (GLB 7, ADM 6, USR 18, SVC 3, WLI 2, GST 6, IDP 5, AGT 4, GSA 3)
 - Groups: **49** (47 dedicated EXCL groups, CA000 emergency access, and SVC service accounts)
@@ -75,6 +74,39 @@ Policy numbers are allocated by family:
 - Policy states in source: **54 disabled**
 - Named locations: **3**
 - Administrator standard: **35 built-in roles**
+
+```
+Conditional-Access-Baseline/
+├── README.md                                      ← This file
+├── SETTINGSOUTPUT.md                              ← Complete policy settings reference
+├── Security-Info-Registration-Readiness-Guide.md  ← Operational checklist for CA202/CA203 readiness
+├── MigrationTable.json                            ← Dependency identity mapping
+├── Invoke-ConditionalAccessBaseline.ps1           ← Backup and restore utility
+│
+├── ConditionalAccess/                             ← 54 policy JSON files
+│   ├── CA001–CA007   GLB — Global baseline policies
+│   ├── CA101–CA106   ADM — Administrator policies
+│   ├── CA201–CA218   USR — Standard user policies
+│   ├── CA301–CA303   SVC — Interactive service account policies
+│   ├── CA401–CA406   GST — Guest and external identity policies
+│   ├── CA501–CA505   IDP — Identity Protection policies (requires Entra ID P2)
+│   ├── CA601–CA604   AGT — Agent and autonomous workload policies
+│   ├── CA701–CA702   WLI — Workload identity policies (requires Workload ID Premium)
+│   └── CA801–CA803   GSA — Global Secure Access policies
+│
+├── Groups/                                        ← 49 security group JSON files
+│   ├── CA000-GLB-BGA-EmergencyAccess-EXCL.json   ← Shared emergency access exclusion
+│   ├── CA-SVC-IntSvcAcc-ServiceAccounts.json      ← Shared SVC service accounts
+│   └── CA001–CA803 EXCL groups                   ← 47 dedicated EXCL groups, one per policy
+│
+├── NamedLocations/                                ← 3 named location JSON files
+│   ├── Allowed Countries.json
+│   ├── Allowed Countries - Service Accounts.json
+│   └── Compliant Network Locations.json
+│
+└── AuthenticationStrengths/                       ← 1 custom authentication strength
+    └── Temp Access Pass - Strength.json
+```
 
 ---
 
@@ -200,19 +232,6 @@ Audience families: `GLB`, `ADM`, `USR`, `SVC`, `WLI`, `GST`, `IDP`, `AGT`, and `
 6. Pilot SVC and WLI policies after identity inventory approval.
 7. Enable CA218, CA601–CA604, and CA801–CA803 in report-only mode until preview, Global Secure Access, and licensing dependencies are validated.
 8. Review at least one normal business cycle of Conditional Access insights before enforcement.
-
----
-
-## Repository Layout
-
-- `ConditionalAccess/`: policy JSON files
-- `Groups/`: shared and dedicated group JSON files
-- `NamedLocations/`: named-location JSON files
-- `AuthenticationStrengths/`: custom authentication strength JSON files
-- `MigrationTable.json`: dependency identity mapping
-- `Invoke-ConditionalAccessBaseline.ps1`: backup and restore utility
-- `SETTINGSOUTPUT.md`: complete policy settings reference
-- `Security-Info-Registration-Readiness-Guide.md`: operational checklist for validating user readiness before enabling CA202 or CA203
 
 ---
 
