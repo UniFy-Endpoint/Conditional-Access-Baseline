@@ -5,7 +5,7 @@
   "@odata.editLink": "identity/conditionalAccess/policies('%CA601PolicyId%')",
   "id": "%CA601PolicyId%",
   "templateId": "6bdcbbb7-ebd1-4f8f-a02f-652db0e3665d",
-  "displayName": "CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-HighRiskAgt-Block",
+  "displayName": "CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "%CreatedDateTime%",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
@@ -22,7 +22,7 @@
     "signInRiskLevels@odata.type": "#Collection(microsoft.graph.riskLevel)",
     "signInRiskLevels": [],
     "agentIdRiskLevels@odata.type": "#microsoft.graph.conditionalAccessAgentIdRiskLevels",
-    "agentIdRiskLevels": "high",
+    "agentIdRiskLevels": "medium,high",
     "clientAppTypes@odata.type": "#Collection(microsoft.graph.conditionalAccessClientApp)",
     "clientAppTypes": [
       "all"
