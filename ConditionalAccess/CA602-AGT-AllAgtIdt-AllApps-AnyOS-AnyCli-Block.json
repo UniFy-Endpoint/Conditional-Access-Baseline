@@ -5,7 +5,7 @@
   "@odata.editLink": "identity/conditionalAccess/policies('%CA602PolicyId%')",
   "id": "%CA602PolicyId%",
   "templateId": null,
-  "displayName": "CA602-AGT-AllAgtIdent-AllApps-AnyOS-AnyCli-Block",
+  "displayName": "CA602-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "%CreatedDateTime%",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
