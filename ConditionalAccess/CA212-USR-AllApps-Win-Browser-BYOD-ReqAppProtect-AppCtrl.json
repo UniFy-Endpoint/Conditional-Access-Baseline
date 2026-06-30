@@ -1,15 +1,15 @@
 {
   "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies/$entity",
   "@odata.type": "#microsoft.graph.conditionalAccessPolicy",
-  "@odata.id": "identity/conditionalAccess/policies('0293b8bd-ce33-4fc6-a2ee-c8a8089c3110')",
-  "@odata.editLink": "identity/conditionalAccess/policies('0293b8bd-ce33-4fc6-a2ee-c8a8089c3110')",
-  "id": "0293b8bd-ce33-4fc6-a2ee-c8a8089c3110",
+  "@odata.id": "identity/conditionalAccess/policies('74546ca7-1a58-425a-866b-8804b04bb7c7')",
+  "@odata.editLink": "identity/conditionalAccess/policies('74546ca7-1a58-425a-866b-8804b04bb7c7')",
+  "id": "74546ca7-1a58-425a-866b-8804b04bb7c7",
   "templateId": null,
   "displayName": "CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2025-11-27T17:04:47.1542038Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
-  "modifiedDateTime": "2026-04-29T12:12:42.5051244Z",
+  "modifiedDateTime": "2026-06-30T13:20:13.8430917Z",
   "state@odata.type": "#microsoft.graph.conditionalAccessPolicyState",
   "state": "disabled",
   "deletedDateTime": null,
@@ -33,12 +33,10 @@
       "@odata.type": "#microsoft.graph.conditionalAccessApplications",
       "includeApplications@odata.type": "#Collection(String)",
       "includeApplications": [
-        "All"
+        "Office365"
       ],
       "excludeApplications@odata.type": "#Collection(String)",
-      "excludeApplications": [
-        "a4f2693f-129c-4b96-982b-2c364b8314d7"
-      ],
+      "excludeApplications": [],
       "includeUserActions@odata.type": "#Collection(String)",
       "includeUserActions": [],
       "includeAuthenticationContextClassReferences@odata.type": "#Collection(String)",
@@ -57,8 +55,8 @@
       "includeGroups": [],
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
-        "9f027ad8-042b-4c85-9727-9008f6851597",
-        "236772fa-5f88-4345-8de1-e6b2b6cc0c8b"
+        "3b759791-ff9b-4190-8271-add271145392",
+        "d635f966-fce3-4208-8953-9cddfba63d70"
       ],
       "includeRoles@odata.type": "#Collection(String)",
       "includeRoles": [],
@@ -99,8 +97,7 @@
         "f28a1f50-f6e7-4571-818b-6a12f2af6b6c",
         "fe930be7-5e62-47db-91af-98c3a49a38b1",
         "d29b2b05-8046-44ba-8758-1e26182fcf32",
-        "a92aed5d-d78a-4d16-b381-09adb37eb3b0",
-        "69091246-20e8-4a56-aa4d-066075b2a7a8"
+        "a92aed5d-d78a-4d16-b381-09adb37eb3b0"
       ],
       "includeGuestsOrExternalUsers": null,
       "excludeGuestsOrExternalUsers": {
@@ -152,9 +149,9 @@
     "customAuthenticationFactors": [],
     "termsOfUse@odata.type": "#Collection(String)",
     "termsOfUse": [],
-    "authenticationStrength@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies('0293b8bd-ce33-4fc6-a2ee-c8a8089c3110')/grantControls/authenticationStrength/$entity",
-    "authenticationStrength@odata.associationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('0293b8bd-ce33-4fc6-a2ee-c8a8089c3110')/grantControls/authenticationStrength/$ref",
-    "authenticationStrength@odata.navigationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('0293b8bd-ce33-4fc6-a2ee-c8a8089c3110')/grantControls/authenticationStrength",
+    "authenticationStrength@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies('74546ca7-1a58-425a-866b-8804b04bb7c7')/grantControls/authenticationStrength/$entity",
+    "authenticationStrength@odata.associationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('74546ca7-1a58-425a-866b-8804b04bb7c7')/grantControls/authenticationStrength/$ref",
+    "authenticationStrength@odata.navigationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('74546ca7-1a58-425a-866b-8804b04bb7c7')/grantControls/authenticationStrength",
     "authenticationStrength": null
   },
   "sessionControls": {
@@ -175,6 +172,6 @@
   },
   "#microsoft.graph.restore": {
     "title": "microsoft.graph.restore",
-    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('0293b8bd-ce33-4fc6-a2ee-c8a8089c3110')/microsoft.graph.restore"
+    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('74546ca7-1a58-425a-866b-8804b04bb7c7')/microsoft.graph.restore"
   }
 }

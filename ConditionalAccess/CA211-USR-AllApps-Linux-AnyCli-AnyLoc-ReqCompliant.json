@@ -1,15 +1,15 @@
 {
   "@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies/$entity",
   "@odata.type": "#microsoft.graph.conditionalAccessPolicy",
-  "@odata.id": "identity/conditionalAccess/policies('b6ed4c3f-1d0c-41b8-bd51-e14a63198c68')",
-  "@odata.editLink": "identity/conditionalAccess/policies('b6ed4c3f-1d0c-41b8-bd51-e14a63198c68')",
-  "id": "b6ed4c3f-1d0c-41b8-bd51-e14a63198c68",
+  "@odata.id": "identity/conditionalAccess/policies('c202bd4a-c35e-42e5-a356-26baf72af874')",
+  "@odata.editLink": "identity/conditionalAccess/policies('c202bd4a-c35e-42e5-a356-26baf72af874')",
+  "id": "c202bd4a-c35e-42e5-a356-26baf72af874",
   "templateId": null,
   "displayName": "CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant",
   "createdDateTime@odata.type": "#DateTimeOffset",
   "createdDateTime": "2025-12-02T14:46:20.7269385Z",
   "modifiedDateTime@odata.type": "#DateTimeOffset",
-  "modifiedDateTime": "2026-04-15T12:22:13.7826702Z",
+  "modifiedDateTime": "2026-06-15T11:45:27.0903734Z",
   "state@odata.type": "#microsoft.graph.conditionalAccessPolicyState",
   "state": "disabled",
   "deletedDateTime": null,
@@ -60,8 +60,8 @@
       "includeGroups": [],
       "excludeGroups@odata.type": "#Collection(String)",
       "excludeGroups": [
-        "9f027ad8-042b-4c85-9727-9008f6851597",
-        "24ce71a0-a35c-4d76-b473-98deae1de32b"
+        "3b759791-ff9b-4190-8271-add271145392",
+        "d4c25070-8cc9-4459-a2ad-b005f7420a4e"
       ],
       "includeRoles@odata.type": "#Collection(String)",
       "includeRoles": [],
@@ -102,8 +102,7 @@
         "f28a1f50-f6e7-4571-818b-6a12f2af6b6c",
         "fe930be7-5e62-47db-91af-98c3a49a38b1",
         "a92aed5d-d78a-4d16-b381-09adb37eb3b0",
-        "d29b2b05-8046-44ba-8758-1e26182fcf32",
-        "69091246-20e8-4a56-aa4d-066075b2a7a8"
+        "d29b2b05-8046-44ba-8758-1e26182fcf32"
       ],
       "includeGuestsOrExternalUsers": null,
       "excludeGuestsOrExternalUsers": {
@@ -138,13 +137,13 @@
     "customAuthenticationFactors": [],
     "termsOfUse@odata.type": "#Collection(String)",
     "termsOfUse": [],
-    "authenticationStrength@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies('b6ed4c3f-1d0c-41b8-bd51-e14a63198c68')/grantControls/authenticationStrength/$entity",
-    "authenticationStrength@odata.associationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('b6ed4c3f-1d0c-41b8-bd51-e14a63198c68')/grantControls/authenticationStrength/$ref",
-    "authenticationStrength@odata.navigationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('b6ed4c3f-1d0c-41b8-bd51-e14a63198c68')/grantControls/authenticationStrength",
+    "authenticationStrength@odata.context": "https://graph.microsoft.com/beta/$metadata#identity/conditionalAccess/policies('c202bd4a-c35e-42e5-a356-26baf72af874')/grantControls/authenticationStrength/$entity",
+    "authenticationStrength@odata.associationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('c202bd4a-c35e-42e5-a356-26baf72af874')/grantControls/authenticationStrength/$ref",
+    "authenticationStrength@odata.navigationLink": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('c202bd4a-c35e-42e5-a356-26baf72af874')/grantControls/authenticationStrength",
     "authenticationStrength": null
   },
   "#microsoft.graph.restore": {
     "title": "microsoft.graph.restore",
-    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('b6ed4c3f-1d0c-41b8-bd51-e14a63198c68')/microsoft.graph.restore"
+    "target": "https://graph.microsoft.com/beta/identity/conditionalAccess/policies('c202bd4a-c35e-42e5-a356-26baf72af874')/microsoft.graph.restore"
   }
 }
