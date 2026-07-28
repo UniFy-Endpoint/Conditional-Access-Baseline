@@ -45,6 +45,8 @@ $script:KnownAppNames = @{
     'a0e84e36-b067-4d5c-ab4a-3db38e598ae2' = 'MicrosoftDefenderATP XPlat'
     'e724aa31-0f56-4018-b8be-f8cb82ca1196' = 'Microsoft Defender for Mobile TVM'
     'a4f2693f-129c-4b96-982b-2c364b8314d7' = 'Edge Sync'
+    '7eadcef8-456d-4611-9480-4fff72b8b9e2' = 'Microsoft Account Controls V2'
+    '6aa00308-ea33-4caa-90d6-ae905d8cb51b' = 'Microsoft Authenticator Credential Registration'
 }
 
 # App IDs that are only present when Global Secure Access (Entra Suite) is provisioned.
@@ -2353,7 +2355,7 @@ function Restore-SinglePolicy {
         Write-Host "  [CREATED — DISABLED]" -ForegroundColor Green
         if ($reusedGroups.Count -gt 0) {
             $grpNoun = if ($reusedGroups.Count -eq 1) { 'group' } else { 'groups' }
-            Write-Host "    ! Exclusion $grpNoun already existed in tenant and was reused — it was not deleted when the policy was removed." -ForegroundColor Yellow
+            Write-Log -Message "Policy '$displayName' reused $($reusedGroups.Count) existing exclusion $grpNoun; reused groups are not deleted if policy creation fails or is removed."
         }
         return 'created'
     }

@@ -428,6 +428,22 @@
       "Type": "ServicePrincipal"
     },
     {
+      "DisplayName": "Microsoft Account Controls V2",
+      "Id": null,
+      "AppId": "7eadcef8-456d-4611-9480-4fff72b8b9e2",
+      "PolicyReferenceId": "7eadcef8-456d-4611-9480-4fff72b8b9e2",
+      "ReferenceKind": "AppId",
+      "Type": "ServicePrincipal"
+    },
+    {
+      "DisplayName": "Microsoft Authenticator Credential Registration",
+      "Id": null,
+      "AppId": "6aa00308-ea33-4caa-90d6-ae905d8cb51b",
+      "PolicyReferenceId": "6aa00308-ea33-4caa-90d6-ae905d8cb51b",
+      "ReferenceKind": "AppId",
+      "Type": "ServicePrincipal"
+    },
+    {
       "DisplayName": "Device Registration Service",
       "Id": null,
       "AppId": "01cb2876-7ebd-4aa4-9cc9-d28bd4d359a9",
