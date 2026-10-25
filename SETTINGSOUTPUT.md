@@ -1,1616 +1,787 @@
 # Conditional Access Baseline - Policy Configuration Reference
 
-Generated from the repository JSON inventory on **June 25, 2026**.
+Baseline **v1.5.0**. Generated from the repository JSON on **October 25, 2026**.
 
 | Metric | Value |
 | :--- | :--- |
-| Policies | 54 |
-| Security groups | 49 |
-| Custom authentication strengths | 1 |
-| Named locations | 3 |
-| Administrator role standard | 35 roles |
-| Disabled policies | 54 |
+| Core policies (Microsoft 365 Business Premium / Entra ID P1) | 29 |
+| Add-on policies (13 extra licences + optional CA211 Linux) | 14 |
+| Security groups | 39 |
+| Administrator role standard | 40 roles (35 Microsoft privileged + Exchange, SharePoint, Teams, Billing, Groups Administrator) |
 
-## Summary
+## Core pack: 29 policies (Microsoft 365 Business Premium)
 
-| ID | Policy | Audience | Resources | Grant | Session | State |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| CA001 | `CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block` | Workforce users | All | block | None | Disabled |
-| CA002 | `CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block` | Workforce users | All | block | None | Disabled |
-| CA003 | `CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block` | Workforce users | All | block | None | Disabled |
-| CA004 | `CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block` | Workforce users | All | block | None | Disabled |
-| CA005 | `CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA` | Workforce users | Any / none | mfa | None | Disabled |
-| CA006 | `CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA` | Workforce users | Any / none | Authentication strength: Temp Access Pass - Strength | None | Disabled |
-| CA007 | `CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block` | Workforce users | All | block | None | Disabled |
-| CA101 | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Administrators (35 roles) | All | mfa | None | Disabled |
-| CA102 | `CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA` | Administrators (35 roles) | All | Authentication strength: Passwordless MFA | None | Disabled |
-| CA103 | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA` | Administrators (35 roles) | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
-| CA104 | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess` | Administrators (35 roles) | All | Session controls only | Sign-in frequency: 8 hours; Persistent browser: never | Disabled |
-| CA105 | `CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval` | Administrators (35 roles) | All | Session controls only | CAE: strictLocation | Disabled |
-| CA106 | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid` | Administrators (35 roles) | All | compliantDevice OR domainJoinedDevice | None | Disabled |
-| CA201 | `CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Workforce users | All | mfa | None | Disabled |
-| CA202 | `CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA` | Workforce users | All | Authentication strength: Passwordless MFA | None | Disabled |
-| CA203 | `CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA` | Workforce users | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
-| CA204 | `CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Workforce users | MicrosoftAdminPortals, Azure Resource Manager (797f4846-ba00-4fd7-ba43-dac1f8f63013) | block | None | Disabled |
-| CA205 | `CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrq-PrstSess` | Workforce users | All | Session controls only | Sign-in frequency: 12 hours; Persistent browser: never | Disabled |
-| CA206 | `CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval` | Workforce users | All | Session controls only | CAE: strictLocation | Disabled |
-| CA207 | `CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice OR domainJoinedDevice | None | Disabled |
-| CA208 | `CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
-| CA209 | `CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
-| CA210 | `CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
-| CA211 | `CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Workforce users | All | compliantDevice | None | Disabled |
-| CA212 | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
-| CA213 | `CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
-| CA214 | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl` | Workforce users | All cloud apps | compliantApplication | Defender for Cloud Apps: blockDownloads | Disabled |
-| CA215 | `CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl` | Workforce users | All cloud apps | Session controls only | Application-enforced restrictions; Defender for Cloud Apps: blockDownloads | Disabled |
-| CA216 | `CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
-| CA217 | `CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys` | Workforce users | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) | mfa | Sign-in frequency: every time | Disabled |
-| CA218 | `CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt` | Workforce users | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe) | Session controls only | Token protection | Disabled |
-| CA301 | `CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Targeted group | All | Authentication strength: Phishing-resistant MFA | None | Disabled |
-| CA302 | `CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block` | Targeted group | All | block | None | Disabled |
-| CA303 | `CA303-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval` | Targeted group | All | Session controls only | CAE: strictLocation | Disabled |
-| CA401 | `CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Guests/external users | All | mfa | None | Disabled |
-| CA402 | `CA402-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block` | Guests/external users | All | block | None | Disabled |
-| CA403 | `CA403-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Guests/external users | Azure Resource Manager (797f4846-ba00-4fd7-ba43-dac1f8f63013), MicrosoftAdminPortals | block | None | Disabled |
-| CA404 | `CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess` | Guests/external users | All | Session controls only | Sign-in frequency: 4 hours; Persistent browser: never | Disabled |
-| CA405 | `CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr` | Guests/external users | Office365 | Session controls only | Application-enforced restrictions | Disabled |
-| CA406 | `CA406-GST-AllApps-AnyOS-ModernCli-AnyLoc-ContAccEval` | Guests/external users | All | Session controls only | CAE: strictLocation | Disabled |
-| CA501 | `CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishMFA` | Workforce users | All | Authentication strength: Phishing-resistant MFA | Sign-in frequency: every time | Disabled |
-| CA502 | `CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemed` | Workforce users | All | riskRemediation AND Authentication strength: Passwordless MFA | Sign-in frequency: every time | Disabled |
-| CA503 | `CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block` | Workforce users | All | block | None | Disabled |
-| CA504 | `CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA` | Workforce users | All | Authentication strength: Phishing-resistant MFA | Sign-in frequency: every time | Disabled |
-| CA505 | `CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed` | Workforce users | All | riskRemediation AND Authentication strength: Passwordless MFA | Sign-in frequency: every time | Disabled |
-| CA601 | `CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block` | Agent identities | All | block | None | Disabled |
-| CA602 | `CA602-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Scoped identities | All | compliantDevice | None | Disabled |
-| CA603 | `CA603-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Agent identities | All | block | None | Disabled |
-| CA604 | `CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Scoped identities | All | block | None | Disabled |
-| CA701 | `CA701-WLI-AllApps-AnyLoc-WorkloadRiskHigh-Block` | Workload identities | All | block | None | Disabled |
-| CA702 | `CA702-WLI-AllApps-AnyLoc-UntrustedNetwork-Block` | Workload identities | All | block | None | Disabled |
-| CA801 | `CA801-GSA-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Scoped identities | AllAgentIdResources | block | None | Disabled |
-| CA802 | `CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant` | All users | All internet resources with Global Secure Access | mfa OR compliantDevice OR domainJoinedDevice | None | Disabled |
-| CA803 | `CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant` | All users | Private Access enterprise app placeholder | mfa OR compliantDevice OR domainJoinedDevice | None | Disabled |
+### Essential (10): low user impact, deploy first
 
-## Administrator Scope
+| ID | Policy | What it does | Recommended first step |
+| :--- | :--- | :--- | :--- |
+| CA001 | `CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block` | Block sign-ins from countries outside Allowed Countries | Report-only |
+| CA002 | `CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block` | Block unsupported or unknown device platforms, Linux included | Report-only |
+| CA003 | `CA003-GLB-AllApps-AnyOS-LegacyAuth-AnyLoc-Block` | Block legacy authentication protocols | Report-only |
+| CA004 | `CA004-GLB-AllApps-AnyOS-AnyCli-DevCodeAuthTransf-Block` | Block device code flow and authentication transfer | Report-only |
+| CA005 | `CA005-GLB-RegDevSecInfo-AnyOS-AnyCli-AnyLoc-ReqTAPorMFA` | Require strong authentication (Temporary Access Pass strength) to register or join devices and to register security information | Off until agreed |
+| CA101 | `CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Require MFA for administrators | Report-only |
+| CA201 | `CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Require MFA for all members (guests are covered by CA301) | Report-only |
+| CA204 | `CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block` | Block admin portals for non-administrator users and guests (service provider users excluded) | Report-only |
+| CA301 | `CA301-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA` | Require MFA for guests and external users | Report-only |
+| CA401 | `CA401-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block` | Restrict interactive service accounts to allowed countries | Off until agreed |
 
-CA101, CA102, CA103, CA104, CA105, and CA106 target the identical 35-role standard. CA201–CA215 exclude that full 35-role standard plus two directory-synchronization/service-role exceptions. CA216, CA217, and CA218 exclude only the two synchronization/service-role roles because their controls are unique and must continue to protect administrators. GLB policies exclude the same two service roles plus the emergency-access and dedicated exception groups.
+### Hardening (19): agree with the customer before enabling
 
-## Policy Details
+| ID | Policy | What it does | Recommended first step |
+| :--- | :--- | :--- | :--- |
+| CA009 | `CA009-GLB-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval` | Continuous access evaluation (strict location) for users and administrators | Off until agreed |
+| CA103 | `CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResMFA` | Require phishing-resistant MFA for administrators | Off until agreed |
+| CA104 | `CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess` | Administrator sign-in frequency 12 hours, no persistent browser | Off until agreed |
+| CA106 | `CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid` | Require compliant or hybrid-joined device for administrators | Off until agreed |
+| CA203 | `CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA` | Require passwordless MFA for users (raise to phishing-resistant when ready) | Off until agreed |
+| CA205 | `CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrqPersistSess` | Sign-in frequency 12 hours, no persistent browser on unmanaged browsers | Off until agreed |
+| CA207 | `CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant` | Require compliant or hybrid-joined Windows device | Off until agreed |
+| CA208 | `CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant` | Require compliant macOS device | Off until agreed |
+| CA209 | `CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant` | Require compliant iOS device | Off until agreed |
+| CA210 | `CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant` | Require compliant Android device | Off until agreed |
+| CA212 | `CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect` | Require app protection for browsers on unmanaged Windows devices | Off until agreed |
+| CA213 | `CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect` | Require app protection for Android on personal devices | Off until agreed |
+| CA214 | `CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect` | Require app protection for iOS on personal devices | Off until agreed |
+| CA215 | `CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr` | Application-enforced restrictions for browsers on unmanaged macOS | Off until agreed |
+| CA216 | `CA216-USR-M365-WinMac-Desktop-AnyLoc-ReqTokenProt` | Token protection for Windows and macOS desktop apps | Off until agreed |
+| CA217 | `CA217-USR-IntuEnrl-AnyOS-AnyCli-AnyLoc-ReqMFA-Always` | Require MFA every time for Intune enrollment | Off until agreed |
+| CA302 | `CA302-GST-AllowedApps-AnyOS-ModernCli-AnyLoc-Block` | Block guests from all apps except the allowed list | Report-only |
+| CA303 | `CA303-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess` | Guest sign-in frequency 4 hours, no persistent browser | Off until agreed |
+| CA304 | `CA304-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr` | Application-enforced restrictions for guests in the browser | Off until agreed |
+
+## Add-on pack: 14 policies (extra licence required, except CA211)
+
+| ID | Policy | What it does | Licence |
+| :--- | :--- | :--- | :--- |
+| CA211 | `CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant` | Require compliant Linux device (Microsoft Edge) for users exempted from CA002 | Intune (no extra licence) |
+| CA219 | `CA219-USR-O365-AnyOS-Browser-BYOD-AppCtrl-BlockDownloads` | Block downloads on unmanaged browsers (Defender for Cloud Apps) | Defender for Cloud Apps |
+| CA501 | `CA501-IDP-AllApps-AnyOS-AnyCli-SignInRisk-ReqPhishResMFA` | Phishing-resistant MFA on medium and high sign-in risk | Entra ID P2 |
+| CA502 | `CA502-IDP-AllApps-AnyOS-AnyCli-UserRisk-ReqRiskRemed` | Risk remediation and passwordless MFA on medium and high user risk | Entra ID P2 |
+| CA503 | `CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block` | Block elevated insider risk | Entra ID P2 + Purview Insider Risk |
+| CA601 | `CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-Block` | Block agent identities that are not approved | Agent 365 / M365 E7 |
+| CA602 | `CA602-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant` | Require compliant device for agent users | Agent 365 / M365 E7 |
+| CA603 | `CA603-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Block risky agent identities | Entra ID P2 |
+| CA604 | `CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block` | Block risky agent users | Entra ID P2 |
+| CA701 | `CA701-WLI-AllApps-AnyLoc-WorkloadRiskHigh-Block` | Block high-risk workload identities | Workload ID Premium |
+| CA702 | `CA702-WLI-AllApps-AnyLoc-UntrustedNetwork-Block` | Block workload identities from untrusted networks | Workload ID Premium |
+| CA801 | `CA801-GSA-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block` | Block agent users outside the compliant network | Agent 365 / M365 E7 |
+| CA802 | `CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant` | Require MFA or managed device for internet access (Global Secure Access) | Entra Suite (Internet Access) |
+| CA803 | `CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant` | Require MFA or managed device for private access (Global Secure Access) | Entra Suite (Private Access) |
+
+> **Deployment state:** every policy is deployed **Off**, by the PowerShell script and by other tooling alike. The *Recommended first step* column is guidance: after the customer conversation, set each policy to Report-only, On or keep it Off. Add-on policies need the listed licence first.
+
+## Policy details
 
 ### CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `8687d337-92c7-404e-912b-febb2a2fb410` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL (abd4c0ac-aaaa-4683-827a-e326873dd454) |
-| Include roles | None |
-| Exclude roles | 2 roles (directory-synchronization/service-role exceptions) |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL |
+| Excluded directory roles | Directory Synchronization Accounts |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | All |
-| Locations exclude | Allowed Countries (10725f98-e039-43b4-9084-ae8e9450d3fe) |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | all |
+| Locations | incl: Any location; excl: Allowed Countries |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL |
 
 ### CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `85158d6b-e42c-480b-bce3-10f569eaf4ca` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block-EXCL (b81ebc29-66cf-4e69-8bf7-7604f797b08a), CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597) |
-| Include roles | None |
-| Exclude roles | 2 roles (directory-synchronization/service-role exceptions) |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | all except android, iOS, windows, macOS, linux (fires on other/unknown platforms only) |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block-EXCL, CA000-GLB-BGA-EmergencyAccess-Admins-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Platforms | all (excl: android,iOS,windows,macOS) |
+| Client apps | all |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | CA002-GLB-AllApps-AnyOS-AnyCli-UnsupportedOS-Block-EXCL |
 
-### CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block
+### CA003-GLB-AllApps-AnyOS-LegacyAuth-AnyLoc-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `2440a1db-13c3-4465-8634-02895b031486` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block-EXCL (a90133c8-9a64-47b4-bd50-3bc45556a0bf) |
-| Include roles | None |
-| Exclude roles | 2 roles (directory-synchronization/service-role exceptions) |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | exchangeActiveSync, other |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA003-GLB-AllApps-AnyOS-LegacyAuth-AnyLoc-Block-EXCL |
+| Excluded directory roles | Directory Synchronization Accounts |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | exchangeActiveSync,other |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block-EXCL |
 
-### CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block
+### CA004-GLB-AllApps-AnyOS-AnyCli-DevCodeAuthTransf-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `84db64ec-b24e-4d21-ba98-37ef4ff2fcfd` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL (0813d74d-094c-4677-b4f4-9d8bec4c3b35) |
-| Include roles | None |
-| Exclude roles | 2 roles (directory-synchronization/service-role exceptions) |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA004-GLB-AllApps-AnyOS-AnyCli-DevCodeAuthTransf-Block-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Authentication flow | deviceCodeFlow |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | all |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL |
 
-### CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA
+### CA005-GLB-RegDevSecInfo-AnyOS-AnyCli-AnyLoc-ReqTAPorMFA
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `cca1efbd-cddb-4c3c-b393-7b1b9ff13787` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (e0a3310d-fd7b-42ec-9a6e-6fc064f02358) |
-| Include roles | None |
-| Exclude roles | 2 roles |
-| Guest/external scope | Not configured |
-| Include resources | Any / none |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | mfa |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA005-GLB-RegDevSecInfo-AnyOS-AnyCli-AnyLoc-ReqTAPorMFA-EXCL |
+| Excluded directory roles | None |
+| Resources | User action: urn:user:registerdevice, User action: urn:user:registersecurityinfo |
+| Platforms |  |
+| Client apps | all |
+| Grant | Auth strength: Temp Access Pass - Strength |
 | Session | None |
-| Dedicated EXCL | CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
 
-### CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `d0bd7a4c-7428-40fa-a44b-0db4dd387e58` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA-EXCL (6a1fd238-bfef-470e-be4d-813bd29cf80e), CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597) |
-| Include roles | None |
-| Exclude roles | 2 roles (directory-synchronization/service-role exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | Any / none |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Authentication strength: Temp Access Pass - Strength |
-| Session | None |
-| Dedicated EXCL | CA006-GLB-SecInfoReg-AnyOS-AnyCli-AnyLoc-ReqAuthStrMFA-EXCL |
-
-### CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block
+### CA009-GLB-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA007PolicyId%` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block-EXCL (%CA007ExclGroupId%) |
-| Include roles | None |
-| Exclude roles | 2 roles (directory-synchronization/service-role exceptions) |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA009-GLB-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL |
+| Excluded directory roles | Directory Synchronization Accounts |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Authentication flow | authenticationTransfer |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | block |
-| Session | None |
-| Dedicated EXCL | CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block-EXCL |
+| Client apps | all |
+| Grant | None |
+| Session | CAE: strictLocation |
 
 ### CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA101ReqMFAId%` |
-| State | Disabled |
-| Audience | Administrators (35 roles) |
-| Include users | Any / none |
-| Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (%CA101ExclGroupId%) |
-| Include roles | 35 roles |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | 40 admin roles |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
 | Grant | mfa |
 | Session | None |
-| Dedicated EXCL | CA101-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
 
-### CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA
+### CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResMFA
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA102PolicyId%` |
-| State | Disabled |
-| Audience | Administrators (35 roles) |
-| Include users | Any / none |
-| Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL (%CA102ExclGroupId%) |
-| Include roles | 35 roles |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Authentication strength: Passwordless MFA |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | 40 admin roles |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResMFA-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
+| Grant | Auth strength: Phishing-resistant MFA |
 | Session | None |
-| Dedicated EXCL | CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL |
 
-### CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `3e7161c6-61f6-48e4-a12c-0b1a80285bcd` |
-| State | Disabled |
-| Audience | Administrators (35 roles) |
-| Include users | Any / none |
-| Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL (7b32cf4c-58c1-4fe8-9547-983e4d57a098) |
-| Include roles | 35 roles |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Authentication strength: Phishing-resistant MFA |
-| Session | None |
-| Dedicated EXCL | CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL |
-
-### CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess
+### CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `4fc32cfa-e7f3-4bf5-b0c1-d9cf03727a0a` |
-| State | Disabled |
-| Audience | Administrators (35 roles) |
-| Include users | Any / none |
-| Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL (9c00db91-443d-403d-aa57-a936717a05a8) |
-| Include roles | 35 roles |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | 40 admin roles |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | Sign-in frequency: 8 hours; Persistent browser: never |
-| Dedicated EXCL | CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL |
-
-### CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `fd8ebdac-ccee-4867-b616-62321f6f7954` |
-| State | Disabled |
-| Audience | Administrators (35 roles) |
-| Include users | Any / none |
-| Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL (a570fe91-63a6-40f4-ae55-aecef9ffa324) |
-| Include roles | 35 roles |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | CAE: strictLocation |
-| Dedicated EXCL | CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL |
+| Client apps | all |
+| Grant | None |
+| Session | Sign-in frequency: 12 hours; Persistent browser: never |
 
 ### CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `49466c67-e8bb-4e0c-a50e-694579314365` |
-| State | Disabled |
-| Audience | Administrators (35 roles) |
-| Include users | Any / none |
-| Include groups | None |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid-EXCL (a247a2a0-0a3d-47cb-83c3-df185d806f8d) |
-| Include roles | 35 roles |
-| Exclude roles | 2 roles |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | 40 admin roles |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid-EXCL, CA000-GLB-ADM-ServiceProvider-Admins-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | all |
 | Grant | compliantDevice OR domainJoinedDevice |
 | Session | None |
-| Dedicated EXCL | CA106-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqComplOrHybrid-EXCL |
 
 ### CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `781877d1-c270-42e2-8508-bc15941143d9` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (3f9c97fb-8087-4992-b912-bfc471201a59) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) + Directory Synchronization Accounts |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | all |
 | Grant | mfa |
 | Session | None |
-| Dedicated EXCL | CA201-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
 
-### CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `61270a8f-8f28-4129-84e1-e7edc9a6cce1` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA-EXCL (1444d9a4-a764-4127-a1f9-716342cb904b) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | browser, mobileAppsAndDesktopClients |
-| Platforms | all |
-| Locations include | All |
-| Locations exclude | Allowed Countries (10725f98-e039-43b4-9084-ae8e9450d3fe) |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Authentication strength: Passwordless MFA |
-| Session | None |
-| Dedicated EXCL | CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA-EXCL |
-
-### CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA
+### CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA203PolicyId%` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL (%CA203ExclGroupId%) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) + Directory Synchronization Accounts |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Authentication strength: Phishing-resistant MFA |
+| Client apps | all |
+| Grant | Auth strength: Passwordless MFA |
 | Session | None |
-| Dedicated EXCL | CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL |
 
 ### CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `0e8ae394-ca86-4604-8380-bc851c5fce45` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL (5273dd03-b602-4a55-b42a-7d8819ea3a0c) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | MicrosoftAdminPortals, Azure Resource Manager (797f4846-ba00-4fd7-ba43-dac1f8f63013) |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) |
+| Resources | Microsoft Admin Portals, Azure Resource Manager |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | all |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | CA204-USR-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL |
 
-### CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrq-PrstSess
+### CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrqPersistSess
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `9ce96145-e024-4bdd-a276-9e44b74d52db` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrq-PrstSess-EXCL (8d1356e9-235c-4fb3-85ff-b6f6fd33639f) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | browser |
-| Platforms | windows, macOS, iOS, android, linux |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `exclude: device.deviceOwnership -eq "Company" -or device.isCompliant -eq True` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrqPersistSess-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) |
+| Resources | All resources |
+| Platforms | windows,macOS,iOS,android,linux |
+| Client apps | browser |
+| Device filter | exclude: device.deviceOwnership -eq "Company" -or device.isCompliant -eq True |
+| Grant | None |
 | Session | Sign-in frequency: 12 hours; Persistent browser: never |
-| Dedicated EXCL | CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrq-PrstSess-EXCL |
-
-### CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `4a88f697-7be4-4896-a37b-db1f6c3bc608` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL (18fa41d2-7057-43bc-a7dc-b319f0ae6606) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | CAE: strictLocation |
-| Dedicated EXCL | CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL |
 
 ### CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `7174872c-ef9f-45a5-9ed8-4203183ff5c3` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL (c489e3e2-1bd0-4bce-b070-4f3ab23c8a9b) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Edge Sync (a4f2693f-129c-4b96-982b-2c364b8314d7), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Microsoft Intune (0000000a-0000-0000-c000-000000000000), Windows Cloud Login (270efc09-cd0d-444b-a71f-39af4910ec45), Microsoft Activity Feed Service (d32c68ad-72d2-4acb-a0c7-46bb2cf93873), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000) |
-| Client app types | mobileAppsAndDesktopClients |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) + Directory Synchronization Accounts |
+| Resources | All resources |
+| Excluded resources | Microsoft Intune Enrollment, Microsoft Intune, Microsoft App Access Panel, Windows Store for Business, Windows Cloud Login, Microsoft Activity Feed Service, Microsoft Rights Management Services |
 | Platforms | windows |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | mobileAppsAndDesktopClients |
 | Grant | compliantDevice OR domainJoinedDevice |
 | Session | None |
-| Dedicated EXCL | CA207-USR-AllApps-Win-Desktop-AnyLoc-ReqCompliant-EXCL |
 
 ### CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `697c223d-7239-4fd2-a05d-0391ee969792` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL (c1b9fdaf-ebc0-456c-acd0-c6d2fac10f1e) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Edge Sync (a4f2693f-129c-4b96-982b-2c364b8314d7), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c), Microsoft Intune (0000000a-0000-0000-c000-000000000000), Windows Cloud Login (270efc09-cd0d-444b-a71f-39af4910ec45), Microsoft Activity Feed Service (d32c68ad-72d2-4acb-a0c7-46bb2cf93873), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000) |
-| Client app types | mobileAppsAndDesktopClients |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) + Directory Synchronization Accounts |
+| Resources | All resources |
+| Excluded resources | Microsoft Intune Enrollment, Microsoft Intune, Windows Cloud Login, Microsoft Activity Feed Service, Microsoft Rights Management Services |
 | Platforms | macOS |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | mobileAppsAndDesktopClients |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA208-USR-AllApps-macOS-Desktop-AnyLoc-ReqCompliant-EXCL |
 
 ### CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `80773c8f-9409-4924-91bb-676e0bc0d86d` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant-EXCL (dd68178f-b5b1-45c3-be04-304ad8b5c91a) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
-| Client app types | all |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) + Directory Synchronization Accounts |
+| Resources | All resources |
+| Excluded resources | Microsoft Intune, Microsoft Intune Enrollment |
 | Platforms | iOS |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `include: device.mdmAppId -eq "0000000a-0000-0000-c000-000000000000"` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | all |
+| Device filter | include: device.mdmAppId -eq "0000000a-0000-0000-c000-000000000000" |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant-EXCL |
 
 ### CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `8e32fb97-8ef0-4198-9f8b-5e77cbe222c2` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant-EXCL (1bed65eb-3c26-449e-bb1d-eb61e193de9e) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
-| Client app types | all |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) + Directory Synchronization Accounts |
+| Resources | All resources |
+| Excluded resources | Microsoft Intune, Microsoft Intune Enrollment |
 | Platforms | android |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `include: device.mdmAppId -eq "0000000a-0000-0000-c000-000000000000"` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | all |
+| Device filter | include: device.mdmAppId -eq "0000000a-0000-0000-c000-000000000000" |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA210-USR-AllApps-Android-AnyCli-AnyLoc-ReqCompliant-EXCL |
+
+### CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect
+
+| Property | Configuration |
+| :--- | :--- |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) |
+| Resources | Office 365 (app group) |
+| Platforms | windows |
+| Client apps | browser |
+| Device filter | include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -and device.isCompliant -ne True |
+| Grant | compliantApplication |
+| Session | None |
+
+### CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect
+
+| Property | Configuration |
+| :--- | :--- |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) |
+| Resources | All resources |
+| Excluded resources | Azure Credential Configuration Endpoint Service, Microsoft App Access Panel, Microsoft Intune, Windows Azure Active Directory, Microsoft Intune Enrollment, Microsoft Authenticator Credential Registration |
+| Platforms | android |
+| Client apps | browser,mobileAppsAndDesktopClients |
+| Device filter | include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -or device.deviceOwnership -eq "Personal" |
+| Grant | compliantApplication |
+| Session | None |
+
+### CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect
+
+| Property | Configuration |
+| :--- | :--- |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) |
+| Resources | All resources |
+| Excluded resources | Azure Credential Configuration Endpoint Service, Microsoft App Access Panel, Microsoft Intune, Windows Azure Active Directory, Microsoft Intune Enrollment, Microsoft Authenticator Credential Registration |
+| Platforms | iOS |
+| Client apps | browser,mobileAppsAndDesktopClients |
+| Device filter | include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -or device.deviceOwnership -eq "Personal" |
+| Grant | compliantApplication |
+| Session | None |
+
+### CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr
+
+| Property | Configuration |
+| :--- | :--- |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) |
+| Resources | All resources |
+| Platforms | macOS |
+| Client apps | browser |
+| Device filter | include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -and device.isCompliant -ne True |
+| Grant | None |
+| Session | App-enforced restrictions |
+
+### CA216-USR-M365-WinMac-Desktop-AnyLoc-ReqTokenProt
+
+| Property | Configuration |
+| :--- | :--- |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA216-USR-M365-WinMac-Desktop-AnyLoc-ReqTokenProt-EXCL, CA000-GLB-ADM-ServiceProvider-Admins-EXCL |
+| Excluded directory roles | None |
+| Resources | Office 365 Exchange Online, Office 365 SharePoint Online, Microsoft Teams Services |
+| Platforms | windows,macOS |
+| Client apps | mobileAppsAndDesktopClients |
+| Grant | None |
+| Session | Token protection |
+
+### CA217-USR-IntuEnrl-AnyOS-AnyCli-AnyLoc-ReqMFA-Always
+
+| Property | Configuration |
+| :--- | :--- |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA217-USR-IntuEnrl-AnyOS-AnyCli-AnyLoc-ReqMFA-Always-EXCL |
+| Excluded directory roles | None |
+| Resources | Microsoft Intune Enrollment |
+| Platforms |  |
+| Client apps | all |
+| Grant | mfa |
+| Session | Sign-in frequency: every time |
 
 ### CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `b6ed4c3f-1d0c-41b8-bd51-e14a63198c68` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL (24ce71a0-a35c-4d76-b473-98deae1de32b) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
-| Client app types | all |
+| Pack | Add-on (optional) |
+| Deployed state | Off |
+| Licence | Intune (no extra licence) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) + Directory Synchronization Accounts |
+| Resources | All resources |
+| Excluded resources | Microsoft Intune, Microsoft Intune Enrollment |
 | Platforms | linux |
-| Locations include | Any |
-| Locations exclude | None |
+| Client apps | all |
 | Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | CA211-USR-AllApps-Linux-AnyCli-AnyLoc-ReqCompliant-EXCL |
 
-### CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `0293b8bd-ce33-4fc6-a2ee-c8a8089c3110` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL (236772fa-5f88-4345-8de1-e6b2b6cc0c8b) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All cloud apps |
-| Exclude resources | Any / none |
-| Client app types | browser |
-| Platforms | windows |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -and device.isCompliant -ne True` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | compliantApplication |
-| Session | Defender for Cloud Apps: blockDownloads |
-| Dedicated EXCL | CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL |
-
-### CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl
+### CA219-USR-O365-AnyOS-Browser-BYOD-AppCtrl-BlockDownloads
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `bb19b550-319f-4edf-9122-0ddee34694c8` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL (f69eda77-f120-4ffb-beba-fce593e90119) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All cloud apps |
-| Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
-| Client app types | mobileAppsAndDesktopClients, browser |
-| Platforms | android |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `exclude: device.mdmAppId -eq "0000000a-0000-0000-c000-000000000000"` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | compliantApplication |
-| Session | Defender for Cloud Apps: blockDownloads |
-| Dedicated EXCL | CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL |
-
-### CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `1ece068a-9766-4626-ac17-afc7262ad15d` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL (b61afe3a-c7b2-4ce0-9dc7-cbc4176bb912) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All cloud apps |
-| Exclude resources | Microsoft Intune (0000000a-0000-0000-c000-000000000000), Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
-| Client app types | mobileAppsAndDesktopClients, browser |
-| Platforms | iOS |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `exclude: device.mdmAppId -eq "0000000a-0000-0000-c000-000000000000"` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | compliantApplication |
-| Session | Defender for Cloud Apps: blockDownloads |
-| Dedicated EXCL | CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL |
-
-### CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `bd42493a-8e90-4f7b-bdcf-5d80a4c0dd19` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl-EXCL (6f0d26b1-8c5d-4c4a-9a77-5b3e2f8416d9) |
-| Include roles | None |
-| Exclude roles | 37 roles (35-role standard plus 2 directory-synchronization exceptions) |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All cloud apps |
-| Exclude resources | Any / none |
-| Client app types | browser |
-| Platforms | macOS |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | `include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -and device.isCompliant -ne True` |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | Application-enforced restrictions; Defender for Cloud Apps: blockDownloads |
-| Dedicated EXCL | CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl-EXCL |
-
-### CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `98768fd6-bd6d-42d7-8d97-a98299a96b67` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt-EXCL (fb64ed78-b96f-4cc8-9eaf-6f1999c2c80b) |
-| Include roles | None |
-| Exclude roles | 2 roles |
-| Guest/external scope | Explicitly excluded |
-| Include resources | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe), Azure Virtual Desktop (9cdead84-a844-4324-93f2-b2e6bb768d07), Windows 365 (0af06dc6-e4b5-4f28-818e-e78e62d137a5) |
-| Exclude resources | Any / none |
-| Client app types | mobileAppsAndDesktopClients |
-| Platforms | windows |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | Token protection |
-| Dedicated EXCL | CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt-EXCL |
-
-### CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA217PolicyId%` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL (%CA217ExclGroupId%) |
-| Include roles | None |
-| Exclude roles | 2 roles |
-| Guest/external scope | Explicitly excluded |
-| Include resources | Microsoft Intune Enrollment (d4ebce55-015a-49b5-a083-c84d1797ae8c) |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | mfa |
-| Session | Sign-in frequency: every time |
-| Dedicated EXCL | CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL |
-
-### CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `6c2b97ef-5c14-43f5-9d26-0d946b1c50ef` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt-EXCL (f5f17fee-8aed-429d-ab88-86c7ba96fa40) |
-| Include roles | None |
-| Exclude roles | 2 roles |
-| Guest/external scope | Explicitly excluded |
-| Include resources | Office 365 Exchange Online (00000002-0000-0ff1-ce00-000000000000), Office 365 SharePoint Online (00000003-0000-0ff1-ce00-000000000000), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe), Azure Virtual Desktop (9cdead84-a844-4324-93f2-b2e6bb768d07), Windows 365 (0af06dc6-e4b5-4f28-818e-e78e62d137a5) |
-| Exclude resources | Any / none |
-| Client app types | mobileAppsAndDesktopClients |
-| Platforms | macOS |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | Token protection |
-| Dedicated EXCL | CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt-EXCL |
-
-### CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA301PolicyId%` |
-| State | Disabled |
-| Audience | Targeted group |
-| Include users | Any / none |
-| Include groups | CA-SVC-IntSvcAcc-ServiceAccounts (%ServiceAccountsGroupId%) |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (%CA301ExclGroupId%) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Authentication strength: Phishing-resistant MFA |
-| Session | None |
-| Dedicated EXCL | CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
-
-### CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA302PolicyId%` |
-| State | Disabled |
-| Audience | Targeted group |
-| Include users | Any / none |
-| Include groups | CA-SVC-IntSvcAcc-ServiceAccounts (%ServiceAccountsGroupId%) |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL (%CA302ExclGroupId%) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | All |
-| Locations exclude | Allowed Countries - Service Accounts (%SvcCountryLocationId%) |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | block |
-| Session | None |
-| Dedicated EXCL | CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL |
-
-### CA303-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA303PolicyId%` |
-| State | Disabled |
-| Audience | Targeted group |
-| Include users | Any / none |
-| Include groups | CA-SVC-IntSvcAcc-ServiceAccounts (%ServiceAccountsGroupId%) |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA303-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL (%CA303ExclGroupId%) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Defender for Cloud Apps |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA219-USR-O365-AnyOS-Browser-BYOD-AppCtrl-BlockDownloads-EXCL |
+| Excluded directory roles | 40 admin roles (standard list) |
+| Resources | Office 365 (app group) |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | CAE: strictLocation |
-| Dedicated EXCL | CA303-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval-EXCL |
+| Client apps | browser |
+| Device filter | include: device.mdmAppId -ne "0000000a-0000-0000-c000-000000000000" -and device.isCompliant -ne True |
+| Grant | None |
+| Session | Defender for Cloud Apps: blockDownloads |
 
-### CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA
+### CA301-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `a9c2077e-49ae-4334-9bae-c728f7ebf16e` |
-| State | Disabled |
-| Audience | Guests/external users |
-| Include users | Any / none |
-| Include groups | Any / none |
-| Exclude groups | CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL (a84532fa-8795-4345-9c04-6cd954ac2191) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Included |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | Guests/external |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA301-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | all |
 | Grant | mfa |
 | Session | None |
-| Dedicated EXCL | CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL |
 
-### CA402-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block
+### CA302-GST-AllowedApps-AnyOS-ModernCli-AnyLoc-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `03c70fc2-fe67-4d3c-b896-86cb8014141b` |
-| State | Disabled |
-| Audience | Guests/external users |
-| Include users | Any / none |
-| Include groups | Any / none |
-| Exclude groups | CA402-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block-EXCL (d09b644e-696a-4e92-affa-29dd0afdf9d1) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Included |
-| Include resources | All |
-| Exclude resources | AADReporting (1b912ec3-a9dd-4c4d-a53e-76aa7adb28d7), Windows 365 (0af06dc6-e4b5-4f28-818e-e78e62d137a5), My Apps (2793995e-0a7d-40d7-bd35-6968ba142197), Windows Azure Active Directory (00000002-0000-0000-c000-000000000000), My Signins (19db86c3-b2b9-44cc-b339-36da233a3be2), Microsoft Approval Management (65d91a3d-ab74-42e6-8a2f-0add61688c74), Microsoft Invitation Acceptance Portal (4660504c-45b3-4674-a709-71951a6b0763), Windows Cloud Login (270efc09-cd0d-444b-a71f-39af4910ec45), Microsoft Teams Services (cc15fd57-2c6c-4117-a88c-83b1d56b4bbe), My Profile (8c59ead7-d703-4a27-9e55-c96a0054c8d2), Microsoft App Access Panel (0000000c-0000-0000-c000-000000000000), Azure Credential Configuration Endpoint Service (ea890292-c8c8-4433-b5ea-b09d0668e1a6), Microsoft Activity Feed Service (d32c68ad-72d2-4acb-a0c7-46bb2cf93873), Microsoft Rights Management Services (00000012-0000-0000-c000-000000000000), Office365 |
-| Client app types | browser, mobileAppsAndDesktopClients |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | Guests/external |
+| Exclude groups | CA302-GST-AllowedApps-AnyOS-ModernCli-AnyLoc-Block-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Excluded resources | My Apps, Windows Azure Active Directory, My Signins, Microsoft Approval Management, Microsoft Invitation Acceptance Portal, Windows Cloud Login, Microsoft Teams Services, My Profile, Microsoft App Access Panel, Azure Credential Configuration Endpoint Service, Microsoft Activity Feed Service, Microsoft Rights Management Services, Office 365 (app group) |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Client apps | browser,mobileAppsAndDesktopClients |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | CA402-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block-EXCL |
 
-### CA403-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `13437e94-79fe-427b-8d30-ee1159f6f624` |
-| State | Disabled |
-| Audience | Guests/external users |
-| Include users | Any / none |
-| Include groups | Any / none |
-| Exclude groups | CA403-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL (d8fa8de6-701f-4d57-855c-1bc64690ac95) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Included |
-| Include resources | Azure Resource Manager (797f4846-ba00-4fd7-ba43-dac1f8f63013), MicrosoftAdminPortals |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | block |
-| Session | None |
-| Dedicated EXCL | CA403-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block-EXCL |
-
-### CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess
+### CA303-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `3c56e68a-ccf3-45ee-9317-996c6dc5f4cb` |
-| State | Disabled |
-| Audience | Guests/external users |
-| Include users | Any / none |
-| Include groups | Any / none |
-| Exclude groups | CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL (ed33faf7-bd1f-4481-9ba2-17508998226c) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Included |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | Guests/external |
+| Exclude groups | CA303-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
+| Client apps | all |
+| Grant | None |
 | Session | Sign-in frequency: 4 hours; Persistent browser: never |
-| Dedicated EXCL | CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL |
 
-### CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr
+### CA304-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `02d314d7-6ede-4d45-a11a-22fe0433f038` |
-| State | Disabled |
-| Audience | Guests/external users |
-| Include users | Any / none |
-| Include groups | Any / none |
-| Exclude groups | CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr-EXCL (5e930f19-7ed3-404d-8381-9ebbdc74bcac) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Included |
-| Include resources | Office365 |
-| Exclude resources | Any / none |
-| Client app types | browser |
+| Pack | Hardening |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | Guests/external |
+| Exclude groups | CA304-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr-EXCL |
+| Excluded directory roles | None |
+| Resources | Office 365 (app group) |
 | Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | Application-enforced restrictions |
-| Dedicated EXCL | CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr-EXCL |
+| Client apps | browser |
+| Grant | None |
+| Session | App-enforced restrictions |
 
-### CA406-GST-AllApps-AnyOS-ModernCli-AnyLoc-ContAccEval
+### CA401-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `60e297ec-1c16-4400-8521-cc1414894327` |
-| State | Disabled |
-| Audience | Guests/external users |
-| Include users | Any / none |
-| Include groups | Any / none |
-| Exclude groups | CA406-GST-AllApps-AnyOS-ModernCli-AnyLoc-ContAccEval-EXCL (b00d9511-f97e-4aea-a1a5-faee05c8ab38) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Included |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | browser, mobileAppsAndDesktopClients |
-| Platforms | all |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Session controls only |
-| Session | CAE: strictLocation |
-| Dedicated EXCL | CA406-GST-AllApps-AnyOS-ModernCli-AnyLoc-ContAccEval-EXCL |
+| Pack | Essential |
+| Deployed state | Off |
+| Licence | Entra ID P1 (Business Premium) |
+| Include | CA401-SVC-IntSvcAcc-ServiceAccounts-INCL |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA401-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
+| Locations | incl: Any location; excl: Allowed Countries - Service Accounts |
+| Grant | block |
+| Session | None |
 
-### CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishMFA
+### CA501-IDP-AllApps-AnyOS-AnyCli-SignInRisk-ReqPhishResMFA
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `ae0c2054-c1b5-4118-bb11-a43be325d1f6` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishMFA-EXCL (16443a68-7c9a-4880-8018-9712da9cdfe9) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | medium |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Authentication strength: Phishing-resistant MFA |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Entra ID P2 |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA501-IDP-AllApps-AnyOS-AnyCli-SignInRisk-ReqPhishResMFA-EXCL |
+| Excluded directory roles | Directory Synchronization Accounts |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
+| Risk | signin:medium,high |
+| Grant | Auth strength: Phishing-resistant MFA |
 | Session | Sign-in frequency: every time |
-| Dedicated EXCL | CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishMFA-EXCL |
 
-### CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemed
+### CA502-IDP-AllApps-AnyOS-AnyCli-UserRisk-ReqRiskRemed
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `ca9a0b62-e1e6-40c6-96b5-0623727cfbd7` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemed-EXCL (c32d5ef2-7411-4c01-9f25-3650e7be61f4) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | medium |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | riskRemediation AND Authentication strength: Passwordless MFA |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Entra ID P2 |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA502-IDP-AllApps-AnyOS-AnyCli-UserRisk-ReqRiskRemed-EXCL |
+| Excluded directory roles | Directory Synchronization Accounts |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
+| Risk | user:medium,high |
+| Grant | Auth strength: Passwordless MFA AND riskRemediation |
 | Session | Sign-in frequency: every time |
-| Dedicated EXCL | CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemed-EXCL |
 
 ### CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `7acb5d22-b294-465b-a9a0-6b620e1e6358` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block-EXCL (c5b52f76-4b2d-43e7-a27b-df4c1f455ef4), CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Entra ID P2 + Purview Insider Risk |
+| Include | All |
+| Exclude groups | CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block-EXCL, CA000-GLB-BGA-EmergencyAccess-Admins-EXCL |
+| Excluded directory roles | Directory Synchronization Accounts |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | CA503-IDP-AllApps-AnyOS-AnyCli-InsiderRiskElevated-Block-EXCL |
 
-### CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA504PolicyId%` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA-EXCL (%CA504ExclGroupId%) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | high |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | Authentication strength: Phishing-resistant MFA |
-| Session | Sign-in frequency: every time |
-| Dedicated EXCL | CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishMFA-EXCL |
-
-### CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed
+### CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA505PolicyId%` |
-| State | Disabled |
-| Audience | Workforce users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed-EXCL (%CA505ExclGroupId%) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Explicitly excluded |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | high |
-| Service-principal risk | Any / none |
-| Agent risk | None |
-| Grant | riskRemediation AND Authentication strength: Passwordless MFA |
-| Session | Sign-in frequency: every time |
-| Dedicated EXCL | CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed-EXCL |
-
-### CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block
-
-| Property | Configuration |
-| :--- | :--- |
-| ID | `%CA601PolicyId%` |
-| State | Disabled |
-| Audience | Agent identities |
-| Include users | None |
-| Include groups | Any / none |
-| Exclude groups | Any / none |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Agent 365 / M365 E7 |
+| Include | None; Workload/agent identities |
+| Exclude groups |  |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
 | Grant | block |
 | Session | None |
-| Include service principals | Any / none |
-| Exclude service principals | Any / none |
-| Include agent identities | All |
-| Exclude agent identities | Any / none |
-| Agent approval filter | `exclude: CustomSecurityAttribute.AgentIdentity_AgentApprovalStatus -eq "Approved"` |
-| Dedicated EXCL | None |
 
 ### CA602-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-ReqCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA602PolicyId%` |
-| State | Disabled |
-| Audience | Scoped identities |
-| Include users | None |
-| Include groups | Any / none |
-| Exclude groups | Any / none |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Agent 365 / M365 E7 |
+| Include | None; Workload/agent identities |
+| Exclude groups |  |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
 | Grant | compliantDevice |
 | Session | None |
-| Dedicated EXCL | None |
 
 ### CA603-AGT-AllAgtId-AllApps-AnyOS-AnyCli-RiskyAgt-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA603PolicyId%` |
-| State | Disabled |
-| Audience | Agent identities |
-| Include users | None |
-| Include groups | Any / none |
-| Exclude groups | Any / none |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | medium,high |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Entra ID P2 |
+| Include | None; Workload/agent identities |
+| Exclude groups |  |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
 | Grant | block |
 | Session | None |
-| Include service principals | Any / none |
-| Exclude service principals | Any / none |
-| Include agent identities | All |
-| Exclude agent identities | Any / none |
-| Agent approval filter | None |
-| Dedicated EXCL | None |
 
 ### CA604-AGT-AllAgtUsr-AllApps-AnyOS-AnyCli-RiskyAgt-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA604PolicyId%` |
-| State | Disabled |
-| Audience | Scoped identities |
-| Include users | None |
-| Include groups | Any / none |
-| Exclude groups | Any / none |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | medium,high |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Entra ID P2 |
+| Include | None; Workload/agent identities |
+| Exclude groups |  |
+| Excluded directory roles | None |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | None |
 
 ### CA701-WLI-AllApps-AnyLoc-WorkloadRiskHigh-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `848a0ffb-bd95-4836-804c-44d42ddc3a59` |
-| State | Disabled |
-| Audience | Workload identities |
-| User conditions | None (workload identity policy) |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | high |
-| Agent risk | None |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Workload ID Premium |
+| Include | 1 admin roles; Workload/agent identities |
+| Exclude groups |  |
+| Excluded directory roles | Directory Synchronization Accounts |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
 | Grant | block |
 | Session | None |
-| Include service principals | ServicePrincipalsInMyTenant |
-| Exclude service principals | Any / none |
-| Include agent identities | Any / none |
-| Exclude agent identities | Any / none |
-| Agent approval filter | None |
-| Dedicated EXCL | None |
 
 ### CA702-WLI-AllApps-AnyLoc-UntrustedNetwork-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `13922b7b-7836-4876-8edc-674ef5a1823d` |
-| State | Disabled |
-| Audience | Workload identities |
-| User conditions | None (workload identity policy) |
-| Include resources | All |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | All |
-| Locations exclude | Allowed Countries - Service Accounts (%SvcCountryLocationId%) |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Workload ID Premium |
+| Include | 1 admin roles; Workload/agent identities |
+| Exclude groups |  |
+| Excluded directory roles | Directory Synchronization Accounts |
+| Resources | All resources |
+| Platforms |  |
+| Client apps | all |
+| Locations | incl: Any location; excl: Allowed Countries - Service Accounts |
 | Grant | block |
 | Session | None |
-| Include service principals | ServicePrincipalsInMyTenant |
-| Exclude service principals | Any / none |
-| Include agent identities | Any / none |
-| Exclude agent identities | Any / none |
-| Agent approval filter | None |
-| Dedicated EXCL | None |
 
 ### CA801-GSA-AllAgtUsr-AllAgtRsrc-AnyOS-AnyCli-NonComplNet-Block
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA801PolicyId%` |
-| State | Disabled |
-| Audience | Scoped identities |
-| Include users | None |
-| Include groups | Any / none |
-| Exclude groups | Any / none |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | AllAgentIdResources |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | All |
-| Locations exclude | All Compliant Network locations (%CompliantNetworkLocationId%) |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Agent 365 / M365 E7 |
+| Include | None; Workload/agent identities |
+| Exclude groups |  |
+| Excluded directory roles | None |
+| Resources | All agent resources |
+| Platforms |  |
+| Client apps | all |
+| Locations | incl: Any location; excl: All Compliant Network locations |
 | Grant | block |
 | Session | None |
-| Dedicated EXCL | None |
 
 ### CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA802PolicyId%` |
-| State | Disabled |
-| Audience | All users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL (9a4b35b3-abea-405c-8b95-032d7cc21087) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | All internet resources with Global Secure Access (5dc48733-b5df-475c-a49b-fa307ef00853) |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Entra Suite (Internet Access) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL |
+| Excluded directory roles | None |
+| Resources | All internet resources with Global Secure Access |
+| Platforms |  |
+| Client apps | all |
 | Grant | mfa OR compliantDevice OR domainJoinedDevice |
 | Session | None |
-| Dedicated EXCL | CA802-GSA-AllUsr-InternetAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL |
 
 ### CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant
 
 | Property | Configuration |
 | :--- | :--- |
-| ID | `%CA803PolicyId%` |
-| State | Disabled |
-| Audience | All users |
-| Include users | All |
-| Include groups | Any / none |
-| Exclude groups | CA000-GLB-BGA-EmergencyAccess-EXCL (9f027ad8-042b-4c85-9727-9008f6851597), CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL (1004aec6-aa43-4e52-9206-7af65569768a) |
-| Include roles | None |
-| Exclude roles | None |
-| Guest/external scope | Not configured |
-| Include resources | `%GsaPrivateAccessAppId%` |
-| Exclude resources | Any / none |
-| Client app types | all |
-| Platforms | Any |
-| Locations include | Any |
-| Locations exclude | None |
-| Device filter | None |
-| Sign-in risk | Any / none |
-| User risk | Any / none |
-| Service-principal risk | Any / none |
-| Agent risk | None |
+| Pack | Add-on |
+| Deployed state | Off |
+| Licence | Entra Suite (Private Access) |
+| Include | All |
+| Exclude groups | CA000-GLB-BGA-EmergencyAccess-Admins-EXCL, CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL |
+| Excluded directory roles | None |
+| Resources | %GsaPrivateAccessAppId% |
+| Platforms |  |
+| Client apps | all |
 | Grant | mfa OR compliantDevice OR domainJoinedDevice |
 | Session | None |
-| Dedicated EXCL | CA803-GSA-AllUsr-PrivateAcc-AnyOS-AnyCli-ReqMFAOrCompliant-EXCL |
 
-## Required Workload Configuration
 
-- CA212 targets all cloud apps and requires Windows Intune App Protection for Microsoft Edge plus a tested Defender for Cloud Apps session policy. Before enabling, add any non-MAM-capable third-party cloud apps to excludeApplications.
-- CA213 and CA214 target all cloud apps and require platform-specific Intune App Protection policies for all supported Microsoft applications across both native app and browser (Microsoft Edge) client types. Browser sessions also enforce Defender for Cloud Apps download blocking. Before enabling, add any non-MAM-capable third-party cloud apps to excludeApplications.
-- CA215 targets all cloud apps on unmanaged macOS browser sessions and requires SharePoint/OneDrive limited-access and Exchange application-enforced restriction settings, plus Defender for Cloud Apps download blocking. CA405 targets Office 365 and requires SharePoint/OneDrive limited-access and Exchange application-enforced restriction settings.
-- CA004 blocks device code flow. CA007 separately blocks authentication transfer.
-- CA505 requires Entra ID P2, registered Passwordless MFA methods, and working user-risk remediation prerequisites.
-- CA105, CA206, CA303, and CA406 require validated named locations and CAE resource-seen IP testing.
-- CA216 targets supported Windows M365 desktop resources. CA218 is the separate macOS preview policy and should be enabled in report-only mode until token-protection support for macOS is confirmed in the tenant.
-- CA701 and CA702 require Microsoft Entra Workload ID Premium and approved service-principal inventory.
-- CA601 requires `CustomSecurityAttribute.AgentIdentity_AgentApprovalStatus` with value `Approved` for allowed agents.
-- CA801 requires Global Secure Access compliant-network signals.
-- CA802 requires Microsoft Entra Internet Access and targets the Microsoft-published `All internet resources with Global Secure Access` resource app ID.
-- CA803 requires Quick Access or per-app Microsoft Entra Private Access enterprise applications. Replace `%GsaPrivateAccessAppId%` with the Private Access enterprise application object ID, or duplicate the policy for each app/app group.

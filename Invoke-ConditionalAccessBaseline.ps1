@@ -62,6 +62,86 @@ $script:GsaAvailable = $null
 $script:EntraP2Available             = $null
 $script:EntraSuiteAvailable          = $null
 $script:WorkloadIdPremiumAvailable   = $null
+# Agent-targeted policies need Microsoft Agent 365 or Microsoft 365 E7. There is no
+# reliable SKU mapping yet, so this is set to $false when Graph returns error 1267.
+$script:Agent365Available            = $null
+
+# Baseline objects that were renamed. Key = current displayName, value = names used by
+# earlier baseline versions. During restore an object found under a previous name is
+# renamed in place and treated as already existing, so no duplicate is created.
+$script:PreviousDisplayNames = @{
+    'CA000-GLB-BGA-EmergencyAccess-Admins-EXCL' = @('CA000-GLB-BGA-EmergencyAccess-EXCL')
+    'CA301-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA' = @('CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA')
+    'CA301-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL' = @('CA401-GST-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL')
+    'CA304-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr' = @('CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr')
+    'CA304-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr-EXCL' = @('CA405-GST-O365-AnyOS-Browser-AnyLoc-AppEnfRestr-EXCL')
+    'CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant'      = @('CA209-USR-AllApps-iOSAndroid-AnyCli-AnyLoc-ReqCompliant', 'CA209-USR-AllApps-Mobile-AnyCli-AnyLoc-ReqCompliant')
+    'CA209-USR-AllApps-iOS-AnyCli-AnyLoc-ReqCompliant-EXCL' = @('CA209-USR-AllApps-iOSAndroid-AnyCli-AnyLoc-ReqCompliant-EXCL', 'CA209-USR-AllApps-Mobile-AnyCli-AnyLoc-ReqCompliant-EXCL')
+    'CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect'      = @('CA213-USR-AllApps-iOSAndroid-AnyCli-BYOD-ReqAppProtect', 'CA213-USR-AllApps-Mobile-AnyCli-BYOD-ReqAppProtect', 'CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl')
+    'CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-EXCL' = @('CA213-USR-AllApps-iOSAndroid-AnyCli-BYOD-ReqAppProtect-EXCL', 'CA213-USR-AllApps-Mobile-AnyCli-BYOD-ReqAppProtect-EXCL', 'CA213-USR-AllApps-Android-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL', 'CA213-USR-AllApps-Android-Mobile-BYOD-ReqAppProtect-EXCL')
+    'CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect'      = @('CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl')
+    'CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-EXCL' = @('CA214-USR-AllApps-iOS-AnyCli-BYOD-ReqAppProtect-AppCtrl-EXCL')
+    'CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block' = @('CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLocat-Block', 'CA001-GLB-AllApps-AnyOS-AnyCli-NonAllowedCtry-Block')
+    'CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL' = @('CA001-GLB-AllApps-AnyOS-AnyCli-UntrustLocat-Block-EXCL', 'CA001-GLB-AllApps-AnyOS-AnyCli-NonAllowedCtry-Block-EXCL')
+    'CA219-USR-O365-AnyOS-Browser-BYOD-AppCtrl-BlockDownloads' = @('CA219-USR-O365-AnyOS-Browser-BYOD-AppCtrl-BlockDwnld')
+    'CA219-USR-O365-AnyOS-Browser-BYOD-AppCtrl-BlockDownloads-EXCL' = @('CA219-USR-O365-AnyOS-Browser-BYOD-AppCtrl-BlockDwnld-EXCL')
+    'CA005-GLB-RegDevSecInfo-AnyOS-AnyCli-AnyLoc-ReqTAPorMFA'      = @('CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA')
+    'CA005-GLB-RegDevSecInfo-AnyOS-AnyCli-AnyLoc-ReqTAPorMFA-EXCL' = @('CA005-GLB-DeviceReg-AnyOS-AnyCli-AnyLoc-ReqMFA-EXCL')
+    'CA501-IDP-AllApps-AnyOS-AnyCli-SignInRisk-ReqPhishResMFA'      = @('CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishResMFA', 'CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishMFA')
+    'CA501-IDP-AllApps-AnyOS-AnyCli-SignInRisk-ReqPhishResMFA-EXCL' = @('CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishResMFA-EXCL', 'CA501-IDP-AllApps-AnyOS-AnyCli-SignInRiskMed-ReqPhishMFA-EXCL')
+    'CA502-IDP-AllApps-AnyOS-AnyCli-UserRisk-ReqRiskRemed'      = @('CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemed')
+    'CA502-IDP-AllApps-AnyOS-AnyCli-UserRisk-ReqRiskRemed-EXCL' = @('CA502-IDP-AllApps-AnyOS-AnyCli-UserRiskMed-ReqRiskRemed-EXCL')
+    'CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResMFA' = @('CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA')
+    'CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishResMFA-EXCL' = @('CA103-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL')
+    'CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess' = @('CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqNoPersist', 'CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess')
+    'CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess-EXCL' = @('CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqNoPersist-EXCL', 'CA104-ADM-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL')
+    'CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrqPersistSess' = @('CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrqNoPersist', 'CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrq-PrstSess')
+    'CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrqPersistSess-EXCL' = @('CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrqNoPersist-EXCL', 'CA205-USR-AllApps-AnyOS-Browser-AnyLoc-SignInFrq-PrstSess-EXCL')
+    'CA303-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess' = @('CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess', 'CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqNoPersist', 'CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess')
+    'CA303-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess-EXCL' = @('CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqPersistSess-EXCL', 'CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrqNoPersist-EXCL', 'CA404-GST-AllApps-AnyOS-AnyCli-AnyLoc-SignInFrq-PrstSess-EXCL')
+    'CA302-GST-AllowedApps-AnyOS-ModernCli-AnyLoc-Block' = @('CA302-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block', 'CA402-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block', 'CA402-GST-AllButAllowed-AnyOS-ModernCli-AnyLoc-Block')
+    'CA302-GST-AllowedApps-AnyOS-ModernCli-AnyLoc-Block-EXCL' = @('CA302-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block-EXCL', 'CA402-GST-ExceptAllowed-AnyOS-ModernCli-AnyLoc-Block-EXCL', 'CA402-GST-AllButAllowed-AnyOS-ModernCli-AnyLoc-Block-EXCL')
+    'CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-Block' = @('CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block')
+    'CA601-AGT-AllAgtId-AllApps-AnyOS-AnyCli-Block-EXCL' = @('CA601-AGT-AllAgtIdt-AllApps-AnyOS-AnyCli-Block-EXCL')
+    'CA003-GLB-AllApps-AnyOS-LegacyAuth-AnyLoc-Block'      = @('CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block')
+    'CA003-GLB-AllApps-AnyOS-LegacyAuth-AnyLoc-Block-EXCL' = @('CA003-GLB-AllApps-AnyOS-LegacyCli-AnyLoc-Block-EXCL')
+    # 2026.10 restructure: merged or renumbered policies keep their tenant objects through an in-place rename.
+    'CA004-GLB-AllApps-AnyOS-AnyCli-DevCodeAuthTransf-Block'       = @('CA004-GLB-AllApps-AnyOS-AnyCli-DevCodeAuthXfer-Block', 'CA004-GLB-AllApps-AnyOS-AnyCli-AuthFlows-Block', 'CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block')
+    'CA004-GLB-AllApps-AnyOS-AnyCli-DevCodeAuthTransf-Block-EXCL'  = @('CA004-GLB-AllApps-AnyOS-AnyCli-DevCodeAuthXfer-Block-EXCL', 'CA004-GLB-AllApps-AnyOS-AnyCli-AuthFlows-Block-EXCL', 'CA004-GLB-AllApps-AnyOS-AnyCli-DeviceCode-Block-EXCL')
+    'CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA'      = @('CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA')
+    'CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA-EXCL' = @('CA203-USR-AllApps-AnyOS-AnyCli-AnyLoc-ReqPhishMFA-EXCL')
+    'CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect'         = @('CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl')
+    'CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-EXCL'    = @('CA212-USR-AllApps-Win-Browser-BYOD-ReqAppProtect-AppCtrl-EXCL')
+    'CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr'         = @('CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl')
+    'CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-EXCL'    = @('CA215-USR-AllApps-macOS-Browser-BYOD-AppEnfRestr-AppCtrl-EXCL', 'CA215-USR-O365-macOS-Browser-AnyLoc-AppEnfRestr-EXCL')
+    'CA216-USR-M365-WinMac-Desktop-AnyLoc-ReqTokenProt'        = @('CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt')
+    'CA216-USR-M365-WinMac-Desktop-AnyLoc-ReqTokenProt-EXCL'   = @('CA216-USR-M365-Win-Desktop-AnyLoc-ReqTokenProt-EXCL')
+    'CA217-USR-IntuEnrl-AnyOS-AnyCli-AnyLoc-ReqMFA-Always'      = @('CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys','CA217-USR-IntuneEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys')
+    'CA217-USR-IntuEnrl-AnyOS-AnyCli-AnyLoc-ReqMFA-Always-EXCL' = @('CA217-USR-IntuEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL','CA217-USR-IntuneEnrollmt-AnyOS-AnyCli-AnyLoc-ReqMFA-ReqSignInAlwys-EXCL')
+    # The old CA302 location block is now CA301. The old CA301 (MFA) is retired (see $script:RetiredPolicyNames).
+    'CA401-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block'      = @('CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block', 'CA301-SVC-SvcAcc-AllApps-AnyOS-AnyCli-AllowedCtry-Block', 'CA301-SVC-SvcAcc-AllApps-AnyOS-AnyCli-NonAllowedCtry-Block', 'CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block')
+    'CA401-SVC-IntSvcAcc-ServiceAccounts-INCL' = @('CA301-SVC-IntSvcAcc-ServiceAccounts-INCL', 'CA301-SVC-SvcAcc-ServiceAccounts-INCL', 'CA-SVC-IntSvcAcc-ServiceAccounts')
+    'CA401-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL' = @('CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL', 'CA301-SVC-SvcAcc-AllApps-AnyOS-AnyCli-AllowedCtry-Block-EXCL', 'CA301-SVC-SvcAcc-AllApps-AnyOS-AnyCli-NonAllowedCtry-Block-EXCL', 'CA302-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-UntrustLoc-Block-EXCL')
+}
+
+# Policies removed in the 2026.10 restructure. A tenant that was deployed with an earlier version may still
+# hold them. They are never created; the restore only reports them so the administrator can review and remove them.
+$script:RetiredPolicyNames = @(
+    'CA007-GLB-AllApps-AnyOS-AnyCli-AuthTransfer-Block',
+    'CA006-GLB-AuthMethReg-AnyOS-AnyCli-AnyLoc-ReqTAPorMFA',
+    'CA008-GLB-AllApps-Linux-AnyCli-AnyLoc-Block',
+    'CA403-GST-AdminCenters-AnyOS-AnyCli-AnyLoc-Block',
+    'CA504-IDP-AllApps-AnyOS-AnyCli-SignInRiskHigh-ReqPhishResMFA',
+    'CA505-IDP-AllApps-AnyOS-AnyCli-UserRiskHigh-ReqRiskRemed',
+    'CA102-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ReqPwdlessMFA',
+    'CA105-ADM-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval',
+    'CA202-USR-AllApps-AnyOS-ModernCli-UntrustLoc-ReqPwdlessMFA',
+    'CA206-USR-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval',
+    'CA218-USR-M365-macOS-Desktop-AnyLoc-ReqTokenProt',
+    'CA301-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ReqMFA',
+    'CA303-SVC-IntSvcAcc-AllApps-AnyOS-AnyCli-AnyLoc-ContAccEval',
+    'CA406-GST-AllApps-AnyOS-ModernCli-AnyLoc-ContAccEval'
+)
 
 $script:EntraP2ServicePlanNames = @(
     'AAD_PREMIUM_P2'
@@ -237,6 +317,7 @@ function Test-AndInstall-GraphModules {
     $requiredModules = @(
         "Microsoft.Graph.Authentication",
         "Microsoft.Graph.Identity.SignIns",
+        "Microsoft.Graph.Beta.Identity.SignIns",   # New-MgBetaIdentityConditionalAccessNamedLocation
         "Microsoft.Graph.Groups"
     )
 
@@ -1389,8 +1470,9 @@ function Restore-NamedLocations {
         $oldId      = if ($locJson -is [PSCustomObject]) { $locJson.id } else { $locJson['id'] }
         $dispName   = if ($locJson -is [PSCustomObject]) { $locJson.displayName } else { $locJson['displayName'] }
 
-        # Filter to only required IDs when doing a targeted restore
-        if ($RequiredOldIds -and $RequiredOldIds.Count -gt 0 -and $oldId -notin $RequiredOldIds) { continue }
+        # Filter to only required IDs when doing a targeted restore. An explicitly
+        # passed empty list means no locations are needed, not "restore all".
+        if ($PSBoundParameters.ContainsKey('RequiredOldIds') -and $oldId -notin @($RequiredOldIds)) { continue }
 
         Write-Host "    $dispName" -NoNewline -ForegroundColor White
 
@@ -1430,11 +1512,23 @@ function Restore-NamedLocations {
 
         try {
             $body    = Get-CleanNamedLocationBody -LocationJson $locJson
-            # Use the typed Beta cmdlet so the @odata.type discriminator is handled correctly
-            # by the SDK's own serializer. Invoke-MgGraphRequest fails with 1041 for named
-            # locations regardless of body encoding (hashtable / string / bytes).
-            $created = New-MgBetaIdentityConditionalAccessNamedLocation -BodyParameter $body -ErrorAction Stop
-            $newId   = $created.Id
+            # Prefer the typed Beta cmdlet so the @odata.type discriminator is handled correctly
+            # by the SDK's own serializer. Invoke-MgGraphRequest against the beta endpoint fails
+            # with 1041 for named locations, so when the Beta module is not installed fall back
+            # to the v1.0 endpoint with a pre-serialized JSON body.
+            if (Get-Command -Name New-MgBetaIdentityConditionalAccessNamedLocation -ErrorAction SilentlyContinue) {
+                $created = New-MgBetaIdentityConditionalAccessNamedLocation -BodyParameter $body -ErrorAction Stop
+                $newId   = $created.Id
+            }
+            else {
+                Write-Log -Level WARN -Message "Module 'Microsoft.Graph.Beta.Identity.SignIns' is not available; creating Named Location '$dispName' through the v1.0 endpoint."
+                $jsonBody = $body | ConvertTo-Json -Depth 10 -Compress
+                $created  = Invoke-MgGraphRequest -Method POST `
+                                -Uri "https://graph.microsoft.com/v1.0/identity/conditionalAccess/namedLocations" `
+                                -ContentType "application/json" `
+                                -Body $jsonBody -ErrorAction Stop
+                $newId    = if ($created -is [PSCustomObject]) { $created.id } else { $created['id'] }
+            }
             if ($oldId) { $idMap[$oldId] = $newId }
             Write-Log -Message "Created Named Location '$dispName' — new ID: $newId"
             Write-Host "  [CREATED]" -ForegroundColor Green
@@ -1461,12 +1555,13 @@ function Restore-ExclusionGroups {
 
     $idMap       = @{}
     $reusedNames = [System.Collections.Generic.List[string]]::new()
+    $failedCount = 0
 
     $grpDir = Join-Path $BackupFolder "Groups"
-    if (-not (Test-Path $grpDir)) { return @{ IdMap = $idMap; ReusedNames = @() } }
+    if (-not (Test-Path $grpDir)) { return @{ IdMap = $idMap; ReusedNames = @(); Failed = 0 } }
 
     $grpFiles = @(Get-ChildItem -Path $grpDir -Filter "*.json" -File | Sort-Object Name)
-    if ($grpFiles.Count -eq 0) { return @{ IdMap = $idMap; ReusedNames = @() } }
+    if ($grpFiles.Count -eq 0) { return @{ IdMap = $idMap; ReusedNames = @(); Failed = 0 } }
 
     $sectionShown = $false
 
@@ -1483,8 +1578,9 @@ function Restore-ExclusionGroups {
         $oldId    = if ($grpJson -is [PSCustomObject]) { $grpJson.id } else { $grpJson['id'] }
         $dispName = if ($grpJson -is [PSCustomObject]) { $grpJson.displayName } else { $grpJson['displayName'] }
 
-        # Filter to only required IDs when doing a targeted restore
-        if ($RequiredOldIds -and $RequiredOldIds.Count -gt 0 -and $oldId -notin $RequiredOldIds) { continue }
+        # Filter to only required IDs when doing a targeted restore. An explicitly
+        # passed empty list means the policy needs no groups, not "restore all".
+        if ($PSBoundParameters.ContainsKey('RequiredOldIds') -and $oldId -notin @($RequiredOldIds)) { continue }
 
         if (-not $sectionShown) {
             Write-Host ""
@@ -1494,24 +1590,32 @@ function Restore-ExclusionGroups {
 
         Write-Host "    $dispName" -NoNewline -ForegroundColor White
 
-        # Check existence by displayName — requires ConsistencyLevel: eventual
+        # Check existence by displayName, previous baseline name, or baseline number —
+        # requires ConsistencyLevel: eventual. If the check itself fails, do not create
+        # the group: an unverified create could duplicate an existing group.
         $existing = $null
+        $lookup   = $null
         try {
-            $escaped  = $dispName -replace "'", "''"
-            $chkUri   = "https://graph.microsoft.com/beta/groups?`$filter=displayName eq '$escaped'&`$count=true"
-            $chkResp  = Invoke-MgGraphRequest -Method GET -Uri $chkUri `
-                            -Headers @{ "ConsistencyLevel" = "eventual" } -ErrorAction Stop
-            $existing = @($chkResp.value) | Select-Object -First 1
+            $grpDesc     = Get-ObjectPropertyValue -InputObject $grpJson -PropertyName 'description'
+            $renameProps = if ($grpDesc) { @{ description = $grpDesc } } else { @{} }
+            $lookup   = Find-ExistingObjectByDisplayName -CollectionUri "https://graph.microsoft.com/beta/groups?`$count=true" `
+                            -DisplayName $dispName -Headers @{ "ConsistencyLevel" = "eventual" } `
+                            -RenameProperties $renameProps -Kind 'group' -Rename (-not $Preview) -PrefixSearch Filter
+            if ($lookup) { $existing = $lookup.Object }
         }
         catch {
+            $graphError = Get-GraphErrorMessage -ErrorRecord $_
             Write-LogError -ErrorRecord $_ -Context "Check whether group '$dispName' already exists"
+            Write-Host "  [FAILED: could not verify whether the group already exists — $graphError]" -ForegroundColor Red
+            $failedCount++
+            continue
         }
 
         if ($existing) {
             $newId = if ($existing -is [PSCustomObject]) { $existing.id } else { $existing['id'] }
             if ($oldId) { $idMap[$oldId] = $newId }
             $null = $reusedNames.Add($dispName)
-            Write-Host "  [REUSED — already exists in tenant]" -ForegroundColor Cyan
+            Write-Host "  [REUSED — already exists in tenant$(Get-ExistingMatchNote -Lookup $lookup -Preview $Preview)]" -ForegroundColor Cyan
             continue
         }
 
@@ -1534,10 +1638,11 @@ function Restore-ExclusionGroups {
             $graphError = Get-GraphErrorMessage -ErrorRecord $_
             Write-LogError -ErrorRecord $_ -Context "Create exclusion group '$dispName'"
             Write-Host "  [FAILED: $graphError]" -ForegroundColor Red
+            $failedCount++
         }
     }
 
-    return @{ IdMap = $idMap; ReusedNames = @($reusedNames) }
+    return @{ IdMap = $idMap; ReusedNames = @($reusedNames); Failed = $failedCount }
 }
 
 function Get-ObjectPropertyValue {
@@ -1549,6 +1654,144 @@ function Get-ObjectPropertyValue {
     if (-not $InputObject) { return $null }
     if ($InputObject -is [System.Collections.IDictionary]) { return $InputObject[$PropertyName] }
     return $InputObject.$PropertyName
+}
+
+# Looks up a policy or group that already exists in the tenant, in this order:
+#   1. exact current displayName
+#   2. a previous name listed in $script:PreviousDisplayNames (renamed in place)
+#   3. the same baseline number, e.g. 'CA207-' (policy) or 'CA207-…-EXCL' (group),
+#      so an object deployed earlier under a different name is not duplicated
+# An object found under a previous name (2) is renamed (PATCH) to the current name;
+# $RenameProperties adds extra properties to that PATCH. Number matches (3) are
+# reused as-is, since the admin may have renamed them on purpose.
+# Lookup errors are thrown so callers can fail safe instead of creating duplicates.
+# Returns $null when nothing exists, otherwise @{ Object; MatchedName; MatchType; Renamed }.
+# The rename map ($script:PreviousDisplayNames) and the baseline-number fallback only make sense when the folder
+# being restored is this baseline. A backup made from any other tenant (or any custom policy set) is matched by
+# exact display name only, so unrelated policies that merely share a CA### prefix are never mixed up.
+$script:BaselineNameMatching = $false
+function Set-BaselineNameMatching {
+    param([string]$BackupFolder)
+
+    $script:BaselineNameMatching = $false
+    try {
+        $path = Join-Path $BackupFolder 'MigrationTable.json'
+        if (Test-Path -LiteralPath $path) {
+            $table = Get-Content -LiteralPath $path -Raw | ConvertFrom-Json
+            if ($table.PSObject.Properties['BaselineId'] -and $table.BaselineId -eq 'Conditional-Access-Baseline') {
+                $script:BaselineNameMatching = $true
+            }
+        }
+    }
+    catch { $script:BaselineNameMatching = $false }
+    if ($script:BaselineNameMatching) { Write-Log -Message "Baseline folder detected: rename map and baseline-number matching enabled." }
+    else { Write-Log -Message "Custom backup folder: objects are matched by exact display name only." }
+}
+
+function Find-ExistingObjectByDisplayName {
+    param(
+        [string]$CollectionUri,
+        [string]$DisplayName,
+        [hashtable]$Headers = @{},
+        [hashtable]$RenameProperties = @{},
+        [string]$Kind = 'object',
+        [bool]$Rename = $true,
+        # 'Filter' = server-side startswith (groups); 'List' = page the whole
+        # collection and match client-side (Conditional Access policies).
+        [ValidateSet('Filter', 'List')]
+        [string]$PrefixSearch = 'Filter'
+    )
+
+    $sep     = if ($CollectionUri.Contains('?')) { '&' } else { '?' }
+    $baseUri = $CollectionUri.Split('?')[0]
+
+    $candidates = @($DisplayName)
+    if ($script:BaselineNameMatching) { $candidates += @($script:PreviousDisplayNames[$DisplayName] | Where-Object { $_ }) }
+    $found      = $null
+    $matchName  = $null
+    foreach ($candidate in $candidates) {
+        $escaped = $candidate -replace "'", "''"
+        $resp    = Invoke-MgGraphRequest -Method GET -Uri "$CollectionUri$sep`$filter=displayName eq '$escaped'" `
+                       -Headers $Headers -ErrorAction Stop
+        $found   = @($resp.value) | Select-Object -First 1
+        if ($found) { $matchName = $candidate; break }
+    }
+
+    if ($found) {
+        $matchType = if ($matchName -eq $DisplayName) { 'Exact' } else { 'PreviousName' }
+    }
+    elseif ($script:BaselineNameMatching -and $DisplayName -match '^(CA\d{3}-)' -and $Matches[1] -ne 'CA000-') {
+        # CA000 is shared by several groups (emergency access, service provider administrators), so the
+        # baseline-number fallback must never be used for them: they are matched by exact name only.
+        $prefix   = $Matches[1]
+        $isGroup  = $DisplayName -like '*-EXCL'
+        $objects  = @()
+        if ($PrefixSearch -eq 'Filter') {
+            $uri = "$CollectionUri$sep`$filter=startswith(displayName,'$prefix')"
+        }
+        else {
+            $uri = $CollectionUri
+        }
+        while ($uri) {
+            $resp     = Invoke-MgGraphRequest -Method GET -Uri $uri -Headers $Headers -ErrorAction Stop
+            $objects += @($resp.value)
+            $uri      = Get-ObjectPropertyValue -InputObject $resp -PropertyName '@odata.nextLink'
+        }
+        # The audience code (GLB, ADM, USR, SVC, GST, ...) must match as well, because a baseline number was
+        # reused for a different audience in the 2026.10 restructure (for example CA301 was SVC, now GST).
+        $audience = if ($DisplayName -match '^CA\d{3}-([A-Z]{3})-') { $Matches[1] } else { '' }
+        $numberMatches = @(
+            $objects | Where-Object {
+                $name = [string](Get-ObjectPropertyValue -InputObject $_ -PropertyName 'displayName')
+                $name.StartsWith($prefix, [StringComparison]::OrdinalIgnoreCase) -and
+                (($name -like '*-EXCL') -eq $isGroup) -and
+                ([string]::IsNullOrEmpty($audience) -or $name -match "^CA\d{3}-$audience-")
+            }
+        )
+        if ($numberMatches.Count -eq 0) { return $null }
+
+        $found     = $numberMatches[0]
+        $matchName = [string](Get-ObjectPropertyValue -InputObject $found -PropertyName 'displayName')
+        $matchType = 'BaselineNumber'
+        if ($numberMatches.Count -gt 1) {
+            $allNames = ($numberMatches | ForEach-Object { Get-ObjectPropertyValue -InputObject $_ -PropertyName 'displayName' }) -join "', '"
+            Write-Log -Level WARN -Message "Multiple existing ${Kind}s match baseline number '$prefix' for '$DisplayName': '$allNames'. Using '$matchName'."
+        }
+    }
+    else {
+        return $null
+    }
+
+    $result = @{ Object = $found; MatchedName = $matchName; MatchType = $matchType; Renamed = $false }
+    if ($matchType -eq 'PreviousName' -and $Rename) {
+        $foundId = Get-ObjectPropertyValue -InputObject $found -PropertyName 'id'
+        $patch   = @{ displayName = $DisplayName } + $RenameProperties
+        try {
+            Invoke-MgGraphRequest -Method PATCH -Uri "$baseUri/$foundId" -ContentType "application/json" `
+                -Body ($patch | ConvertTo-Json -Depth 5 -Compress) -ErrorAction Stop | Out-Null
+            $result.Renamed = $true
+            Write-Log -Message "Renamed existing $Kind '$matchName' to '$DisplayName'."
+        }
+        catch {
+            Write-LogError -ErrorRecord $_ -Context "Rename existing $Kind '$matchName' to '$DisplayName'"
+        }
+    }
+
+    return $result
+}
+
+# Host-status suffix describing how an existing object was matched.
+function Get-ExistingMatchNote {
+    param($Lookup, [bool]$Preview)
+
+    switch ($Lookup.MatchType) {
+        'PreviousName' {
+            $verb = if ($Lookup.Renamed) { 'renamed from' } elseif ($Preview) { 'would rename from' } else { 'rename failed, still named' }
+            return ", $verb '$($Lookup.MatchedName)'"
+        }
+        'BaselineNumber' { return ", matched by baseline number as '$($Lookup.MatchedName)'" }
+        default          { return '' }
+    }
 }
 
 function Get-PolicyConditions {
@@ -1691,6 +1934,26 @@ function Test-PolicyRequiresWorkloadIdentityPremium {
     return $false
 }
 
+function Test-PolicyTargetsAgents {
+    param($PolicyJson)
+
+    $conditions = Get-PolicyConditions -PolicyJson $PolicyJson
+    if (-not $conditions) { return $false }
+
+    if (Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'agents') { return $true }
+
+    $clientApplications = Get-ObjectPropertyValue -InputObject $conditions -PropertyName 'clientApplications'
+    if ($clientApplications) {
+        $agentRefs = @(
+            @(Get-ObjectPropertyValue -InputObject $clientApplications -PropertyName 'includeAgentIdServicePrincipals') +
+            @(Get-ObjectPropertyValue -InputObject $clientApplications -PropertyName 'excludeAgentIdServicePrincipals')
+        )
+        if (@($agentRefs | Where-Object { $_ }).Count -gt 0) { return $true }
+    }
+
+    return $false
+}
+
 function Test-PolicyRequiresEntraSuite {
     param($PolicyJson)
 
@@ -1771,6 +2034,14 @@ function Get-PolicyUnavailableTenantCapabilityReason {
                 HostStatus = '[SKIPPED - Required Workload Identity Premium]'
                 LogMessage = "Conditional Access policy '$displayName' was not created because the target tenant does not have the required Workload Identity Premium capability."
             }
+        }
+    }
+
+    if ($script:Agent365Available -eq $false -and (Test-PolicyTargetsAgents -PolicyJson $PolicyJson)) {
+        return [PSCustomObject]@{
+            Code       = 'Agent365'
+            HostStatus = '[SKIPPED - Required Microsoft Agent 365 or Microsoft 365 E7]'
+            LogMessage = "Conditional Access policy '$displayName' was not created because the target tenant does not have a Microsoft Agent 365 or Microsoft 365 E7 license, which is required for policies that target agents."
         }
     }
 
@@ -2289,22 +2560,30 @@ function Restore-SinglePolicy {
 
     Write-Host "    $displayName" -NoNewline -ForegroundColor White
 
-    # Check if policy with same displayName already exists
+    # Check if the policy already exists (same displayName, previous baseline name, or
+    # same baseline number). If the check itself fails, do not create the policy: an
+    # unverified create could duplicate an existing policy.
     $existing = $null
+    $lookup   = $null
     try {
-        $escaped = $displayName -replace "'", "''"
-        $chkResp = Invoke-MgGraphRequest -Method GET `
-                       -Uri "https://graph.microsoft.com/beta/identity/conditionalAccess/policies?`$filter=displayName eq '$escaped'" `
-                       -ErrorAction Stop
-        $existing = @($chkResp.value) | Select-Object -First 1
+        $lookup = Find-ExistingObjectByDisplayName `
+                      -CollectionUri "https://graph.microsoft.com/beta/identity/conditionalAccess/policies" `
+                      -DisplayName $displayName -Kind 'Conditional Access policy' -Rename (-not $Preview) `
+                      -PrefixSearch List
+        if ($lookup) { $existing = $lookup.Object }
     }
     catch {
+        $graphError = Get-GraphErrorMessage -ErrorRecord $_
         Write-LogError -ErrorRecord $_ -Context "Check whether Conditional Access policy '$displayName' already exists"
+        Write-Host "  [FAILED: could not verify whether the policy already exists — $graphError]" -ForegroundColor Red
+        return 'failed'
     }
 
     if ($existing) {
-        Write-Log -Message "Skipped Conditional Access policy '$displayName' because it already exists."
-        Write-Host "  [SKIPPED — already exists]" -ForegroundColor Yellow
+        $matchNote = Get-ExistingMatchNote -Lookup $lookup -Preview $Preview
+        $logName   = if ($lookup.MatchType -eq 'Exact') { '' } else { " as '$($lookup.MatchedName)'" }
+        Write-Log -Message "Skipped Conditional Access policy '$displayName' because it already exists$logName."
+        Write-Host "  [SKIPPED — already exists$matchNote]" -ForegroundColor Yellow
         return 'skipped'
     }
 
@@ -2333,6 +2612,14 @@ function Restore-SinglePolicy {
         $newGroupMap  = $groupResult.IdMap
         $reusedGroups = @($groupResult.ReusedNames)
         foreach ($k in $newGroupMap.Keys) { $SharedGroupIdMap[$k] = $newGroupMap[$k] }
+
+        # Never create a policy whose exclusion groups could not be resolved: it would
+        # be missing its exclusions (including the emergency access accounts).
+        if ($groupResult.Failed -gt 0) {
+            Write-Log -Level WARN -Message "Conditional Access policy '$displayName' was not created because $($groupResult.Failed) exclusion group(s) could not be verified or created."
+            Write-Host "    $displayName  [FAILED: exclusion group(s) could not be verified or created — policy not created]" -ForegroundColor Red
+            return 'failed'
+        }
 
         # ── Build and remap the policy body ─────────────────────────────────────
         $body = Get-CleanPolicyBody -PolicyJson $PolicyJson
@@ -2433,6 +2720,13 @@ function Restore-SinglePolicy {
             $script:WorkloadIdPremiumAvailable = $false   # skip subsequent WLP policies before group creation
             Write-Log -Level WARN -Message "Conditional Access policy '$displayName' was not created because the target tenant does not have the required Workload Identity Premium capability. Graph: $graphError"
             Write-Host "  [SKIPPED - Required Workload Identity Premium]" -ForegroundColor Yellow
+            return 'unsupported'
+        }
+
+        if ($graphError -match '1267:.*(Agent 365|E7)') {
+            $script:Agent365Available = $false   # skip subsequent agent policies before group creation
+            Write-Log -Level WARN -Message "Conditional Access policy '$displayName' was not created because the target tenant does not have a Microsoft Agent 365 or Microsoft 365 E7 license. Graph: $graphError"
+            Write-Host "  [SKIPPED - Required Microsoft Agent 365 or Microsoft 365 E7]" -ForegroundColor Yellow
             return 'unsupported'
         }
 
@@ -2606,6 +2900,94 @@ function Show-WorkloadIdentityPremiumRestoreWarning {
 # RESTORE ORCHESTRATOR
 # ─────────────────────────────────────────────────────────────────────────────
 
+# The baseline keeps its policies in two folders: ConditionalAccess\Core (Business Premium) and ConditionalAccess\AddOn
+# (extra licences). Groups, NamedLocations, AuthenticationStrengths and MigrationTable.json are shared at the root.
+# The restore logic reads one flat ConditionalAccess folder, so when the selected folder uses this layout a temporary
+# restore root is built with the chosen pack(s). A classic backup (policies directly in ConditionalAccess\) is
+# returned unchanged. -Pack skips the question (Core, AddOn or Both). Returns the folder to restore from.
+function Resolve-RestoreRootFolder {
+    param(
+        [string]$FolderPath,
+        [ValidateSet('', 'Core', 'AddOn', 'Both')]
+        [string]$Pack = ''
+    )
+
+    $root = $FolderPath
+    $leaf = Split-Path -Path $FolderPath -Leaf
+    $parentLeaf = Split-Path -Path (Split-Path -Path $FolderPath -Parent) -Leaf
+    if ($leaf -in 'Core', 'AddOn' -and $parentLeaf -eq 'ConditionalAccess') {
+        # A pack folder was selected directly: that pack only, root is two levels up.
+        $root = Split-Path -Path (Split-Path -Path $FolderPath -Parent) -Parent
+        $Pack = $leaf
+    }
+
+    $caDir     = Join-Path $root 'ConditionalAccess'
+    $coreDir   = Join-Path $caDir 'Core'
+    $addOnDir  = Join-Path $caDir 'AddOn'
+    $hasPacks  = (Test-Path -LiteralPath $coreDir) -or (Test-Path -LiteralPath $addOnDir)
+    $hasFlat   = (Test-Path -LiteralPath $caDir) -and @(Get-ChildItem -LiteralPath $caDir -Filter '*.json' -File -ErrorAction SilentlyContinue).Count -gt 0
+    if (-not $hasPacks -or $hasFlat) { return $FolderPath }
+
+    if (-not $Pack) {
+        Write-Host ""
+        Write-Host "  This folder contains the baseline packs. Which pack do you want to restore?" -ForegroundColor Cyan
+        Write-Host "    [1] Core pack    - Microsoft 365 Business Premium (Entra ID P1)" -ForegroundColor White
+        Write-Host "    [2] Add-on pack  - needs extra licences (policies without the licence are skipped)" -ForegroundColor White
+        Write-Host "    [3] Both" -ForegroundColor White
+        $answer = Read-Host "  Enter your choice (1-3)"
+        $Pack = switch ($answer.Trim()) { '1' { 'Core' } '2' { 'AddOn' } '3' { 'Both' } default { '' } }
+        if (-not $Pack) { Write-Host "  No valid choice. Core pack selected." -ForegroundColor Yellow; $Pack = 'Core' }
+    }
+
+    $sources = @()
+    if ($Pack -in 'Core', 'Both')  { $sources += $coreDir }
+    if ($Pack -in 'AddOn', 'Both') { $sources += $addOnDir }
+
+    $stage = Join-Path ([System.IO.Path]::GetTempPath()) ("CABaseline-" + $Pack + "-" + [guid]::NewGuid().ToString('N').Substring(0, 8))
+    foreach ($sub in 'ConditionalAccess', 'Groups', 'NamedLocations', 'AuthenticationStrengths') {
+        $null = New-Item -ItemType Directory -Path (Join-Path $stage $sub) -Force
+    }
+    foreach ($src in $sources) {
+        if (Test-Path -LiteralPath $src) {
+            Copy-Item -Path (Join-Path $src '*.json') -Destination (Join-Path $stage 'ConditionalAccess') -Force
+        }
+    }
+    foreach ($sub in 'Groups', 'NamedLocations', 'AuthenticationStrengths') {
+        if (Test-Path -LiteralPath (Join-Path $root $sub)) {
+            Copy-Item -Path (Join-Path (Join-Path $root $sub) '*.json') -Destination (Join-Path $stage $sub) -Force -ErrorAction SilentlyContinue
+        }
+    }
+    if (Test-Path -LiteralPath (Join-Path $root 'MigrationTable.json')) {
+        Copy-Item -LiteralPath (Join-Path $root 'MigrationTable.json') -Destination $stage -Force
+    }
+
+    Write-Log -Message "Pack restore: temporary restore root '$stage' built from '$root' (pack: $Pack)."
+    Write-Host "  Pack selected: $Pack. Shared groups, named locations, authentication strength and MigrationTable come from '$root'." -ForegroundColor DarkGray
+    return $stage
+}
+# Reports policies from earlier baseline versions that were retired in the 2026.10 restructure. Nothing is changed.
+function Show-RetiredPolicyNotice {
+    try {
+        $existing = @()
+        $uri = 'https://graph.microsoft.com/beta/identity/conditionalAccess/policies?$select=id,displayName,state'
+        while ($uri) {
+            $resp     = Invoke-MgGraphRequest -Method GET -Uri $uri -ErrorAction Stop
+            $existing += @($resp.value)
+            $uri      = Get-ObjectPropertyValue -InputObject $resp -PropertyName '@odata.nextLink'
+        }
+        $found = @($existing | Where-Object { $_.displayName -in $script:RetiredPolicyNames })
+        if ($found.Count -eq 0) { return }
+        Write-Host ""
+        Write-Host "  [!] Policies from an earlier baseline version were found in this tenant (retired, no longer part of the baseline):" -ForegroundColor Yellow
+        foreach ($p in $found) { Write-Host ("      {0}  [{1}]" -f $p.displayName, $p.state) -ForegroundColor DarkGray }
+        Write-Host "      Review them (their intent is covered by newer policies, see CHANGELOG.md) before removing them." -ForegroundColor DarkGray
+        Write-Log -Level WARN -Message ("Retired baseline policies present in tenant: " + (($found | ForEach-Object { $_.displayName }) -join ', '))
+    }
+    catch {
+        Write-LogError -ErrorRecord $_ -Context 'List retired baseline policies'
+    }
+}
+
 function Invoke-RestoreConditionalAccess {
     Write-Log -Message "Restore operation requested."
 
@@ -2647,6 +3029,10 @@ function Invoke-RestoreConditionalAccess {
                                   -Description "Select Backup Folder to Restore From" `
                                   -SelectedPath $PSScriptRoot
                 if (-not $folderPath) { break }
+
+                # A folder with ConditionalAccess\Core and ConditionalAccess\AddOn asks which pack to restore.
+                $folderPath = Resolve-RestoreRootFolder -FolderPath $folderPath
+                Set-BaselineNameMatching -BackupFolder $folderPath
 
                 $caDir  = Join-Path $folderPath "ConditionalAccess"
                 $grpDir = Join-Path $folderPath "Groups"
@@ -2860,7 +3246,7 @@ function Invoke-RestoreConditionalAccess {
                     Write-Host "  ──────────────────────────────────────────────────────────────────────" -ForegroundColor DarkGray
                     Write-Host "    Created      : $($stats['created'])  (all in DISABLED state)" -ForegroundColor Green
                     Write-Host "    Skipped      : $($stats['skipped'])  (already exist)" -ForegroundColor Yellow
-                    Write-Host "    License req. : $($stats['unsupported'])  (requires Entra ID P2, Entra Suite/GSA, Workload Identity Premium, or tenant prerequisite)" -ForegroundColor $(if ($stats['unsupported'] -gt 0) { 'Yellow' } else { 'Green' })
+                    Write-Host "    License req. : $($stats['unsupported'])  (requires Entra ID P2, Entra Suite/GSA, Workload Identity Premium, Agent 365/M365 E7, or tenant prerequisite)" -ForegroundColor $(if ($stats['unsupported'] -gt 0) { 'Yellow' } else { 'Green' })
                     Write-Host "    Failed       : $($stats['failed'])" -ForegroundColor $(if ($stats['failed'] -gt 0) { 'Red' } else { 'Green' })
                     if ($stats['failed'] -gt 0 -and $script:LogEnabled) {
                         Write-Host "    Troubleshooting log: $script:LogPath" -ForegroundColor DarkGray
@@ -2873,6 +3259,7 @@ function Invoke-RestoreConditionalAccess {
                 }
                 Write-Host "  ══════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
                 Write-Log -Message "Folder restore completed. Preview: $previewMode; created: $($stats['created']); skipped: $($stats['skipped']); license required: $($stats['unsupported']); failed: $($stats['failed']); preview count: $($stats['preview'])."
+                Show-RetiredPolicyNotice
                 Write-Host ""
                 Wait-ForUserContinue
             }
@@ -2898,7 +3285,10 @@ function Invoke-RestoreConditionalAccess {
 
                 # Determine backup root from file path (file is typically in <root>\ConditionalAccess\)
                 $parentDir = Split-Path $filePath -Parent
-                $backupRoot = Split-Path $parentDir -Parent
+                $grandDir  = Split-Path $parentDir -Parent
+                # <root>\ConditionalAccess\<file> (classic backup) or <root>\ConditionalAccess\Core|AddOn\<file> (baseline layout)
+                $backupRoot = if ((Split-Path $grandDir -Leaf) -eq 'ConditionalAccess') { Split-Path $grandDir -Parent } else { $grandDir }
+                Set-BaselineNameMatching -BackupFolder $backupRoot
                 $hasGroups    = Test-Path (Join-Path $backupRoot "Groups")
                 $hasLocations = Test-Path (Join-Path $backupRoot "NamedLocations")
 
